@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Jlbelanger\LaravelJsonApi\Traits\Resource;
 
 class ActionType extends Model
@@ -25,13 +26,24 @@ class ActionType extends Model
 		'order_num',
 	];
 
-	protected $additional = [];
+	protected $additional = [
+		'slug',
+	];
 
 	protected $oneRelationships = [
 		'user',
 	];
 
 	protected $manyRelationships = [];
+
+	// ========================================================================
+	// Attributes
+	// ========================================================================
+
+	public function getSlugAttribute()
+	{
+		return Str::slug($this->label);
+	}
 
 	// ========================================================================
 	// JSON API
