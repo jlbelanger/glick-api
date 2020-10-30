@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af8582746d60faf68fb2f7b112d33ad1",
+    "content-hash": "3b7576b765775e58ce605dfde84ebb7c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -830,6 +830,44 @@
                 "url"
             ],
             "time": "2020-09-30T07:37:11+00:00"
+        },
+        {
+            "name": "jlbelanger/laravel-json-api",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "jlbelanger/laravel-json-api",
+                "reference": "e9f5a590416db578b62a3cf72af24ea502edbca3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.1",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jlbelanger\\LaravelJsonApi\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jenny Belanger",
+                    "email": "mail@jennybelanger.com",
+                    "homepage": "https://www.jennybelanger.com/"
+                }
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "laravel/framework",
@@ -6913,7 +6951,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "jlbelanger/laravel-json-api": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

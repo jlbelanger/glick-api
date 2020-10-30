@@ -17,8 +17,8 @@ class CreateActionsTable extends Migration
 			$table->id();
 			$table->unsignedInteger('action_type_id');
 			$table->dateTime('start_date');
-			$table->dateTime('end_date');
-			$table->string('value');
+			$table->dateTime('end_date')->nullable();
+			$table->string('value')->nullable();
 			$table->timestamps();
 			$table->timestamp('deleted_at')->nullable();
 		});

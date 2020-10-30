@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Jlbelanger\LaravelJsonApi\Traits\Resource;
 
 class Action extends Model
 {
-	use HasFactory;
+	use HasFactory, Resource;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -20,4 +21,42 @@ class Action extends Model
 		'end_date',
 		'value',
 	];
+
+	protected $additional = [];
+
+	protected $oneRelationships = [
+		'action_type',
+	];
+
+	protected $manyRelationships = [];
+
+	// ========================================================================
+	// JSON API
+	// ========================================================================
+
+	public function defaultSort()
+	{
+		return ['start_date'];
+	}
+
+	protected function requiredRelationships()
+	{
+		return ['action_type'];
+	}
+
+	protected function rules()
+	{
+		return [
+			'start_date' => 'required',
+		];
+	}
+
+	// ========================================================================
+	// Relationships
+	// ========================================================================
+
+	public function actionType()
+	{
+		return $this->belongsTo('App\Models\ActionType');
+	}
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Jlbelanger\LaravelJsonApi\Controllers\ResourceController;
 
-class ActionController extends Controller
+class ActionController extends ResourceController
 {
 	//
 }

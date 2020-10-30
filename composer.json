@@ -12,6 +12,7 @@
 		"fideloper/proxy": "^4.2",
 		"fruitcake/laravel-cors": "^2.0",
 		"guzzlehttp/guzzle": "^7.0.1",
+		"jlbelanger/laravel-json-api": "@dev",
 		"laravel/framework": "^8.12",
 		"laravel/tinker": "^2.0"
 	},
@@ -22,6 +23,15 @@
 		"nunomaduro/collision": "^5.0",
 		"phpunit/phpunit": "^9.3",
 		"squizlabs/php_codesniffer": "^3.5"
+	},
+	"repositories": {
+		"dev-package": {
+			"type": "path",
+			"url": "jlbelanger/laravel-json-api",
+			"options": {
+				"symlink": true
+			}
+		}
 	},
 	"config": {
 		"optimize-autoloader": true,

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-	return $request->user();
+Route::get('/', function () {
+	return response()->json(['success' => true]);
 });
+
+Route::apiResources([
+	'actions' => '\App\Http\Controllers\ActionController',
+	'action-types' => '\App\Http\Controllers\ActionTypeController',
+	'users' => '\App\Http\Controllers\UserController',
+]);

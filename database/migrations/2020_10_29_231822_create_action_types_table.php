@@ -19,9 +19,9 @@ class CreateActionTypesTable extends Migration
 			$table->string('label');
 			$table->tinyInteger('is_discrete');
 			$table->enum('field_type', ['int', 'float', 'string']);
-			$table->string('suffix');
-			$table->string('options');
-			$table->integer('order_num');
+			$table->string('suffix')->nullable();
+			$table->string('options')->nullable();
+			$table->integer('order_num')->default(0);
 			$table->timestamps();
 			$table->timestamp('deleted_at')->nullable();
 		});
