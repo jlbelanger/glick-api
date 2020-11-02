@@ -24,7 +24,7 @@ class ActionTypeFactory extends Factory
 		return [
 			'user_id' => factory(App\Models\User::class)->create()->id,
 			'label' => ucfirst($this->faker->word),
-			'is_discrete' => $this->faker->randomElement(['0', '1']),
+			'is_continuous' => $this->faker->randomElement(['0', '1']),
 			'field_type' => $this->faker->randomElement(['int', 'float', 'string']),
 			'suffix' => null,
 			'options' => null,

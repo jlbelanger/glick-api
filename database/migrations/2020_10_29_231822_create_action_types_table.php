@@ -17,8 +17,8 @@ class CreateActionTypesTable extends Migration
 			$table->id();
 			$table->unsignedInteger('user_id');
 			$table->string('label');
-			$table->tinyInteger('is_discrete');
-			$table->enum('field_type', ['int', 'float', 'string']);
+			$table->tinyInteger('is_continuous')->default(0);
+			$table->enum('field_type', ['button', 'number']);
 			$table->string('suffix')->nullable();
 			$table->string('options')->nullable();
 			$table->integer('order_num')->default(0);

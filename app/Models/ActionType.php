@@ -20,7 +20,7 @@ class ActionType extends Model
 	protected $fillable = [
 		'user_id',
 		'label',
-		'is_discrete',
+		'is_continuous',
 		'field_type',
 		'suffix',
 		'options',

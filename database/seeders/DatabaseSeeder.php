@@ -22,31 +22,32 @@ class DatabaseSeeder extends Seeder
 
 		DB::table('action_types')->insert([
 			'label' => 'Weight',
-			'is_discrete' => true,
-			'field_type' => 'float',
+			'is_continuous' => false,
+			'field_type' => 'number',
 			'suffix' => 'lbs',
 			'user_id' => 1,
 		]);
 
 		DB::table('action_types')->insert([
 			'label' => 'Temperature',
-			'is_discrete' => true,
-			'field_type' => 'float',
-			'suffix' => '&deg;C',
+			'is_continuous' => false,
+			'field_type' => 'number',
+			'suffix' => '°C',
 			'user_id' => 1,
 		]);
 
 		DB::table('action_types')->insert([
 			'label' => 'Sleep',
-			'is_discrete' => false,
+			'is_continuous' => true,
+			'field_type' => 'button',
 			'user_id' => 1,
 		]);
 
 		DB::table('action_types')->insert([
 			'label' => 'Headache',
-			'is_discrete' => false,
-			'field_type' => 'string',
-			'options' => 'Mild,Moderate,Severe',
+			'is_continuous' => true,
+			'field_type' => 'button',
+			'options' => 'Mild, Moderate, Severe',
 			'user_id' => 1,
 		]);
 	}
