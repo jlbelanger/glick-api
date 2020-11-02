@@ -69,6 +69,18 @@ class ActionType extends Model
 	}
 
 	// ========================================================================
+	// Mutators
+	// ========================================================================
+
+	public function setOptionsAttribute($value)
+	{
+		$value = explode(',', $value);
+		$value = array_map('trim', $value);
+		$value = implode(', ', $value);
+		$this->attributes['options'] = $value;
+	}
+
+	// ========================================================================
 	// Relationships
 	// ========================================================================
 
