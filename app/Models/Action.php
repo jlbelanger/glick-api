@@ -37,7 +37,7 @@ class Action extends Model
 
 	public function defaultSort()
 	{
-		return ['start_date'];
+		return ['-start_date'];
 	}
 
 	protected function requiredRelationships()
