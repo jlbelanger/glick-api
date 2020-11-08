@@ -17,8 +17,18 @@ Route::get('/', function () {
 	return response()->json(['success' => true]);
 });
 
-Route::apiResources([
-	'actions' => '\App\Http\Controllers\ActionController',
-	'action-types' => '\App\Http\Controllers\ActionTypeController',
-	'users' => '\App\Http\Controllers\UserController',
-]);
+Route::post('/auth/login', '\App\Http\Controllers\AuthController@login');
+Route::delete('/auth/logout', '\App\Http\Controllers\AuthController@logout');
+Route::post('/auth/register', '\App\Http\Controllers\AuthController@register');
+
+Route::group(['middleware' => ['api']], function () {
+	Route::apiResources([
+		'actions' => '\App\Http\Controllers\ActionController',
+		'action-types' => '\App\Http\Controllers\ActionTypeController',
+		'users' => '\App\Http\Controllers\UserController',
+	]);
+});
+
+Route::fallback(function () {
+	return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+});
