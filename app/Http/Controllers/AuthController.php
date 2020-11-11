@@ -61,7 +61,8 @@ class AuthController extends Controller
 		}
 
 		DB::beginTransaction();
-		$user->create($data['attributes']);
+		$user = User::create($data['attributes']);
+		$user->save();
 		$token = $user->createToken('api');
 		DB::commit();
 
