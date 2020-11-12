@@ -20,6 +20,8 @@ Route::get('/', function () {
 Route::post('/auth/login', '\App\Http\Controllers\AuthController@login');
 Route::delete('/auth/logout', '\App\Http\Controllers\AuthController@logout');
 Route::post('/auth/register', '\App\Http\Controllers\AuthController@register');
+Route::post('/auth/forgot-password', '\App\Http\Controllers\AuthController@forgotPassword');
+Route::put('/auth/reset-password/{key}', '\App\Http\Controllers\AuthController@resetPassword');
 
 Route::group(['middleware' => ['api']], function () {
 	Route::apiResources([

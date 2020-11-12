@@ -77,13 +77,4 @@ class User extends Authenticatable
 	{
 		return array_merge($this->fillable, ['password_confirmation']);
 	}
-
-	// ========================================================================
-	// Mutators
-	// ========================================================================
-
-	public function setPasswordAttribute($value)
-	{
-		$this->attributes['password'] = bcrypt($value);
-	}
 }
