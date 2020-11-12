@@ -31,6 +31,8 @@ Route::group(['middleware' => ['api']], function () {
 	]);
 });
 
+Route::put('/users/{id}/change-password', '\App\Http\Controllers\UserController@changePassword');
+
 Route::fallback(function () {
 	return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
 });
