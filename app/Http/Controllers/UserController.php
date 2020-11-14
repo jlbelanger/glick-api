@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Jlbelanger\LaravelJsonApi\Controllers\ResourceController;
@@ -20,6 +21,11 @@ class UserController extends ResourceController
 	 */
 	public function changePassword(Request $request, string $id)
 	{
+		$user = User::find($id);
+		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
+			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+		}
+
 		$data = $request->input('data');
 		$rules = [
 			'password' => 'required',
@@ -34,8 +40,6 @@ class UserController extends ResourceController
 		if (!empty($errors)) {
 			return response()->json(['errors' => $errors], 422);
 		}
-
-		$user = User::find($id);
 		if (!Hash::check($data['attributes']['password'], $user->password)) {
 			$error = [
 				'title' => 'Current password is incorrect.',

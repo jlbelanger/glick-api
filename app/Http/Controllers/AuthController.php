@@ -57,8 +57,7 @@ class AuthController extends Controller
 	 */
 	public function logout(Request $request)
 	{
-		Auth::logout();
-		// $request->user()->currentAccessToken()->delete(); // TODO
+		Auth::guard('sanctum')->user()->currentAccessToken()->delete();
 
 		return response()->json(null, 204);
 	}
