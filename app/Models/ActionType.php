@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Jlbelanger\LaravelJsonApi\Traits\Resource;
 
@@ -49,6 +50,15 @@ class ActionType extends Model
 	// ========================================================================
 	// JSON API
 	// ========================================================================
+
+	public function defaultFilter()
+	{
+		return [
+			'user_id' => [
+				'eq' => Auth::guard('sanctum')->user()->id,
+			],
+		];
+	}
 
 	public function defaultSort()
 	{
