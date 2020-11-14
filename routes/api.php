@@ -26,6 +26,7 @@ Route::group(['middleware' => ['api', 'guest']], function () {
 
 Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 	Route::delete('/auth/logout', '\App\Http\Controllers\AuthController@logout');
+	Route::put('/users/{id}/change-email', '\App\Http\Controllers\UserController@changeEmail');
 	Route::put('/users/{id}/change-password', '\App\Http\Controllers\UserController@changePassword');
 
 	Route::apiResources([

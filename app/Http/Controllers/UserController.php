@@ -19,6 +19,48 @@ class UserController extends ResourceController
 	 * @param  string                   $id
 	 * @return \Illuminate\Http\JsonResponse
 	 */
+	public function changeEmail(Request $request, string $id)
+	{
+		$user = User::find($id);
+		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
+			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+		}
+
+		$data = $request->input('data');
+		$rules = [
+			'password' => 'required',
+			'email' => 'required|email',
+		];
+		$validator = Validator::make($data['attributes'], $rules);
+		if ($validator->fails()) {
+			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			return response()->json(['errors' => $errors], 422);
+		}
+		if (!empty($errors)) {
+			return response()->json(['errors' => $errors], 422);
+		}
+		if (!Hash::check($data['attributes']['password'], $user->password)) {
+			$error = [
+				'title' => 'Current password is incorrect.',
+				'source' => [
+					'pointer' => '/data/attributes/password',
+				],
+				'status' => '422',
+			];
+			return response()->json(['errors' => [$error]], 422);
+		}
+
+		$user->email = $data['attributes']['email'];
+		$user->save();
+
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  string                   $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function changePassword(Request $request, string $id)
 	{
 		$user = User::find($id);
