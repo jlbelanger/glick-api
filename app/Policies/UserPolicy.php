@@ -34,13 +34,13 @@ class UserPolicy
 	}
 
 	/**
-	 * Determine if the given user can be destroyed by the user.
+	 * Determine if the given user can be deleted by the user.
 	 *
 	 * @param  \App\Models\User $currentUser
 	 * @param  \App\Models\User $user
 	 * @return bool
 	 */
-	public function destroy(User $currentUser, User $user)
+	public function delete(User $currentUser, User $user)
 	{
 		return $this->view($currentUser, $user);
 	}

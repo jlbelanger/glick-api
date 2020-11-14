@@ -31,17 +31,17 @@ class ActionTypePolicy
 	 */
 	public function create(User $currentUser, ActionType $actionType)
 	{
-		return $this->view($currentUser, $actionType);
+		return true;
 	}
 
 	/**
-	 * Determine if the given action type can be destroyed by the user.
+	 * Determine if the given action type can be deleted by the user.
 	 *
 	 * @param  \App\Models\User       $currentUser
 	 * @param  \App\Models\ActionType $actionType
 	 * @return bool
 	 */
-	public function destroy(User $currentUser, ActionType $actionType)
+	public function delete(User $currentUser, ActionType $actionType)
 	{
 		return $this->view($currentUser, $actionType);
 	}
@@ -67,6 +67,6 @@ class ActionTypePolicy
 	 */
 	public function viewAny(User $currentUser, ActionType $actionType)
 	{
-		return $this->view($currentUser, $actionType);
+		return true;
 	}
 }
