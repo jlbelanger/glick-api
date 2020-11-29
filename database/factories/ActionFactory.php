@@ -15,7 +15,7 @@ class ActionFactory extends Factory
 	protected $model = Action::class;
 
 	/**
-	 * Define the model's default state.
+	 * Defines the model's default state.
 	 *
 	 * @return array
 	 */

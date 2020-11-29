@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
 	];
 
 	/**
-	 * Register the exception handling callbacks for the application.
+	 * Registers the exception handling callbacks for the application.
 	 *
 	 * @return void
 	 */
@@ -38,9 +38,11 @@ class Handler extends ExceptionHandler
 		$this->renderable(function (MethodNotAllowedHttpException $e) {
 			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404', 'detail' => 'Method not allowed.']]], 404);
 		});
+
 		$this->renderable(function (JsonApiException $e) {
-			return response()->json(['errors' => [$e->getError()]], $e->getCode());
+			return response()->json(['errors' => $e->getErrors()], $e->getCode());
 		});
+
 		$this->renderable(function (HttpException $e) {
 			return response()->json(['errors' => [['title' => $e->getMessage(), 'status' => $e->getStatusCode()]]], $e->getStatusCode());
 		});

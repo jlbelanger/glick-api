@@ -4,22 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Jlbelanger\LaravelJsonApi\Controllers\ResourceController;
+use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
 use Jlbelanger\LaravelJsonApi\Traits\Validatable;
 use Validator;
 
-class UserController extends ResourceController
+class UserController extends AuthorizedResourceController
 {
 	/**
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  string                   $id
-	 * @return \Illuminate\Http\JsonResponse
+	 * @param  Request $request
+	 * @param  string  $id
+	 * @return JsonResponse
 	 */
-	public function changeEmail(Request $request, string $id)
+	public function changeEmail(Request $request, string $id) : JsonResponse
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
@@ -28,10 +29,10 @@ class UserController extends ResourceController
 
 		$data = $request->input('data');
 		$rules = [
-			'password' => 'required',
-			'email' => 'required|email',
+			'attributes.password' => 'required',
+			'attributes.email' => 'required|email',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
@@ -57,11 +58,11 @@ class UserController extends ResourceController
 	}
 
 	/**
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  string                   $id
-	 * @return \Illuminate\Http\JsonResponse
+	 * @param  Request $request
+	 * @param  string  $id
+	 * @return JsonResponse
 	 */
-	public function changePassword(Request $request, string $id)
+	public function changePassword(Request $request, string $id) : JsonResponse
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
@@ -70,11 +71,11 @@ class UserController extends ResourceController
 
 		$data = $request->input('data');
 		$rules = [
-			'password' => 'required',
-			'new_password' => 'required|confirmed',
-			'new_password_confirmation' => 'required',
+			'attributes.password' => 'required',
+			'attributes.new_password' => 'required|confirmed',
+			'attributes.new_password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);

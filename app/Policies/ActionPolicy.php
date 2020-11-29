@@ -11,61 +11,61 @@ class ActionPolicy
 	use HandlesAuthorization;
 
 	/**
-	 * Determine if the given action can be viewed by the user.
+	 * Determines if the given action can be viewed by the user.
 	 *
-	 * @param  \App\Models\User   $currentUser
-	 * @param  \App\Models\Action $action
+	 * @param  User   $currentUser
+	 * @param  Action $action
 	 * @return bool
 	 */
-	public function view(User $currentUser, Action $action)
+	public function view(User $currentUser, Action $action) : bool
 	{
 		return $currentUser->id === $action->actionType->user_id;
 	}
 
 	/**
-	 * Determine if the given action can be created by the user.
+	 * Determines if the given action can be created by the user.
 	 *
-	 * @param  \App\Models\User   $currentUser
-	 * @param  \App\Models\Action $action
+	 * @param  User   $currentUser
+	 * @param  Action $action
 	 * @return bool
 	 */
-	public function create(User $currentUser, Action $action)
+	public function create(User $currentUser, Action $action) : bool
 	{
 		return true;
 	}
 
 	/**
-	 * Determine if the given action can be deleted by the user.
+	 * Determines if the given action can be deleted by the user.
 	 *
-	 * @param  \App\Models\User   $currentUser
-	 * @param  \App\Models\Action $action
+	 * @param  User   $currentUser
+	 * @param  Action $action
 	 * @return bool
 	 */
-	public function delete(User $currentUser, Action $action)
+	public function delete(User $currentUser, Action $action) : bool
 	{
 		return $this->view($currentUser, $action);
 	}
 
 	/**
-	 * Determine if the given action can be updated by the user.
+	 * Determines if the given action can be updated by the user.
 	 *
-	 * @param  \App\Models\User   $currentUser
-	 * @param  \App\Models\Action $action
+	 * @param  User   $currentUser
+	 * @param  Action $action
 	 * @return bool
 	 */
-	public function update(User $currentUser, Action $action)
+	public function update(User $currentUser, Action $action) : bool
 	{
 		return $this->view($currentUser, $action);
 	}
 
 	/**
-	 * Determine if the given action can be viewed by the user.
+	 * Determines if the given action can be viewed by the user.
 	 *
-	 * @param  \App\Models\User   $currentUser
-	 * @param  \App\Models\Action $action
+	 * @param  User   $currentUser
+	 * @param  Action $action
 	 * @return bool
 	 */
-	public function viewAny(User $currentUser, Action $action)
+	public function viewAny(User $currentUser, Action $action) : bool
 	{
 		return true;
 	}

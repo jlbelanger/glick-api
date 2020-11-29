@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
 	/**
-	 * Register any application services.
+	 * Registers any application services.
 	 *
 	 * @return void
 	 */
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Bootstrap any application services.
+	 * Bootstraps any application services.
 	 *
 	 * @return void
 	 */

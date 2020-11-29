@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Jlbelanger\LaravelJsonApi\Traits\Resource;
@@ -24,19 +25,14 @@ class Action extends Model
 		'value',
 	];
 
-	protected $additional = [];
-
-	protected $oneRelationships = [
-		'action_type',
-	];
-
-	protected $manyRelationships = [];
-
 	// ========================================================================
 	// JSON API
 	// ========================================================================
 
-	public function defaultFilter()
+	/**
+	 * @return array
+	 */
+	public function defaultFilter() : array
 	{
 		return [
 			'action_type.user_id' => [
@@ -45,28 +41,42 @@ class Action extends Model
 		];
 	}
 
-	public function defaultSort()
+	/**
+	 * @return array
+	 */
+	public function defaultSort() : array
 	{
 		return ['-start_date'];
 	}
 
-	protected function requiredRelationships()
-	{
-		return ['action_type'];
-	}
-
-	protected function rules()
+	/**
+	 * @return array
+	 */
+	protected function rules() : array
 	{
 		return [
-			'start_date' => 'required',
+			'attributes.start_date' => 'required',
+			'attributes.end_date' => 'after:start_date',
+			'relationships.action_type' => 'required',
 		];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function singularRelationships() : array
+	{
+		return ['action_type'];
 	}
 
 	// ========================================================================
 	// Relationships
 	// ========================================================================
 
-	public function actionType()
+	/**
+	 * @return BelongsTo
+	 */
+	public function actionType() : BelongsTo
 	{
 		return $this->belongsTo('App\Models\ActionType');
 	}

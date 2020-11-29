@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -28,21 +30,14 @@ class ActionType extends Model
 		'order_num',
 	];
 
-	protected $additional = [
-		'slug',
-	];
-
-	protected $oneRelationships = [
-		'user',
-	];
-
-	protected $manyRelationships = [];
-
 	// ========================================================================
 	// Attributes
 	// ========================================================================
 
-	public function getSlugAttribute()
+	/**
+	 * @return string
+	 */
+	public function getSlugAttribute() : string
 	{
 		return Str::slug($this->label);
 	}
@@ -51,7 +46,18 @@ class ActionType extends Model
 	// JSON API
 	// ========================================================================
 
-	public function defaultFilter()
+	/**
+	 * @return array
+	 */
+	public function additionalAttributes() : array
+	{
+		return ['slug'];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function defaultFilter() : array
 	{
 		return [
 			'user_id' => [
@@ -60,28 +66,42 @@ class ActionType extends Model
 		];
 	}
 
-	public function defaultSort()
+	/**
+	 * @return array
+	 */
+	public function defaultSort() : array
 	{
 		return ['order_num', 'label'];
 	}
 
-	protected function requiredRelationships()
-	{
-		return ['user'];
-	}
-
-	protected function rules()
+	/**
+	 * @return array
+	 */
+	protected function rules() : array
 	{
 		return [
-			'label' => 'required',
-			'field_type' => 'required',
+			'attributes.label' => 'required',
+			'attributes.field_type' => 'required',
+			'relationships.user' => 'required',
 		];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function singularRelationships() : array
+	{
+		return ['user'];
 	}
 
 	// ========================================================================
 	// Mutators
 	// ========================================================================
 
+	/**
+	 * @param  string|mixed $value
+	 * @return void
+	 */
 	public function setOptionsAttribute($value)
 	{
 		$value = explode(',', $value);
@@ -94,12 +114,18 @@ class ActionType extends Model
 	// Relationships
 	// ========================================================================
 
-	public function actions()
+	/**
+	 * @return HasMany
+	 */
+	public function actions() : HasMany
 	{
 		return $this->hasMany('App\Models\Action');
 	}
 
-	public function user()
+	/**
+	 * @return BelongsTo
+	 */
+	public function user() : BelongsTo
 	{
 		return $this->belongsTo('App\Models\User');
 	}

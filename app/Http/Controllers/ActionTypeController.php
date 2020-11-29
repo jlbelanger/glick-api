@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Jlbelanger\LaravelJsonApi\Controllers\ResourceController;
+use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
 
-class ActionTypeController extends ResourceController
+class ActionTypeController extends AuthorizedResourceController
 {
 	//
 }

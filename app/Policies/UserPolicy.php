@@ -10,61 +10,61 @@ class UserPolicy
 	use HandlesAuthorization;
 
 	/**
-	 * Determine if the given user can be viewed by the user.
+	 * Determines if the given user can be viewed by the user.
 	 *
-	 * @param  \App\Models\User $currentUser
-	 * @param  \App\Models\User $user
+	 * @param  User $currentUser
+	 * @param  User $user
 	 * @return bool
 	 */
-	public function view(User $currentUser, User $user)
+	public function view(User $currentUser, User $user) : bool
 	{
 		return $currentUser->id === $user->id;
 	}
 
 	/**
-	 * Determine if the given user can be created by the user.
+	 * Determines if the given user can be created by the user.
 	 *
-	 * @param  \App\Models\User $currentUser
-	 * @param  \App\Models\User $user
+	 * @param  User $currentUser
+	 * @param  User $user
 	 * @return bool
 	 */
-	public function create(User $currentUser, User $user)
+	public function create(User $currentUser, User $user) : bool
 	{
 		return false;
 	}
 
 	/**
-	 * Determine if the given user can be deleted by the user.
+	 * Determines if the given user can be deleted by the user.
 	 *
-	 * @param  \App\Models\User $currentUser
-	 * @param  \App\Models\User $user
+	 * @param  User $currentUser
+	 * @param  User $user
 	 * @return bool
 	 */
-	public function delete(User $currentUser, User $user)
+	public function delete(User $currentUser, User $user) : bool
 	{
 		return $this->view($currentUser, $user);
 	}
 
 	/**
-	 * Determine if the given user can be updated by the user.
+	 * Determines if the given user can be updated by the user.
 	 *
-	 * @param  \App\Models\User $currentUser
-	 * @param  \App\Models\User $user
+	 * @param  User $currentUser
+	 * @param  User $user
 	 * @return bool
 	 */
-	public function update(User $currentUser, User $user)
+	public function update(User $currentUser, User $user) : bool
 	{
 		return $this->view($currentUser, $user);
 	}
 
 	/**
-	 * Determine if the given user can be viewed by the user.
+	 * Determines if the given user can be viewed by the user.
 	 *
-	 * @param  \App\Models\User $currentUser
-	 * @param  \App\Models\User $user
+	 * @param  User $currentUser
+	 * @param  User $user
 	 * @return bool
 	 */
-	public function viewAny(User $currentUser, User $user)
+	public function viewAny(User $currentUser, User $user) : bool
 	{
 		return false;
 	}

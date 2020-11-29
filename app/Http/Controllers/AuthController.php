@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use DB;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,19 +18,19 @@ use Validator;
 class AuthController extends Controller
 {
 	/**
-	 * Handle an authentication attempt.
+	 * Handles an authentication attempt.
 	 *
-	 * @param  \Illuminate\Http\Request $request
+	 * @param  Request $request
 	 * @return Response
 	 */
-	public function login(Request $request)
+	public function login(Request $request) : JsonResponse
 	{
 		$data = $request->input('data');
 		$rules = [
-			'username' => 'required',
-			'password' => 'required',
+			'attributes.username' => 'required',
+			'attributes.password' => 'required',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
@@ -50,12 +51,12 @@ class AuthController extends Controller
 	}
 
 	/**
-	 * Log the user out (Invalidate the token).
+	 * Logs the user out (Invalidate the token).
 	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\JsonResponse
+	 * @param  Request $request
+	 * @return JsonResponse
 	 */
-	public function logout(Request $request)
+	public function logout(Request $request) : JsonResponse
 	{
 		Auth::guard('sanctum')->user()->currentAccessToken()->delete();
 
@@ -63,21 +64,21 @@ class AuthController extends Controller
 	}
 
 	/**
-	 * Handle an authentication attempt.
+	 * Handles an authentication attempt.
 	 *
-	 * @param  \Illuminate\Http\Request $request
+	 * @param  Request $request
 	 * @return Response
 	 */
-	public function register(Request $request)
+	public function register(Request $request) : JsonResponse
 	{
 		$data = $request->input('data');
 		$rules = [
-			'username' => 'required|max:255|unique:users,username',
-			'email' => 'required|email|max:255|unique:users,email',
-			'password' => 'required|confirmed',
-			'password_confirmation' => 'required',
+			'attributes.username' => 'required|max:255|unique:users,username',
+			'attributes.email' => 'required|email|max:255|unique:users,email',
+			'attributes.password' => 'required|confirmed',
+			'attributes.password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
@@ -96,16 +97,16 @@ class AuthController extends Controller
 	}
 
 	/**
-	 * @param  \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\JsonResponse
+	 * @param  Request $request
+	 * @return JsonResponse
 	 */
-	public function forgotPassword(Request $request)
+	public function forgotPassword(Request $request) : JsonResponse
 	{
 		$data = $request->input('data');
 		$rules = [
-			'email' => 'required|email',
+			'attributes.email' => 'required|email',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
@@ -121,19 +122,19 @@ class AuthController extends Controller
 	}
 
 	/**
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  string                   $token
-	 * @return \Illuminate\Http\JsonResponse
+	 * @param  Request $request
+	 * @param  string  $token
+	 * @return JsonResponse
 	 */
-	public function resetPassword(Request $request, string $token)
+	public function resetPassword(Request $request, string $token) : JsonResponse
 	{
 		$data = $request->input('data');
 		$rules = [
-			'email' => 'required|email',
-			'new_password' => 'required|confirmed',
-			'new_password_confirmation' => 'required',
+			'attributes.email' => 'required|email',
+			'attributes.new_password' => 'required|confirmed',
+			'attributes.new_password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data['attributes'], $rules);
+		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {
 			$errors = Validatable::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);

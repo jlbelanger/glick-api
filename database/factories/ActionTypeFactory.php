@@ -15,7 +15,7 @@ class ActionTypeFactory extends Factory
 	protected $model = ActionType::class;
 
 	/**
-	 * Define the model's default state.
+	 * Defines the model's default state.
 	 *
 	 * @return array
 	 */

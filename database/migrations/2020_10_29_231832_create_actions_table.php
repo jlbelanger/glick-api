@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateActionsTable extends Migration
 {
 	/**
-	 * Run the migrations.
+	 * Runs the migrations.
 	 *
 	 * @return void
 	 */
@@ -25,7 +25,7 @@ class CreateActionsTable extends Migration
 	}
 
 	/**
-	 * Reverse the migrations.
+	 * Reverses the migrations.
 	 *
 	 * @return void
 	 */

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -35,12 +36,6 @@ class User extends Authenticatable
 		'remember_token',
 	];
 
-	protected $additional = [];
-
-	protected $oneRelationships = [];
-
-	protected $manyRelationships = [];
-
 	/**
 	 * The attributes that should be cast to native types.
 	 *
@@ -54,27 +49,43 @@ class User extends Authenticatable
 	// JSON API
 	// ========================================================================
 
-	public function actionTypes()
-	{
-		return $this->hasMany('App\Models\ActionType');
-	}
-
-	public function defaultSort()
+	/**
+	 * @return array
+	 */
+	public function defaultSort() : array
 	{
 		return ['username'];
 	}
 
-	protected function rules()
+	/**
+	 * @return array
+	 */
+	protected function rules() : array
 	{
 		return [
-			'username' => 'required|max:255|unique:users,username' . ($this->id ? ',' . $this->id : ''),
-			'email' => 'required|email|max:255|unique:users,email' . ($this->id ? ',' . $this->id : ''),
-			'password' => 'required|confirmed',
+			'attributes.username' => 'required|max:255|unique:users,username' . ($this->id ? ',' . $this->id : ''),
+			'attributes.email' => 'required|email|max:255|unique:users,email' . ($this->id ? ',' . $this->id : ''),
+			'attributes.password' => 'required|confirmed',
 		];
 	}
 
-	public function whitelistedAttributes()
+	/**
+	 * @return array
+	 */
+	public function whitelistedAttributes() : array
 	{
 		return array_merge($this->fillable, ['password_confirmation']);
+	}
+
+	// ========================================================================
+	// Relationships
+	// ========================================================================
+
+	/**
+	 * @return HasMany
+	 */
+	public function actionTypes() : HasMany
+	{
+		return $this->hasMany('App\Models\ActionType');
 	}
 }
