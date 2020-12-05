@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Rules\Action as ActionRule;
+use App\Rules\ActionValue;
+use App\Rules\ActionActionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,8 +60,8 @@ class Action extends Model
 		return [
 			'attributes.start_date' => 'required',
 			'attributes.end_date' => 'after:start_date',
-			'attributes.value' => [new ActionRule($this, $request)],
-			'relationships.action_type' => 'required',
+			'attributes.value' => [new ActionValue($this, $request)],
+			'relationships.action_type' => ['sometimes:required', new ActionActionType($this, $request)],
 		];
 	}
 

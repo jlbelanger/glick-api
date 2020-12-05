@@ -2,14 +2,15 @@
 
 namespace App\Rules;
 
-use App\Models\Action as ActionModel;
+use App\Models\Action;
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
 use Illuminate\Http\Request;
 
-class Action implements ImplicitRule
+class ActionValue implements ImplicitRule
 {
 	protected $actionType;
+	protected $isSettingActionType;
 
 	/**
 	 * Creates a new rule instance.
@@ -17,12 +18,16 @@ class Action implements ImplicitRule
 	 * @param  Action $action
 	 * @return void
 	 */
-	public function __construct(ActionModel $action, Request $request)
+	public function __construct(Action $action, Request $request)
 	{
+		$this->isSettingActionType = false;
 		$this->actionType = $action->actionType;
-		if (!$this->actionType) {
-			$data = $request->get('data');
-			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
+
+		$data = $request->get('data');
+		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
+		if ($id) {
+			$this->isSettingActionType = true;
+			$this->actionType = ActionType::find($id);
 		}
 	}
 
@@ -35,6 +40,9 @@ class Action implements ImplicitRule
 	 */
 	public function passes($attribute, $value)
 	{
+		if (!$this->isSettingActionType || !$this->actionType) {
+			return true;
+		}
 		if ($this->actionType->field_type === 'number' || strpos($this->actionType->options, ',') !== false) {
 			return !empty($value);
 		}
