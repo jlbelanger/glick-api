@@ -61,7 +61,7 @@ class ActionType extends Model
 	{
 		return [
 			'user_id' => [
-				'eq' => Auth::guard('sanctum')->user()->id,
+				'eq' => Auth::guard('sanctum')->id(),
 			],
 		];
 	}

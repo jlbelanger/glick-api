@@ -38,7 +38,7 @@ class Action extends Model
 	{
 		return [
 			'action_type.user_id' => [
-				'eq' => Auth::guard('sanctum')->user()->id,
+				'eq' => Auth::guard('sanctum')->id(),
 			],
 		];
 	}
