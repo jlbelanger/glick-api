@@ -50,5 +50,20 @@ class DatabaseSeeder extends Seeder
 			'options' => 'Mild, Moderate, Severe',
 			'user_id' => 1,
 		]);
+
+		DB::table('action_types')->insert([
+			'label' => 'Meal',
+			'is_continuous' => false,
+			'field_type' => 'button',
+			'user_id' => 1,
+		]);
+
+		DB::table('action_types')->insert([
+			'label' => 'Pain',
+			'is_continuous' => false,
+			'field_type' => 'button',
+			'options' => 'Mild, Moderate, Severe',
+			'user_id' => 1,
+		]);
 	}
 }
