@@ -35,6 +35,21 @@ class ActionType extends Model
 	// ========================================================================
 
 	/**
+	 * @return int
+	 */
+	public function getInProgressAttribute() : int
+	{
+		if (!$this->is_continuous) {
+			return 0;
+		}
+		$actions = $this->actions()->whereNull('end_date')->select('id');
+		if (!$actions->exists()) {
+			return 0;
+		}
+		return $actions->first()->id;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getSlugAttribute() : string
@@ -51,7 +66,7 @@ class ActionType extends Model
 	 */
 	public function additionalAttributes() : array
 	{
-		return ['slug'];
+		return ['in_progress', 'slug'];
 	}
 
 	/**

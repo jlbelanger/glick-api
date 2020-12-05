@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Action;
+use App\Observers\ActionObserver;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
 		ResetPassword::createUrlUsing(function ($notifiable, string $token) {
 			return env('FRONTEND_URL') . '/reset-password/' . $token;
 		});
+
+		Action::observe(ActionObserver::class);
 	}
 }
