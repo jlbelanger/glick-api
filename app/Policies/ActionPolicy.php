@@ -15,7 +15,7 @@ class ActionPolicy
 	 *
 	 * @param  User   $currentUser
 	 * @param  Action $action
-	 * @return bool
+	 * @return boolean
 	 */
 	public function view(User $currentUser, Action $action) : bool
 	{
@@ -27,7 +27,7 @@ class ActionPolicy
 	 *
 	 * @param  User   $currentUser
 	 * @param  Action $action
-	 * @return bool
+	 * @return boolean
 	 */
 	public function create(User $currentUser, Action $action) : bool
 	{
@@ -39,7 +39,7 @@ class ActionPolicy
 	 *
 	 * @param  User   $currentUser
 	 * @param  Action $action
-	 * @return bool
+	 * @return boolean
 	 */
 	public function delete(User $currentUser, Action $action) : bool
 	{
@@ -51,7 +51,7 @@ class ActionPolicy
 	 *
 	 * @param  User   $currentUser
 	 * @param  Action $action
-	 * @return bool
+	 * @return boolean
 	 */
 	public function update(User $currentUser, Action $action) : bool
 	{
@@ -63,7 +63,7 @@ class ActionPolicy
 	 *
 	 * @param  User   $currentUser
 	 * @param  Action $action
-	 * @return bool
+	 * @return boolean
 	 */
 	public function viewAny(User $currentUser, Action $action) : bool
 	{

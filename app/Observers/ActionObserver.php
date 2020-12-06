@@ -6,6 +6,10 @@ use App\Models\Action;
 
 class ActionObserver
 {
+	/**
+	 * @param  Action $record
+	 * @return void
+	 */
 	public function creating(Action $record)
 	{
 		$action = $record->actionType->inProgress;

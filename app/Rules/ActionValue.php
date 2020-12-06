@@ -15,7 +15,8 @@ class ActionValue implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
+	 * @param  Action  $action
+	 * @param  Request $request
 	 * @return void
 	 */
 	public function __construct(Action $action, Request $request)
@@ -36,9 +37,9 @@ class ActionValue implements ImplicitRule
 	 *
 	 * @param  string $attribute
 	 * @param  mixed  $value
-	 * @return bool
+	 * @return boolean
 	 */
-	public function passes($attribute, $value)
+	public function passes($attribute, $value) // phpcs:disable Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
 		if (!$this->isSettingActionType || !$this->actionType) {
 			return true;

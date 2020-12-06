@@ -38,9 +38,9 @@ class ActionActionType implements Rule
 	 *
 	 * @param  string $attribute
 	 * @param  mixed  $value
-	 * @return bool
+	 * @return boolean
 	 */
-	public function passes($attribute, $value)
+	public function passes($attribute, $value) // phpcs:disable Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
 		return $this->actionType->user_id === $this->userId;
 	}

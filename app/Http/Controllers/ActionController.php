@@ -6,5 +6,4 @@ use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
 
 class ActionController extends AuthorizedResourceController
 {
-	//
 }

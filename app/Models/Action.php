@@ -53,6 +53,7 @@ class Action extends Model
 	}
 
 	/**
+	 * @param  Request $request
 	 * @return array
 	 */
 	protected function rules(Request $request) : array

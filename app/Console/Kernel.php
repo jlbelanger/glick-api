@@ -12,9 +12,7 @@ class Kernel extends ConsoleKernel
 	 *
 	 * @var array
 	 */
-	protected $commands = [
-		//
-	];
+	protected $commands = [];
 
 	/**
 	 * Defines the application's command schedule.

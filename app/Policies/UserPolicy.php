@@ -14,7 +14,7 @@ class UserPolicy
 	 *
 	 * @param  User $currentUser
 	 * @param  User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function view(User $currentUser, User $user) : bool
 	{
@@ -26,7 +26,7 @@ class UserPolicy
 	 *
 	 * @param  User $currentUser
 	 * @param  User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function create(User $currentUser, User $user) : bool
 	{
@@ -38,7 +38,7 @@ class UserPolicy
 	 *
 	 * @param  User $currentUser
 	 * @param  User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function delete(User $currentUser, User $user) : bool
 	{
@@ -50,7 +50,7 @@ class UserPolicy
 	 *
 	 * @param  User $currentUser
 	 * @param  User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function update(User $currentUser, User $user) : bool
 	{
@@ -62,7 +62,7 @@ class UserPolicy
 	 *
 	 * @param  User $currentUser
 	 * @param  User $user
-	 * @return bool
+	 * @return boolean
 	 */
 	public function viewAny(User $currentUser, User $user) : bool
 	{
