@@ -1,6 +1,5 @@
 .DS_Store
 .env
 .phpunit.result.cache
-/jlbelanger
 /vendor
 TODO.md

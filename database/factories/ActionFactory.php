@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Action;
+use App\Models\ActionType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActionFactory extends Factory
@@ -22,10 +23,8 @@ class ActionFactory extends Factory
 	public function definition()
 	{
 		return [
-			'action_type_id' => factory(App\Models\ActionType::class)->create()->id,
-			'start_date' => $this->faker->dateTime(),
-			'end_date' => $this->faker->dateTime(),
-			'value' => $this->faker->randomDigit,
+			'action_type_id' => ActionType::factory(),
+			'start_date' => '2001-02-03 04:05:06',
 		];
 	}
 }

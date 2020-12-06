@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Action;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -139,7 +141,7 @@ class ActionType extends Model
 	 */
 	public function actions() : HasMany
 	{
-		return $this->hasMany('App\Models\Action');
+		return $this->hasMany(Action::class);
 	}
 
 	/**
@@ -147,6 +149,6 @@ class ActionType extends Model
 	 */
 	public function user() : BelongsTo
 	{
-		return $this->belongsTo('App\Models\User');
+		return $this->belongsTo(User::class);
 	}
 }

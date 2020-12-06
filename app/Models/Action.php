@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Rules\ActionValue;
+use App\Models\ActionType;
 use App\Rules\ActionActionType;
+use App\Rules\ActionValue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -83,6 +84,6 @@ class Action extends Model
 	 */
 	public function actionType() : BelongsTo
 	{
-		return $this->belongsTo('App\Models\ActionType');
+		return $this->belongsTo(ActionType::class);
 	}
 }

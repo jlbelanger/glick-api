@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ActionType;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -86,6 +87,6 @@ class User extends Authenticatable
 	 */
 	public function actionTypes() : HasMany
 	{
-		return $this->hasMany('App\Models\ActionType');
+		return $this->hasMany(ActionType::class);
 	}
 }

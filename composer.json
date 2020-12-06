@@ -1,8 +1,16 @@
 {
 	"name": "jlbelanger/glick-api",
+	"description": "Track occurrences of time-based events.",
 	"type": "project",
-	"description": "",
 	"license": "MIT",
+	"version": "1.0.0",
+	"authors": [
+		{
+			"name": "Jenny Belanger",
+			"email": "mail@jennybelanger.com",
+			"homepage": "https://www.jennybelanger.com/"
+		}
+	],
 	"require": {
 		"php": "^7.3|^8.0",
 		"fideloper/proxy": "^4.2",
