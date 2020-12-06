@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Jlbelanger\LaravelJsonApi\Exceptions\NotFoundException;
 
 class Authenticate extends Middleware
 {
@@ -20,7 +21,7 @@ class Authenticate extends Middleware
 	public function handle(Request $request, Closure $next, $guard = null)
 	{
 		if (!Auth::guard($guard)->check()) {
-			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+			throw new NotFoundException();
 		}
 
 		return $next($request);

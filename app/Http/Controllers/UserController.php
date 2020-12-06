@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
+use Jlbelanger\LaravelJsonApi\Exceptions\NotFoundException;
 use Jlbelanger\LaravelJsonApi\Traits\Validatable;
 use Validator;
 
@@ -24,7 +25,7 @@ class UserController extends AuthorizedResourceController
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
-			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+			throw new NotFoundException();
 		}
 
 		$data = $request->input('data');
@@ -66,7 +67,7 @@ class UserController extends AuthorizedResourceController
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
-			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404']]], 404);
+			throw new NotFoundException();
 		}
 
 		$data = $request->input('data');
