@@ -15,15 +15,15 @@ class CreateActionTypesTable extends Migration
 	{
 		Schema::create('action_types', function (Blueprint $table) {
 			$table->id();
-			$table->unsignedInteger('user_id');
+			$table->foreignId('user_id')->constrained();
 			$table->string('label');
-			$table->tinyInteger('is_continuous')->default(0);
+			$table->boolean('is_continuous')->default(false);
 			$table->enum('field_type', ['button', 'number']);
 			$table->string('suffix')->nullable();
 			$table->string('options')->nullable();
 			$table->integer('order_num')->default(0);
 			$table->timestamps();
-			$table->timestamp('deleted_at')->nullable();
+			$table->softDeletes('deleted_at');
 		});
 	}
 

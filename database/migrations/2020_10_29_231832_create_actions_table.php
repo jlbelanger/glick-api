@@ -15,12 +15,12 @@ class CreateActionsTable extends Migration
 	{
 		Schema::create('actions', function (Blueprint $table) {
 			$table->id();
-			$table->unsignedInteger('action_type_id');
+			$table->foreignId('action_type_id')->constrained();
 			$table->dateTime('start_date');
 			$table->dateTime('end_date')->nullable();
 			$table->string('value')->nullable();
 			$table->timestamps();
-			$table->timestamp('deleted_at')->nullable();
+			$table->softDeletes('deleted_at');
 		});
 	}
 
