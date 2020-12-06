@@ -35,18 +35,23 @@ class ActionType extends Model
 	// ========================================================================
 
 	/**
-	 * @return int
+	 * @return array|null
 	 */
-	public function getInProgressAttribute() : int
+	public function getInProgressAttribute()
 	{
 		if (!$this->is_continuous) {
-			return 0;
+			return null;
 		}
-		$actions = $this->actions()->whereNull('end_date')->select('id');
+		$actions = $this->actions()->whereNull('end_date')->select(['id', 'start_date', 'value']);
 		if (!$actions->exists()) {
-			return 0;
+			return null;
 		}
-		return $actions->first()->id;
+		$action = $actions->first();
+		return [
+			'id' => (string) $action->id,
+			'start_date' => $action->start_date,
+			'value' => $action->value,
+		];
 	}
 
 	/**

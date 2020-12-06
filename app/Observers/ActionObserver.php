@@ -8,12 +8,12 @@ class ActionObserver
 {
 	public function creating(Action $record)
 	{
-		$actionId = $record->actionType->inProgress;
-		if (!$actionId) {
+		$action = $record->actionType->inProgress;
+		if (!$action) {
 			return;
 		}
 
-		$action = Action::find($actionId);
+		$action = Action::find($action['id']);
 		$action->end_date = $record->start_date;
 		$action->save();
 	}
