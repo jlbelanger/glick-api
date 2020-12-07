@@ -10,15 +10,19 @@ class ActionObserver
 	 * @param  Action $record
 	 * @return void
 	 */
-	public function creating(Action $record)
+	public function creating(Action $action)
 	{
-		$action = $record->actionType->inProgress;
-		if (!$action) {
+		if (!$action->actionType) {
 			return;
 		}
 
-		$action = Action::find($action['id']);
-		$action->end_date = $record->start_date;
-		$action->save();
+		$inProgressAction = $action->actionType->inProgress;
+		if (!$inProgressAction) {
+			return;
+		}
+
+		$inProgressAction = Action::find($inProgressAction['id']);
+		$inProgressAction->end_date = $action->start_date;
+		$inProgressAction->save();
 	}
 }

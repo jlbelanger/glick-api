@@ -22,13 +22,10 @@ class ActionActionType implements Rule
 	 */
 	public function __construct(Action $action, Request $request)
 	{
-		$this->actionType = $action->actionType;
-		if (!$this->actionType) {
-			$data = $request->get('data');
-			$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
-			if ($id) {
-				$this->actionType = ActionType::find($id);
-			}
+		$data = $request->get('data');
+		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
+		if ($id) {
+			$this->actionType = ActionType::find($id);
 		}
 		$this->userId = Auth::guard('sanctum')->id();
 	}
@@ -42,6 +39,9 @@ class ActionActionType implements Rule
 	 */
 	public function passes($attribute, $value) // phpcs:disable Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
+		if (!$this->actionType) {
+			return false;
+		}
 		return $this->actionType->user_id === $this->userId;
 	}
 

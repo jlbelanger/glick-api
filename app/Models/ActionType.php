@@ -4,13 +4,18 @@ namespace App\Models;
 
 use App\Models\Action;
 use App\Models\User;
+use App\Rules\CannotChange;
+use App\Rules\NotPresent;
+use App\Rules\OnlyIfFieldType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Jlbelanger\LaravelJsonApi\Traits\Resource;
 
 class ActionType extends Model
@@ -79,6 +84,16 @@ class ActionType extends Model
 	/**
 	 * @return array
 	 */
+	public function defaultAttributes() : array
+	{
+		return [
+			'user_id' => Auth::guard('sanctum')->id(),
+		];
+	}
+
+	/**
+	 * @return array
+	 */
 	public function defaultFilter() : array
 	{
 		return [
@@ -97,15 +112,30 @@ class ActionType extends Model
 	}
 
 	/**
+	 * @param  Request $request
 	 * @return array
 	 */
-	protected function rules() : array
+	protected function rules(Request $request) : array
 	{
-		return [
-			'attributes.label' => 'required',
-			'attributes.field_type' => 'required',
-			'relationships.user' => 'required',
+		$rules = [
+			'attributes.label' => ['max:255'],
+			'attributes.suffix' => ['bail', new OnlyIfFieldType($request, 'number', $this), 'max:255'],
+			'attributes.options' => ['max:255'],
+			'attributes.order_num' => ['integer'],
 		];
+		$method = $request->method();
+		if ($method === 'POST') {
+			$rules['attributes.label'][] = 'required';
+			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number'])];
+			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($request, 'button', $this), 'boolean'];
+			$rules['relationships.user'] = [new NotPresent()];
+		} elseif ($method === 'PUT') {
+			$rules['attributes.label'][] = 'filled';
+			$rules['attributes.field_type'] = [new CannotChange()];
+			$rules['attributes.is_continuous'] = [new CannotChange()];
+			$rules['relationships.user'] = [new CannotChange()];
+		}
+		return $rules;
 	}
 
 	/**

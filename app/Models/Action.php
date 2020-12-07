@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\ActionType;
 use App\Rules\ActionActionType;
 use App\Rules\ActionValue;
+use App\Rules\CannotChange;
+use App\Rules\NotPresent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,12 +61,20 @@ class Action extends Model
 	 */
 	protected function rules(Request $request) : array
 	{
-		return [
-			'attributes.start_date' => 'required',
-			'attributes.end_date' => 'after:start_date',
-			'attributes.value' => [new ActionValue($this, $request)],
-			'relationships.action_type' => ['sometimes:required', new ActionActionType($this, $request)],
+		$rules = [
+			'attributes.start_date' => ['date_format:"Y-m-d H:i:s"'],
+			'attributes.value' => [new ActionValue($this, $request), 'max:255'],
 		];
+		$method = $request->method();
+		if ($method === 'POST') {
+			$rules['attributes.start_date'][] = ['required'];
+			$rules['attributes.end_date'] = [new NotPresent()];
+			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $request)];
+		} elseif ($method === 'PUT') {
+			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', 'after:start_date'];
+			$rules['relationships.action_type'] = [new CannotChange()];
+		}
+		return $rules;
 	}
 
 	/**

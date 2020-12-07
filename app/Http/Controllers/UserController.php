@@ -31,7 +31,7 @@ class UserController extends AuthorizedResourceController
 		$data = $request->input('data');
 		$rules = [
 			'attributes.password' => 'required',
-			'attributes.email' => 'required|email',
+			'attributes.email' => 'required|email|max:255|unique:users,email,' . $user->id,
 		];
 		$validator = Validator::make($data, $rules);
 		if ($validator->fails()) {

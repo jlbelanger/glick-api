@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ActionType;
+use App\Rules\CannotChange;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -64,9 +65,9 @@ class User extends Authenticatable
 	protected function rules() : array
 	{
 		return [
-			'attributes.username' => 'required|max:255|unique:users,username' . ($this->id ? ',' . $this->id : ''),
-			'attributes.email' => 'required|email|max:255|unique:users,email' . ($this->id ? ',' . $this->id : ''),
-			'attributes.password' => 'required|confirmed',
+			'attributes.username' => ['filled', 'max:255', 'unique:users,username,' . $this->id],
+			'attributes.email' => [new CannotChange()],
+			'attributes.password' => [new CannotChange()],
 		];
 	}
 
