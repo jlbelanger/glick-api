@@ -39,7 +39,7 @@ class ActionValue implements ImplicitRule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:disable Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
 		if (!$this->isSettingActionType || !$this->actionType) {
 			return true;
