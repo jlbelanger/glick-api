@@ -526,7 +526,7 @@ class ActionTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The end date must be a date after start date.',
+							'title' => 'The end date must be after the start date.',
 							'source' => [
 								'pointer' => '/data/attributes/end_date',
 							],
@@ -551,7 +551,7 @@ class ActionTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The end date must be a date after start date.',
+							'title' => 'The end date must be after the start date.',
 							'source' => [
 								'pointer' => '/data/attributes/end_date',
 							],

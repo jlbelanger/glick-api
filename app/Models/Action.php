@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\ActionType;
 use App\Rules\ActionActionType;
+use App\Rules\ActionEndDate;
 use App\Rules\ActionValue;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
@@ -71,7 +72,7 @@ class Action extends Model
 			$rules['attributes.end_date'] = [new NotPresent()];
 			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $request)];
 		} elseif ($method === 'PUT') {
-			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', 'after:start_date'];
+			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionEndDate($this, $request)];
 			$rules['relationships.action_type'] = [new CannotChange()];
 		}
 		return $rules;
