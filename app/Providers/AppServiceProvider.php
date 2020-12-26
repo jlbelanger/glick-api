@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Action;
 use App\Observers\ActionObserver;
+use DB;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,16 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
+		if (env('LOG_DATABASE_QUERIES') === '1') {
+			DB::listen(function ($query) {
+				Log::info(
+					$query->sql,
+					$query->bindings,
+					$query->time
+				);
+			});
+		}
+
 		ResetPassword::createUrlUsing(function ($notifiable, string $token) {
 			return env('FRONTEND_URL') . '/reset-password/' . $token;
 		});
