@@ -16,6 +16,7 @@ class CreateActionsTable extends Migration
 		Schema::create('actions', function (Blueprint $table) {
 			$table->id();
 			$table->foreignId('action_type_id')->constrained();
+			$table->foreignId('option_id')->nullable()->constrained();
 			$table->dateTime('start_date');
 			$table->dateTime('end_date')->nullable();
 			$table->string('value')->nullable();

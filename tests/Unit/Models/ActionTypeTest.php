@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\Action;
 use App\Models\ActionType;
+use App\Models\Option;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,11 +24,12 @@ class ActionTypeTest extends TestCase
 		$this->assertSame(null, $actionType->inProgress);
 
 		// Continuous action type with no in-progress actions.
+		$option = Option::factory()->create(['action_type_id' => $actionType->id]);
 		$action = Action::factory()->create([
 			'action_type_id' => $actionType->id,
 			'start_date' => '2001-02-03 04:05:06',
 			'end_date' => '2001-02-03 05:05:06',
-			'value' => '100',
+			'option_id' => $option->id,
 		]);
 		$this->assertSame(null, $actionType->inProgress);
 
@@ -37,7 +39,10 @@ class ActionTypeTest extends TestCase
 		$this->assertSame([
 			'id' => (string) $action->id,
 			'start_date' => '2001-02-03 04:05:06',
-			'value' => '100',
+			'option' => [
+				'id' => (string) $option->id,
+				'type' => 'options',
+			],
 		], $actionType->inProgress);
 	}
 
@@ -45,11 +50,5 @@ class ActionTypeTest extends TestCase
 	{
 		$actionType = ActionType::factory()->make(['label' => 'Foo Bar']);
 		$this->assertSame('foo-bar', $actionType->slug);
-	}
-
-	public function testSetOptionsAttribute()
-	{
-		$actionType = ActionType::factory()->make(['options' => ' Foo ,Bar ']);
-		$this->assertSame('Foo, Bar', $actionType->options);
 	}
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ActionType;
+use App\Models\Option;
 use App\Rules\ActionActionType;
 use App\Rules\ActionEndDate;
 use App\Rules\ActionValue;
@@ -27,6 +28,7 @@ class Action extends Model
 	 */
 	protected $fillable = [
 		'action_type_id',
+		'option_id',
 		'start_date',
 		'end_date',
 		'value',
@@ -83,7 +85,7 @@ class Action extends Model
 	 */
 	public function singularRelationships() : array
 	{
-		return ['action_type'];
+		return ['action_type', 'option'];
 	}
 
 	// ========================================================================
@@ -96,5 +98,13 @@ class Action extends Model
 	public function actionType() : BelongsTo
 	{
 		return $this->belongsTo(ActionType::class);
+	}
+
+	/**
+	 * @return BelongsTo
+	 */
+	public function option() : BelongsTo
+	{
+		return $this->belongsTo(Option::class);
 	}
 }

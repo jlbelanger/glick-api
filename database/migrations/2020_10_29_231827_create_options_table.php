@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActionTypesTable extends Migration
+class CreateOptionsTable extends Migration
 {
 	/**
 	 * Runs the migrations.
@@ -13,14 +13,10 @@ class CreateActionTypesTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('action_types', function (Blueprint $table) {
+		Schema::create('options', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('user_id')->constrained();
+			$table->foreignId('action_type_id')->constrained();
 			$table->string('label');
-			$table->boolean('is_continuous')->default(false);
-			$table->enum('field_type', ['button', 'number']);
-			$table->string('suffix')->nullable();
-			$table->integer('order_num')->default(0);
 			$table->timestamps();
 			$table->softDeletes('deleted_at');
 		});
@@ -33,6 +29,6 @@ class CreateActionTypesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('action_types');
+		Schema::dropIfExists('options');
 	}
 }

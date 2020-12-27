@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Action;
+use App\Models\Option;
 use App\Models\User;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
@@ -33,7 +34,6 @@ class ActionType extends Model
 		'is_continuous',
 		'field_type',
 		'suffix',
-		'options',
 		'order_num',
 	];
 
@@ -49,7 +49,7 @@ class ActionType extends Model
 		if (!$this->is_continuous) {
 			return null;
 		}
-		$actions = $this->actions()->whereNull('end_date')->select(['id', 'start_date', 'value']);
+		$actions = $this->actions()->whereNull('end_date')->select(['id', 'start_date', 'option_id']);
 		if (!$actions->exists()) {
 			return null;
 		}
@@ -57,7 +57,10 @@ class ActionType extends Model
 		return [
 			'id' => (string) $action->id,
 			'start_date' => $action->start_date,
-			'value' => $action->value,
+			'option' => [
+				'id' => (string) $action->option_id,
+				'type' => 'options',
+			],
 		];
 	}
 
@@ -120,7 +123,6 @@ class ActionType extends Model
 		$rules = [
 			'attributes.label' => ['max:255'],
 			'attributes.suffix' => ['bail', new OnlyIfFieldType($request, 'number', $this), 'max:255'],
-			'attributes.options' => ['max:255'],
 			'attributes.order_num' => ['integer'],
 		];
 		$method = $request->method();
@@ -146,20 +148,12 @@ class ActionType extends Model
 		return ['user'];
 	}
 
-	// ========================================================================
-	// Mutators
-	// ========================================================================
-
 	/**
-	 * @param  string|mixed $value
-	 * @return void
+	 * @return array
 	 */
-	public function setOptionsAttribute($value)
+	public function multiRelationships() : array
 	{
-		$value = explode(',', $value);
-		$value = array_map('trim', $value);
-		$value = implode(', ', $value);
-		$this->attributes['options'] = $value;
+		return ['options'];
 	}
 
 	// ========================================================================
@@ -172,6 +166,14 @@ class ActionType extends Model
 	public function actions() : HasMany
 	{
 		return $this->hasMany(Action::class);
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function options() : HasMany
+	{
+		return $this->hasMany(Option::class);
 	}
 
 	/**

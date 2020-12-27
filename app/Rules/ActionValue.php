@@ -21,13 +21,11 @@ class ActionValue implements ImplicitRule
 	 */
 	public function __construct(Action $action, Request $request)
 	{
-		$this->isSettingActionType = false;
 		$this->actionType = $action->actionType;
 
 		$data = $request->get('data');
 		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
 		if ($id) {
-			$this->isSettingActionType = true;
 			$this->actionType = ActionType::find($id);
 		}
 	}
@@ -41,13 +39,13 @@ class ActionValue implements ImplicitRule
 	 */
 	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
-		if (!$this->isSettingActionType || !$this->actionType) {
+		if (!$this->actionType) {
 			return true;
 		}
-		if ($this->actionType->field_type === 'number' || strpos($this->actionType->options, ',') !== false) {
+		if ($this->actionType->field_type === 'number') {
 			return !empty($value);
 		}
-		return true;
+		return empty($value);
 	}
 
 	/**
@@ -57,6 +55,9 @@ class ActionValue implements ImplicitRule
 	 */
 	public function message()
 	{
-		return 'The :attribute is required.';
+		if ($this->actionType->field_type === 'number') {
+			return 'The :attribute is required.';
+		}
+		return 'The :attribute cannot be set.';
 	}
 }

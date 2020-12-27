@@ -54,8 +54,26 @@ class DatabaseSeeder extends Seeder
 			'label' => 'Headache',
 			'is_continuous' => true,
 			'field_type' => 'button',
-			'options' => 'Mild, Moderate, Severe',
 			'user_id' => $userId,
+			'created_at' => $date,
+		]);
+		$headacheId = DB::getPdo()->lastInsertId();
+
+		DB::table('options')->insert([
+			'label' => 'Mild',
+			'action_type_id' => $headacheId,
+			'created_at' => $date,
+		]);
+
+		DB::table('options')->insert([
+			'label' => 'Moderate',
+			'action_type_id' => $headacheId,
+			'created_at' => $date,
+		]);
+
+		DB::table('options')->insert([
+			'label' => 'Severe',
+			'action_type_id' => $headacheId,
 			'created_at' => $date,
 		]);
 
@@ -71,8 +89,26 @@ class DatabaseSeeder extends Seeder
 			'label' => 'Pain',
 			'is_continuous' => false,
 			'field_type' => 'button',
-			'options' => 'Mild, Moderate, Severe',
 			'user_id' => $userId,
+			'created_at' => $date,
+		]);
+		$painId = DB::getPdo()->lastInsertId();
+
+		DB::table('options')->insert([
+			'label' => 'Mild',
+			'action_type_id' => $painId,
+			'created_at' => $date,
+		]);
+
+		DB::table('options')->insert([
+			'label' => 'Moderate',
+			'action_type_id' => $painId,
+			'created_at' => $date,
+		]);
+
+		DB::table('options')->insert([
+			'label' => 'Severe',
+			'action_type_id' => $painId,
 			'created_at' => $date,
 		]);
 	}
