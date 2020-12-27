@@ -22,7 +22,6 @@ Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
 	Route::apiResources([
 		'actions' => '\App\Http\Controllers\ActionController',
 		'action-types' => '\App\Http\Controllers\ActionTypeController',
-		'options' => '\App\Http\Controllers\OptionController',
 		'users' => '\App\Http\Controllers\UserController',
 	]);
 });
