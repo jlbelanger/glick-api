@@ -6,6 +6,8 @@ use App\Models\ActionType;
 use App\Models\Option;
 use App\Rules\ActionActionType;
 use App\Rules\ActionEndDate;
+use App\Rules\ActionOptionForButton;
+use App\Rules\ActionOptionForNumber;
 use App\Rules\ActionValue;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
@@ -66,7 +68,12 @@ class Action extends Model
 	{
 		$rules = [
 			'attributes.start_date' => ['date_format:"Y-m-d H:i:s"'],
-			'attributes.value' => [new ActionValue($this, $request), 'max:255'],
+			'attributes.value' => ['bail', new ActionValue($this, $request), 'numeric'],
+			'relationships.option' => [
+				'bail',
+				new ActionOptionForNumber($this, $request),
+				new ActionOptionForButton($this, $request),
+			],
 		];
 		$method = $request->method();
 		if ($method === 'POST') {

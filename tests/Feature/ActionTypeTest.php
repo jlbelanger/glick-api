@@ -188,6 +188,223 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
+			'with options for number' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'number',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The options cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/options',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			/*
+			// TODO:
+			'with missing option label' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'button',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with empty string option label' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'button',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => '',
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with null option label' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'button',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => null,
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with too long option label' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'button',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => str_pad('', 256, 'a', STR_PAD_LEFT),
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label may not be greater than 255 characters.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			*/
+			// TODO: with existing/non-temp option IDs
 			'with invalid field_type' => [[
 				'body' => [
 					'data' => [
@@ -350,9 +567,28 @@ class ActionTypeTest extends TestCase
 							'is_continuous' => true,
 							'order_num' => 1,
 						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+							],
+						],
 					],
 				],
-				'params' => '?include=user',
+				'params' => '?include=options,user',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -367,6 +603,14 @@ class ActionTypeTest extends TestCase
 							'slug' => 'foo',
 						],
 						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%option_id%',
+										'type' => 'options',
+									],
+								],
+							],
 							'user' => [
 								'data' => [
 									'id' => '%user_id%',
@@ -376,6 +620,14 @@ class ActionTypeTest extends TestCase
 						],
 					],
 					'included' => [
+						[
+							'id' => '%option_id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+								'has_events' => false,
+							],
+						],
 						[
 							'id' => '%user_id%',
 							'type' => 'users',
@@ -494,6 +746,9 @@ class ActionTypeTest extends TestCase
 		$args['response'] = $this->replaceToken('%user_id%', $this->user->id, $args['response']);
 		if (!empty($response['data']['id'])) {
 			$args['response'] = $this->replaceToken('%id%', $response['data']['id'], $args['response']);
+		}
+		if (!empty($response['data']['relationships']['options']['data'][0]['id'])) {
+			$args['response'] = $this->replaceToken('%option_id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
 		}
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
@@ -683,6 +938,11 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
+			// TODO: with options for number
+			// TODO: with empty string option label
+			// TODO: with null option label
+			// TODO: with too long option label
+			// TODO: when removing an option that has events
 			'when changing field_type' => [[
 				'key' => 'actionType',
 				'body' => [
@@ -925,6 +1185,9 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 200,
 			]],
+			// TODO: when adding an option
+			// TODO: when removing an option that has no events
+			// TODO: when renaming an option
 		];
 	}
 

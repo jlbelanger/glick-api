@@ -4,13 +4,15 @@ namespace App\Rules;
 
 use App\Models\Action;
 use App\Models\ActionType;
+use App\Models\Option;
 use Illuminate\Contracts\Validation\ImplicitRule;
 use Illuminate\Http\Request;
 
-class ActionValue implements ImplicitRule
+class ActionOptionForButton implements ImplicitRule
 {
 	protected $actionType;
-	protected $value;
+	protected $option;
+	protected $isSettingOption;
 
 	/**
 	 * Creates a new rule instance.
@@ -21,16 +23,18 @@ class ActionValue implements ImplicitRule
 	 */
 	public function __construct(Action $action, Request $request)
 	{
-		$this->actionType = $action->actionType;
-		$this->value = $action->value;
-
 		$data = $request->get('data');
+
+		$this->actionType = $action->actionType;
 		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
 		if ($id) {
 			$this->actionType = ActionType::find($id);
 		}
-		if (!empty($data['attributes']) && array_key_exists('value', $data['attributes'])) {
-			$this->value = $data['attributes']['value'];
+
+		$this->isSettingOption = false;
+		if (!empty($data['relationships']['option']['data']['id'])) {
+			$this->isSettingOption = true;
+			$this->option = Option::find($data['relationships']['option']['data']['id']);
 		}
 	}
 
@@ -43,13 +47,10 @@ class ActionValue implements ImplicitRule
 	 */
 	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
-		if (!$this->actionType) {
+		if (!$this->actionType || !$this->isSettingOption) {
 			return true;
 		}
-		if ($this->actionType->field_type === 'number') {
-			return $this->value !== null && $this->value !== '';
-		}
-		return $value === null || $value === '';
+		return !empty($this->option) && $this->option->action_type_id === $this->actionType->id;
 	}
 
 	/**
@@ -59,9 +60,6 @@ class ActionValue implements ImplicitRule
 	 */
 	public function message()
 	{
-		if ($this->actionType->field_type === 'number') {
-			return 'The :attribute is required.';
-		}
-		return 'The :attribute cannot be present.';
+		return 'The :attribute does not belong to the action type.';
 	}
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Action;
 use App\Models\Option;
 use App\Models\User;
+use App\Rules\ActionTypeOptions;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
 use App\Rules\OnlyIfFieldType;
@@ -124,6 +125,7 @@ class ActionType extends Model
 			'attributes.label' => ['max:255'],
 			'attributes.suffix' => ['bail', new OnlyIfFieldType($request, 'number', $this), 'max:255'],
 			'attributes.order_num' => ['integer'],
+			'relationships.options' => [new ActionTypeOptions($this, $request)],
 		];
 		$method = $request->method();
 		if ($method === 'POST') {

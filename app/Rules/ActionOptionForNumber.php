@@ -7,10 +7,10 @@ use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
 use Illuminate\Http\Request;
 
-class ActionValue implements ImplicitRule
+class ActionOptionForNumber implements ImplicitRule
 {
 	protected $actionType;
-	protected $value;
+	protected $hasOption;
 
 	/**
 	 * Creates a new rule instance.
@@ -22,15 +22,15 @@ class ActionValue implements ImplicitRule
 	public function __construct(Action $action, Request $request)
 	{
 		$this->actionType = $action->actionType;
-		$this->value = $action->value;
+		$this->hasOption = !empty($action->option_id);
 
 		$data = $request->get('data');
 		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
 		if ($id) {
 			$this->actionType = ActionType::find($id);
 		}
-		if (!empty($data['attributes']) && array_key_exists('value', $data['attributes'])) {
-			$this->value = $data['attributes']['value'];
+		if (!empty($data['relationships']['option']['data'])) {
+			$this->hasOption = true;
 		}
 	}
 
@@ -47,9 +47,9 @@ class ActionValue implements ImplicitRule
 			return true;
 		}
 		if ($this->actionType->field_type === 'number') {
-			return $this->value !== null && $this->value !== '';
+			return !$this->hasOption;
 		}
-		return $value === null || $value === '';
+		return true;
 	}
 
 	/**
@@ -59,9 +59,6 @@ class ActionValue implements ImplicitRule
 	 */
 	public function message()
 	{
-		if ($this->actionType->field_type === 'number') {
-			return 'The :attribute is required.';
-		}
 		return 'The :attribute cannot be present.';
 	}
 }

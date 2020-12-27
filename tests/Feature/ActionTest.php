@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Action;
 use App\Models\ActionType;
+use App\Models\Option;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,10 +21,16 @@ class ActionTest extends TestCase
 		$this->user = User::factory()->create([]);
 		$this->otherUser = User::factory()->create(['email' => 'bar@example.com', 'username' => 'bar']);
 		$this->actionType = ActionType::factory()->create(['user_id' => $this->user->id]);
+		$this->actionTypeOptions = ActionType::factory()->create(['user_id' => $this->user->id]);
 		$this->actionTypeNumber = ActionType::factory()->create(['user_id' => $this->user->id, 'field_type' => 'number']);
 		$this->actionTypeOtherUser = ActionType::factory()->create(['user_id' => $this->otherUser->id]);
+		$this->optionA = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'A']);
+		$this->optionB = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'B']);
+		$this->optionOtherUser = Option::factory()->create(['action_type_id' => $this->actionTypeOtherUser->id]);
 		$this->action = Action::factory()->create(['action_type_id' => $this->actionType->id]);
-		$this->actionOtherUser = Action::factory()->create(['action_type_id' => $this->actionTypeOtherUser->id]);
+		$this->actionOptions = Action::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'option_id' => $this->optionA->id]);
+		$this->actionNumber = Action::factory()->create(['action_type_id' => $this->actionTypeNumber->id, 'value' => '100']);
+		$this->actionOtherUser = Action::factory()->create(['action_type_id' => $this->actionTypeOtherUser->id, 'option_id' => $this->optionOtherUser->id]);
 	}
 
 	public function testIndex()
@@ -38,6 +45,24 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => null,
+					],
+				],
+				[
+					'id' => (string) $this->actionOptions->id,
+					'type' => 'actions',
+					'attributes' => [
+						'start_date' => '2001-02-03 04:05:06',
+						'end_date' => null,
+						'value' => null,
+					],
+				],
+				[
+					'id' => (string) $this->actionNumber->id,
+					'type' => 'actions',
+					'attributes' => [
+						'start_date' => '2001-02-03 04:05:06',
+						'end_date' => null,
+						'value' => '100',
 					],
 				],
 			],
@@ -106,39 +131,7 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with too long value' => [[
-				'body' => [
-					'data' => [
-						'type' => 'actions',
-						'attributes' => [
-							'start_date' => '2001-02-03 04:05:06',
-							'value' => str_pad('', 256, 'a', STR_PAD_LEFT),
-						],
-						'relationships' => [
-							'action_type' => [
-								'data' => [
-									'id' => '%actionTypeNumber.id%',
-									'type' => 'action-types',
-								],
-							],
-						],
-					],
-				],
-				'params' => '',
-				'response' => [
-					'errors' => [
-						[
-							'title' => 'The value may not be greater than 255 characters.',
-							'source' => [
-								'pointer' => '/data/attributes/value',
-							],
-							'status' => '422',
-						],
-					],
-				],
-				'code' => 422,
-			]],
-			'with missing value for number' => [[
+			'with missing value' => [[
 				'body' => [
 					'data' => [
 						'type' => 'actions',
@@ -169,8 +162,246 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: with options and missing value
-			// TODO: with value for non-option-button
+			'with empty string value' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with null value' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => null,
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with non-numeric value' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => 'Foo',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value must be a number.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with value for button' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '0',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionType.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value cannot be present.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option for number' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '0',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '123',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option that does not exist' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeOptions.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '12345678901234567890',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option does not belong to the action type.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option that does not belong to the action type' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeOptions.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '%optionOtherUser.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option does not belong to the action type.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
 			'when including end_date' => [[
 				'body' => [
 					'data' => [
@@ -319,7 +550,80 @@ class ActionTest extends TestCase
 				],
 				'code' => 201,
 			]],
-			// TODO: with value for options-button
+			'with valid option for button' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeOptions.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '%optionA.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '?include=action_type,option',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => null,
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeOptions.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '%optionA.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%actionTypeOptions.id%',
+							'type' => 'action-types',
+							'attributes' => [
+								'label' => 'Foo',
+								'is_continuous' => 0,
+								'field_type' => 'button',
+								'suffix' => null,
+								'order_num' => 0,
+								'in_progress' => null,
+								'slug' => 'foo',
+							],
+						],
+						[
+							'id' => '%optionA.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'A',
+								'has_events' => true,
+							],
+						],
+					],
+				],
+				'code' => 201,
+			]],
 			'with minimal valid attributes for number' => [[
 				'body' => [
 					'data' => [
@@ -375,6 +679,70 @@ class ActionTest extends TestCase
 				],
 				'code' => 201,
 			]],
+			'with zero value for number' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '0',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '0',
+						],
+					],
+				],
+				'code' => 201,
+			]],
+			'with float value for number' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '1.5',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '1.5',
+						],
+					],
+				],
+				'code' => 201,
+			]],
 		];
 	}
 
@@ -385,8 +753,11 @@ class ActionTest extends TestCase
 	{
 		$tokens = [
 			'%actionType.id%' => $this->actionType->id,
+			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
 			'%actionTypeNumber.id%' => $this->actionTypeNumber->id,
 			'%actionTypeOtherUser.id%' => $this->actionTypeOtherUser->id,
+			'%optionOtherUser.id%' => $this->optionOtherUser->id,
+			'%optionA.id%' => $this->optionA->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
@@ -448,6 +819,7 @@ class ActionTest extends TestCase
 			"with another user's record" => [[
 				'key' => 'actionOtherUser',
 				'body' => [],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -469,6 +841,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -482,10 +855,200 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: with too long value
-			// TODO: when removing value for number
-			// TODO: when removing value for option-button
-			// TODO: when adding value for non-option-button
+			'with empty string value' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with null value' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => null,
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with non-numeric value' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => 'Foo',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value must be a number.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with value for button' => [[
+				'key' => 'action',
+				'body' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => 'Foo',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value cannot be present.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option for number' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '123',
+						],
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '123',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option that does not exist' => [[
+				'key' => 'action',
+				'body' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '12345678901234567890',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option does not belong to the action type.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option that does not belong to the action type' => [[
+				'key' => 'actionOptions',
+				'body' => [
+					'data' => [
+						'id' => '%actionOptions.id%',
+						'type' => 'actions',
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '%optionOtherUser.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option does not belong to the action type.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			// TODO: when removing option
 			'with invalid end_date format' => [[
 				'key' => 'action',
 				'body' => [
@@ -497,6 +1060,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -521,6 +1085,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -546,6 +1111,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -576,6 +1142,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -600,6 +1167,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -624,6 +1192,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -637,8 +1206,123 @@ class ActionTest extends TestCase
 				],
 				'code' => 200,
 			]],
-			// TODO: with valid value for number
-			// TODO: with valid value for option-button
+			'with valid value' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '200',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '200',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with no attributes for number' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '100',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with no attributes for button' => [[
+				'key' => 'action',
+				'body' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => null,
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with valid option for button' => [[
+				'key' => 'actionOptions',
+				'body' => [
+					'data' => [
+						'id' => '%actionOptions.id%',
+						'type' => 'actions',
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '%optionB.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '?include=option',
+				'response' => [
+					'data' => [
+						'id' => '%actionOptions.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => null,
+						],
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '%optionB.id%',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%optionB.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'B',
+								'has_events' => true,
+							],
+						],
+					],
+				],
+				'code' => 200,
+			]],
 		];
 	}
 
@@ -647,9 +1331,17 @@ class ActionTest extends TestCase
 	 */
 	public function testUpdate($args)
 	{
-		$args['body'] = $this->replaceToken('%id%', $this->action->id, $args['body']);
-		$args['response'] = $this->replaceToken('%id%', $this->action->id, $args['response']);
-		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id, $args['body']);
+		$tokens = [
+			'%id%' => $this->action->id,
+			'%actionNumber.id%' => $this->actionNumber->id,
+			'%actionOptions.id%' => $this->actionOptions->id,
+			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
+			'%optionOtherUser.id%' => $this->optionOtherUser->id,
+			'%optionB.id%' => $this->optionB->id,
+		];
+		$args['body'] = $this->replaceTokens($tokens, $args['body']);
+		$args['response'] = $this->replaceTokens($tokens, $args['response']);
+		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id . $args['params'], $args['body']);
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
