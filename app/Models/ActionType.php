@@ -116,22 +116,22 @@ class ActionType extends Model
 	}
 
 	/**
-	 * @param  Request $request
+	 * @param  array  $data
+	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(Request $request) : array
+	protected function rules(array $data, string $method) : array
 	{
 		$rules = [
 			'attributes.label' => ['max:255'],
-			'attributes.suffix' => ['bail', new OnlyIfFieldType($request, 'number', $this), 'max:255'],
+			'attributes.suffix' => ['bail', new OnlyIfFieldType($data, $method, 'number', $this), 'max:255'],
 			'attributes.order_num' => ['integer'],
-			'relationships.options' => [new ActionTypeOptions($this, $request)],
+			'relationships.options' => [new ActionTypeOptions($this, $data)],
 		];
-		$method = $request->method();
 		if ($method === 'POST') {
 			$rules['attributes.label'][] = 'required';
 			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number'])];
-			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($request, 'button', $this), 'boolean'];
+			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($data, $method, 'button', $this), 'boolean'];
 			$rules['relationships.user'] = [new NotPresent()];
 		} elseif ($method === 'PUT') {
 			$rules['attributes.label'][] = 'filled';

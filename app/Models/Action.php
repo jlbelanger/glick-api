@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\ActionType;
 use App\Models\Option;
 use App\Rules\ActionActionType;
-use App\Rules\ActionEndDate;
 use App\Rules\ActionOptionForButton;
 use App\Rules\ActionOptionForNumber;
+use App\Rules\ActionStartEndDate;
 use App\Rules\ActionValue;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Jlbelanger\LaravelJsonApi\Traits\Resource;
 
@@ -61,27 +60,27 @@ class Action extends Model
 	}
 
 	/**
-	 * @param  Request $request
+	 * @param  array  $data
+	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(Request $request) : array
+	protected function rules(array $data, string $method) : array
 	{
 		$rules = [
-			'attributes.start_date' => ['date_format:"Y-m-d H:i:s"'],
-			'attributes.value' => ['bail', new ActionValue($this, $request), 'numeric'],
+			'attributes.value' => ['bail', new ActionValue($this, $data), 'numeric'],
 			'relationships.option' => [
 				'bail',
-				new ActionOptionForNumber($this, $request),
-				new ActionOptionForButton($this, $request),
+				new ActionOptionForNumber($this, $data),
+				new ActionOptionForButton($this, $data),
 			],
 		];
-		$method = $request->method();
 		if ($method === 'POST') {
-			$rules['attributes.start_date'][] = ['required'];
+			$rules['attributes.start_date'] = ['bail', 'required', 'date_format:"Y-m-d H:i:s"'];
 			$rules['attributes.end_date'] = [new NotPresent()];
-			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $request)];
+			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $data)];
 		} elseif ($method === 'PUT') {
-			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionEndDate($this, $request)];
+			$rules['attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
+			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['relationships.action_type'] = [new CannotChange()];
 		}
 		return $rules;

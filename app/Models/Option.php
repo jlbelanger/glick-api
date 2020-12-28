@@ -63,6 +63,24 @@ class Option extends Model
 	}
 
 	/**
+	 * @param  array  $data
+	 * @param  string $method
+	 * @return array
+	 */
+	protected function rules(array $data, string $method) : array
+	{
+		$rules = [
+			'attributes.label' => ['max:255'],
+		];
+		if ($method === 'POST') {
+			$rules['attributes.label'][] = 'required';
+		} elseif ($method === 'PUT') {
+			$rules['attributes.label'][] = 'filled';
+		}
+		return $rules;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function singularRelationships() : array

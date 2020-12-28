@@ -4,7 +4,6 @@ namespace App\Rules;
 
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Http\Request;
 
 class ActionTypeOptions implements Rule
 {
@@ -15,13 +14,12 @@ class ActionTypeOptions implements Rule
 	 * Creates a new rule instance.
 	 *
 	 * @param  ActionType $actionType
-	 * @param  Request    $request
+	 * @param  array      $data
 	 * @return void
 	 */
-	public function __construct(ActionType $actionType, Request $request)
+	public function __construct(ActionType $actionType, array $data)
 	{
-		$this->fieldType = $actionType->fieldType;
-		$data = $request->get('data');
+		$this->fieldType = $actionType->field_type;
 		if (!empty($data['attributes']['field_type'])) {
 			$this->fieldType = $data['attributes']['field_type'];
 		}

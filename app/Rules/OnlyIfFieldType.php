@@ -4,7 +4,6 @@ namespace App\Rules;
 
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Http\Request;
 
 class OnlyIfFieldType implements Rule
 {
@@ -14,16 +13,16 @@ class OnlyIfFieldType implements Rule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Request    $request
+	 * @param  array      $data
+	 * @param  string     $method
 	 * @param  string     $allowedFieldType
 	 * @param  ActionType $actionType
 	 * @return void
 	 */
-	public function __construct(Request $request, string $allowedFieldType, ActionType $actionType)
+	public function __construct(array $data, string $method, string $allowedFieldType, ActionType $actionType)
 	{
-		$data = $request->get('data');
 		$this->requestFieldType = !empty($data['attributes']['field_type']) ? $data['attributes']['field_type'] : null;
-		if ($request->method() === 'PUT' && !$this->requestFieldType) {
+		if ($method === 'PUT' && !$this->requestFieldType) {
 			$this->requestFieldType = $actionType->field_type;
 		}
 		$this->allowedFieldType = $allowedFieldType;

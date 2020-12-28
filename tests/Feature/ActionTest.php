@@ -31,6 +31,7 @@ class ActionTest extends TestCase
 		$this->actionOptions = Action::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'option_id' => $this->optionA->id]);
 		$this->actionNumber = Action::factory()->create(['action_type_id' => $this->actionTypeNumber->id, 'value' => '100']);
 		$this->actionOtherUser = Action::factory()->create(['action_type_id' => $this->actionTypeOtherUser->id, 'option_id' => $this->optionOtherUser->id]);
+		$this->actionWithEndDate = Action::factory()->create(['action_type_id' => $this->actionType->id, 'start_date' => '2001-01-01 01:00:00', 'end_date' => '2001-01-01 02:00:00']);
 	}
 
 	public function testIndex()
@@ -63,6 +64,15 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => '100',
+					],
+				],
+				[
+					'id' => (string) $this->actionWithEndDate->id,
+					'type' => 'actions',
+					'attributes' => [
+						'start_date' => '2001-01-01 01:00:00',
+						'end_date' => '2001-01-01 02:00:00',
+						'value' => null,
 					],
 				],
 			],
@@ -1048,7 +1058,6 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: when removing option
 			'with invalid end_date format' => [[
 				'key' => 'action',
 				'body' => [
@@ -1125,7 +1134,31 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: when setting start_date after existing end_date
+			'when setting start_date after existing end_date' => [[
+				'key' => 'actionWithEndDate',
+				'body' => [
+					'data' => [
+						'id' => '%actionWithEndDate.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-01-01 03:00:00'
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The end date must be after the start date.',
+							'source' => [
+								'pointer' => '/data/attributes/start_date',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
 			'when changing action_type' => [[
 				'key' => 'action',
 				'body' => [
@@ -1337,6 +1370,7 @@ class ActionTest extends TestCase
 			'%actionOptions.id%' => $this->actionOptions->id,
 			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
 			'%optionOtherUser.id%' => $this->optionOtherUser->id,
+			'%actionWithEndDate.id%' => $this->actionWithEndDate->id,
 			'%optionB.id%' => $this->optionB->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);

@@ -5,7 +5,6 @@ namespace App\Rules;
 use App\Models\Action;
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
-use Illuminate\Http\Request;
 
 class ActionValue implements ImplicitRule
 {
@@ -15,16 +14,15 @@ class ActionValue implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action  $action
-	 * @param  Request $request
+	 * @param  Action $action
+	 * @param  array  $data
 	 * @return void
 	 */
-	public function __construct(Action $action, Request $request)
+	public function __construct(Action $action, array $data)
 	{
 		$this->actionType = $action->actionType;
 		$this->value = $action->value;
 
-		$data = $request->get('data');
 		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
 		if ($id) {
 			$this->actionType = ActionType::find($id);

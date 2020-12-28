@@ -6,7 +6,6 @@ use App\Models\Action;
 use App\Models\ActionType;
 use App\Models\Option;
 use Illuminate\Contracts\Validation\ImplicitRule;
-use Illuminate\Http\Request;
 
 class ActionOptionForButton implements ImplicitRule
 {
@@ -17,14 +16,12 @@ class ActionOptionForButton implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action  $action
-	 * @param  Request $request
+	 * @param  Action $action
+	 * @param  array  $data
 	 * @return void
 	 */
-	public function __construct(Action $action, Request $request)
+	public function __construct(Action $action, array $data)
 	{
-		$data = $request->get('data');
-
 		$this->actionType = $action->actionType;
 		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
 		if ($id) {

@@ -231,8 +231,6 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			/*
-			// TODO:
 			'with missing option label' => [[
 				'body' => [
 					'data' => [
@@ -403,7 +401,6 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			*/
 			// TODO: with existing/non-temp option IDs
 			'with invalid field_type' => [[
 				'body' => [
