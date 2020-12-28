@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
 use Jlbelanger\LaravelJsonApi\Exceptions\NotFoundException;
-use Jlbelanger\LaravelJsonApi\Traits\Validatable;
+use Jlbelanger\LaravelJsonApi\Exceptions\ValidationException;
+use Jlbelanger\LaravelJsonApi\Helpers\Utilities;
 use Validator;
 
 class UserController extends AuthorizedResourceController
@@ -33,9 +34,9 @@ class UserController extends AuthorizedResourceController
 			'attributes.password' => 'required',
 			'attributes.email' => 'required|email|max:255|unique:users,email,' . $user->id,
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 		if (!empty($errors)) {
@@ -76,9 +77,9 @@ class UserController extends AuthorizedResourceController
 			'attributes.new_password' => 'required|confirmed',
 			'attributes.new_password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 		if (!empty($errors)) {

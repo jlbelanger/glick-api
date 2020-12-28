@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Jlbelanger\LaravelJsonApi\Traits\Validatable;
+use Jlbelanger\LaravelJsonApi\Exceptions\ValidationException;
+use Jlbelanger\LaravelJsonApi\Helpers\Utilities;
 use Validator;
 
 class AuthController extends Controller
@@ -30,9 +31,9 @@ class AuthController extends Controller
 			'attributes.username' => 'required',
 			'attributes.password' => 'required',
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 
@@ -78,9 +79,9 @@ class AuthController extends Controller
 			'attributes.password' => 'required|confirmed',
 			'attributes.password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 
@@ -106,9 +107,9 @@ class AuthController extends Controller
 		$rules = [
 			'attributes.email' => 'required|email',
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 
@@ -134,9 +135,9 @@ class AuthController extends Controller
 			'attributes.new_password' => 'required|confirmed',
 			'attributes.new_password_confirmation' => 'required',
 		];
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
-			$errors = Validatable::formatErrors($validator->errors()->toArray());
+			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
 		if (!empty($errors)) {
