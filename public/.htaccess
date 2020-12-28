@@ -1,3 +1,14 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+# Redirects ==============================
+
+RewriteRule ^apple-touch-icon.+\.png$ /apple-touch-icon.png [L,R=301]
+
+Redirect 301 /favicon.ico /favicon.svg
+
+# Laravel ==============================
+
 <IfModule mod_rewrite.c>
 	<IfModule mod_negotiation.c>
 		Options -MultiViews -Indexes
