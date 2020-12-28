@@ -15,7 +15,7 @@
 		"php": "^7.3|^8.0",
 		"fruitcake/laravel-cors": "^2.0",
 		"guzzlehttp/guzzle": "^7.0.1",
-		"jlbelanger/laravel-json-api": "@dev",
+		"jlbelanger/laravel-json-api": "dev-master#1db1c080b87ef2bafab07238415f61da79521309",
 		"laravel/framework": "^8.19",
 		"laravel/sanctum": "^2.8"
 	},
@@ -41,15 +41,12 @@
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"repositories": {
-		"dev-package": {
-			"type": "path",
-			"url": "../laravel-json-api",
-			"options": {
-				"symlink": true
-			}
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:jlbelanger/laravel-json-api.git"
 		}
-	},
+	],
 	"config": {
 		"optimize-autoloader": true,
 		"preferred-install": "dist",
