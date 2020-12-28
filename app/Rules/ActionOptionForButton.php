@@ -10,8 +10,8 @@ use Illuminate\Contracts\Validation\ImplicitRule;
 class ActionOptionForButton implements ImplicitRule
 {
 	protected $actionType;
-	protected $option;
 	protected $isSettingOption;
+	protected $option;
 
 	/**
 	 * Creates a new rule instance.
@@ -23,9 +23,8 @@ class ActionOptionForButton implements ImplicitRule
 	public function __construct(Action $action, array $data)
 	{
 		$this->actionType = $action->actionType;
-		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
-		if ($id) {
-			$this->actionType = ActionType::find($id);
+		if (!empty($data['relationships']['action_type']['data']['id'])) {
+			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
 		}
 
 		$this->isSettingOption = false;

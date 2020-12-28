@@ -7,14 +7,15 @@ use App\Models\Option;
 use App\Models\User;
 use App\Rules\ActionTypeOptions;
 use App\Rules\CannotChange;
+use App\Rules\CannotRemoveWithEvents;
 use App\Rules\NotPresent;
 use App\Rules\OnlyIfFieldType;
+use App\Rules\TempIdsOnly;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -132,11 +133,13 @@ class ActionType extends Model
 			$rules['attributes.label'][] = 'required';
 			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number'])];
 			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($data, $method, 'button', $this), 'boolean'];
+			$rules['relationships.options'][] = new TempIdsOnly();
 			$rules['relationships.user'] = [new NotPresent()];
 		} elseif ($method === 'PUT') {
 			$rules['attributes.label'][] = 'filled';
 			$rules['attributes.field_type'] = [new CannotChange()];
 			$rules['attributes.is_continuous'] = [new CannotChange()];
+			$rules['relationships.options'][] = new CannotRemoveWithEvents($this);
 			$rules['relationships.user'] = [new CannotChange()];
 		}
 		return $rules;

@@ -2,26 +2,22 @@
 
 namespace App\Rules;
 
-use App\Models\ActionType;
+use App\Models\Action;
 use Illuminate\Contracts\Validation\Rule;
 
-class ActionTypeOptions implements Rule
+class ActionValueUpdate implements Rule
 {
-	protected $fieldType;
+	protected $actionType;
 
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  ActionType $actionType
-	 * @param  array      $data
+	 * @param  Action $action
 	 * @return void
 	 */
-	public function __construct(ActionType $actionType, array $data)
+	public function __construct(Action $action)
 	{
-		$this->fieldType = $actionType->field_type;
-		if (!empty($data['attributes']['field_type'])) {
-			$this->fieldType = $data['attributes']['field_type'];
-		}
+		$this->actionType = $action->actionType;
 	}
 
 	/**
@@ -33,10 +29,10 @@ class ActionTypeOptions implements Rule
 	 */
 	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
-		if ($this->fieldType === 'button') {
-			return true;
+		if ($this->actionType->field_type === 'number') {
+			return $value !== null && $value !== '';
 		}
-		return empty($value);
+		return $value === null || $value === '';
 	}
 
 	/**
@@ -46,6 +42,9 @@ class ActionTypeOptions implements Rule
 	 */
 	public function message()
 	{
+		if ($this->actionType->field_type === 'number') {
+			return 'The :attribute is required.';
+		}
 		return 'The :attribute cannot be present.';
 	}
 }

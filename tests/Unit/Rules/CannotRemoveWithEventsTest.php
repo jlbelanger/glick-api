@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Rules;
 
-use App\Models\Action;
-use App\Rules\ActionActionType;
+use App\Models\ActionType;
+use App\Rules\CannotRemoveWithEvents;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ActionActionTypeTest extends TestCase
+class CannotRemoveWithEventsTest extends TestCase
 {
 	use RefreshDatabase;
 
@@ -22,8 +22,8 @@ class ActionActionTypeTest extends TestCase
 	public function testPasses($args)
 	{
 		$this->markAsSkipped();
-		$args['action'] = Action::factory()->create($args['action']);
-		$rule = new ActionActionType($args['action'], $args['data']);
+		$args['actionType'] = ActionType::factory()->create($args['actionType']);
+		$rule = new CannotRemoveWithEvents($args['actionType']);
 		$output = $rule->passes('foo', $args['value']);
 		$this->assertSame($args['expected'], $output);
 	}

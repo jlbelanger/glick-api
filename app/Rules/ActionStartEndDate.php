@@ -21,18 +21,18 @@ class ActionStartEndDate implements Rule
 	 */
 	public function __construct(Action $action, array $data)
 	{
-		$this->isSettingStartDate = false;
-		$this->isSettingEndDate = false;
 		$this->startDate = $action->start_date;
-		$this->endDate = $action->end_date;
-
+		$this->isSettingStartDate = false;
 		if (!empty($data['attributes']['start_date'])) {
-			$this->isSettingStartDate = true;
 			$this->startDate = $data['attributes']['start_date'];
+			$this->isSettingStartDate = true;
 		}
+
+		$this->endDate = $action->end_date;
+		$this->isSettingEndDate = false;
 		if (!empty($data['attributes']['end_date'])) {
-			$this->isSettingEndDate = true;
 			$this->endDate = $data['attributes']['end_date'];
+			$this->isSettingEndDate = true;
 		}
 	}
 

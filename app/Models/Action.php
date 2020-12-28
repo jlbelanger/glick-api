@@ -8,7 +8,8 @@ use App\Rules\ActionActionType;
 use App\Rules\ActionOptionForButton;
 use App\Rules\ActionOptionForNumber;
 use App\Rules\ActionStartEndDate;
-use App\Rules\ActionValue;
+use App\Rules\ActionValueCreate;
+use App\Rules\ActionValueUpdate;
 use App\Rules\CannotChange;
 use App\Rules\NotPresent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -67,7 +68,6 @@ class Action extends Model
 	protected function rules(array $data, string $method) : array
 	{
 		$rules = [
-			'attributes.value' => ['bail', new ActionValue($this, $data), 'numeric'],
 			'relationships.option' => [
 				'bail',
 				new ActionOptionForNumber($this, $data),
@@ -75,10 +75,12 @@ class Action extends Model
 			],
 		];
 		if ($method === 'POST') {
+			$rules['attributes.value'] = ['bail', new ActionValueCreate($data), 'numeric'];
 			$rules['attributes.start_date'] = ['bail', 'required', 'date_format:"Y-m-d H:i:s"'];
 			$rules['attributes.end_date'] = [new NotPresent()];
 			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $data)];
 		} elseif ($method === 'PUT') {
+			$rules['attributes.value'] = ['bail', new ActionValueUpdate($this), 'numeric'];
 			$rules['attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['relationships.action_type'] = [new CannotChange()];

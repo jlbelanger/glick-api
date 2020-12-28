@@ -2,33 +2,23 @@
 
 namespace App\Rules;
 
-use App\Models\Action;
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ActionValue implements ImplicitRule
+class ActionValueCreate implements ImplicitRule
 {
 	protected $actionType;
-	protected $value;
 
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
-	 * @param  array  $data
+	 * @param  array $data
 	 * @return void
 	 */
-	public function __construct(Action $action, array $data)
+	public function __construct(array $data)
 	{
-		$this->actionType = $action->actionType;
-		$this->value = $action->value;
-
-		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
-		if ($id) {
-			$this->actionType = ActionType::find($id);
-		}
-		if (!empty($data['attributes']) && array_key_exists('value', $data['attributes'])) {
-			$this->value = $data['attributes']['value'];
+		if (!empty($data['relationships']['action_type']['data']['id'])) {
+			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
 		}
 	}
 
@@ -45,7 +35,7 @@ class ActionValue implements ImplicitRule
 			return true;
 		}
 		if ($this->actionType->field_type === 'number') {
-			return $this->value !== null && $this->value !== '';
+			return $value !== null && $value !== '';
 		}
 		return $value === null || $value === '';
 	}

@@ -21,12 +21,11 @@ class ActionOptionForNumber implements ImplicitRule
 	public function __construct(Action $action, array $data)
 	{
 		$this->actionType = $action->actionType;
-		$this->hasOption = !empty($action->option_id);
-
-		$id = !empty($data['relationships']['action_type']['data']['id']) ? $data['relationships']['action_type']['data']['id'] : null;
-		if ($id) {
-			$this->actionType = ActionType::find($id);
+		if (!empty($data['relationships']['action_type']['data']['id'])) {
+			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
 		}
+
+		$this->hasOption = !empty($action->option_id);
 		if (!empty($data['relationships']['option']['data'])) {
 			$this->hasOption = true;
 		}

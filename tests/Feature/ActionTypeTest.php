@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Action;
 use App\Models\ActionType;
+use App\Models\Option;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,8 +21,12 @@ class ActionTypeTest extends TestCase
 		$this->user = User::factory()->create([]);
 		$this->otherUser = User::factory()->create(['email' => 'bar@example.com', 'username' => 'bar']);
 		$this->actionType = ActionType::factory()->create(['user_id' => $this->user->id]);
+		$this->actionTypeOptions = ActionType::factory()->create(['user_id' => $this->user->id]);
 		$this->actionTypeNumber = ActionType::factory()->create(['user_id' => $this->user->id, 'field_type' => 'number']);
 		$this->actionTypeOtherUser = ActionType::factory()->create(['user_id' => $this->otherUser->id]);
+		$this->optionA = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'A']);
+		$this->optionB = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'B']);
+		$this->action = Action::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'option_id' => $this->optionB]);
 	}
 
 	public function testIndex()
@@ -30,6 +36,19 @@ class ActionTypeTest extends TestCase
 			'data' => [
 				[
 					'id' => (string) $this->actionType->id,
+					'type' => 'action-types',
+					'attributes' => [
+						'label' => 'Foo',
+						'is_continuous' => 0,
+						'field_type' => 'button',
+						'suffix' => null,
+						'order_num' => 0,
+						'in_progress' => null,
+						'slug' => 'foo',
+					],
+				],
+				[
+					'id' => (string) $this->actionTypeOptions->id,
 					'type' => 'action-types',
 					'attributes' => [
 						'label' => 'Foo',
@@ -401,7 +420,40 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: with existing/non-temp option IDs
+			'with existing/non-temp option IDs' => [[
+				'body' => [
+					'data' => [
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'field_type' => 'button',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionA.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The options cannot contain existing options.',
+							'source' => [
+								'pointer' => '/data/relationships/options',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
 			'with invalid field_type' => [[
 				'body' => [
 					'data' => [
@@ -739,6 +791,7 @@ class ActionTypeTest extends TestCase
 	 */
 	public function testStore($args)
 	{
+		$args['body'] = $this->replaceToken('%optionA.id%', $this->optionA->id, $args['body']);
 		$response = $this->actingAs($this->user)->json('POST', $this->path . $args['params'], $args['body']);
 		$args['response'] = $this->replaceToken('%user_id%', $this->user->id, $args['response']);
 		if (!empty($response['data']['id'])) {
@@ -805,6 +858,7 @@ class ActionTypeTest extends TestCase
 			"with another user's record" => [[
 				'key' => 'actionTypeOtherUser',
 				'body' => [],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -826,6 +880,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -850,6 +905,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -874,6 +930,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -898,6 +955,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -922,6 +980,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -935,11 +994,241 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			// TODO: with options for number
-			// TODO: with empty string option label
-			// TODO: with null option label
-			// TODO: with too long option label
-			// TODO: when removing an option that has events
+			'with options for number' => [[
+				'key' => 'actionTypeNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionTypeNumber.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The options cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/options',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with missing option label' => [[
+				'key' => 'actionType',
+				'body' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with empty string option label' => [[
+				'key' => 'actionType',
+				'body' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => '',
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with empty string option label' => [[
+				'key' => 'actionType',
+				'body' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => null,
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label field is required.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with too long option label' => [[
+				'key' => 'actionType',
+				'body' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => str_pad('', 256, 'a', STR_PAD_LEFT),
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The label may not be greater than 255 characters.',
+							'source' => [
+								'pointer' => '/included/0/attributes/label',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'when removing an option that has events' => [[
+				'key' => 'actionTypeOptions',
+				'body' => [
+					'data' => [
+						'id' => '%actionTypeOptions.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionA.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'Options with existing events cannot be removed.',
+							'source' => [
+								'pointer' => '/data/relationships/options',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
 			'when changing field_type' => [[
 				'key' => 'actionType',
 				'body' => [
@@ -951,6 +1240,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -975,6 +1265,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -1004,6 +1295,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'errors' => [
 						[
@@ -1025,6 +1317,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionType.id%',
@@ -1053,6 +1346,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionType.id%',
@@ -1081,6 +1375,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionTypeNumber.id%',
@@ -1109,6 +1404,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionTypeNumber.id%',
@@ -1137,6 +1433,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionType.id%',
@@ -1165,6 +1462,7 @@ class ActionTypeTest extends TestCase
 						],
 					],
 				],
+				'params' => '',
 				'response' => [
 					'data' => [
 						'id' => '%actionType.id%',
@@ -1182,9 +1480,208 @@ class ActionTypeTest extends TestCase
 				],
 				'code' => 200,
 			]],
-			// TODO: when adding an option
-			// TODO: when removing an option that has no events
-			// TODO: when renaming an option
+			'when adding an option' => [[
+				'key' => 'actionType',
+				'body' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => 'temp-1',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => 'temp-1',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+							],
+						],
+					],
+				],
+				'params' => '?include=options',
+				'response' => [
+					'data' => [
+						'id' => '%actionType.id%',
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'is_continuous' => 0,
+							'field_type' => 'button',
+							'suffix' => null,
+							'order_num' => 0,
+							'in_progress' => null,
+							'slug' => 'foo',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%option.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%option.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'Bar',
+								'has_events' => false,
+							],
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'when renaming an option' => [[
+				'key' => 'actionTypeOptions',
+				'body' => [
+					'data' => [
+						'id' => '%actionTypeOptions.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionA.id%',
+										'type' => 'options',
+									],
+									[
+										'id' => '%optionB.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%optionA.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'New Label',
+							],
+						],
+					],
+				],
+				'params' => '?include=options',
+				'response' => [
+					'data' => [
+						'id' => '%actionTypeOptions.id%',
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'is_continuous' => 0,
+							'field_type' => 'button',
+							'suffix' => null,
+							'order_num' => 0,
+							'in_progress' => null,
+							'slug' => 'foo',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionA.id%',
+										'type' => 'options',
+									],
+									[
+										'id' => '%optionB.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%optionA.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'New Label',
+								'has_events' => false,
+							],
+						],
+						[
+							'id' => '%optionB.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'B',
+								'has_events' => true,
+							],
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'when removing an option that has no events' => [[
+				'key' => 'actionTypeOptions',
+				'body' => [
+					'data' => [
+						'id' => '%actionTypeOptions.id%',
+						'type' => 'action-types',
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionB.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+				],
+				'params' => '?include=options',
+				'response' => [
+					'data' => [
+						'id' => '%actionTypeOptions.id%',
+						'type' => 'action-types',
+						'attributes' => [
+							'label' => 'Foo',
+							'is_continuous' => 0,
+							'field_type' => 'button',
+							'suffix' => null,
+							'order_num' => 0,
+							'in_progress' => null,
+							'slug' => 'foo',
+						],
+						'relationships' => [
+							'options' => [
+								'data' => [
+									[
+										'id' => '%optionB.id%',
+										'type' => 'options',
+									],
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%optionB.id%',
+							'type' => 'options',
+							'attributes' => [
+								'label' => 'B',
+								'has_events' => true,
+							],
+						],
+					],
+				],
+				'code' => 200,
+			]],
 		];
 	}
 
@@ -1196,10 +1693,16 @@ class ActionTypeTest extends TestCase
 		$tokens = [
 			'%actionType.id%' => $this->actionType->id,
 			'%actionTypeNumber.id%' => $this->actionTypeNumber->id,
+			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
+			'%optionA.id%' => $this->optionA->id,
+			'%optionB.id%' => $this->optionB->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
-		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id, $args['body']);
+		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id . $args['params'], $args['body']);
+		if (!empty($response['data']['relationships']['options']['data'][0]['id'])) {
+			$args['response'] = $this->replaceToken('%option.id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
+		}
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
