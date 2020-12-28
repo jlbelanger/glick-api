@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e1d6d1568634aa0e077f3783dc1dc03",
+    "content-hash": "82dd554000ba032bf55450efbbaf71be",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -759,12 +759,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/laravel-json-api.git",
-                "reference": "1db1c080b87ef2bafab07238415f61da79521309"
+                "reference": "97b53fab5c9044bbedab743604cdaa94e5203d8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/1db1c080b87ef2bafab07238415f61da79521309",
-                "reference": "1db1c080b87ef2bafab07238415f61da79521309",
+                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/97b53fab5c9044bbedab743604cdaa94e5203d8a",
+                "reference": "97b53fab5c9044bbedab743604cdaa94e5203d8a",
                 "shasum": ""
             },
             "require-dev": {
@@ -804,7 +804,7 @@
                 "source": "https://github.com/jlbelanger/laravel-json-api/tree/master",
                 "issues": "https://github.com/jlbelanger/laravel-json-api/issues"
             },
-            "time": "2020-12-28T00:47:09+00:00"
+            "time": "2020-12-28T19:28:12+00:00"
         },
         {
             "name": "laravel/framework",
