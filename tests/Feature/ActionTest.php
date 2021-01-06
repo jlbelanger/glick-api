@@ -753,6 +753,38 @@ class ActionTest extends TestCase
 				],
 				'code' => 201,
 			]],
+			'with fraction value for number' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '120/80',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '120/80',
+						],
+					],
+				],
+				'code' => 201,
+			]],
 		];
 	}
 
@@ -1259,6 +1291,81 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '200',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with zero value for number' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '0',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '0',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with float value for number' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '1.5',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '1.5',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with fraction value for number' => [[
+				'key' => 'actionNumber',
+				'body' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '120/80',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => '120/80',
 						],
 					],
 				],
