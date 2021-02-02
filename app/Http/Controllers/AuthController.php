@@ -41,14 +41,19 @@ class AuthController extends Controller
 			'username' => $data['attributes']['username'],
 			'password' => $data['attributes']['password'],
 		];
-		if (!Auth::attempt($credentials, !empty($data['attributes']['remember']))) {
+		$remember = !empty($data['attributes']['remember']);
+		if (!Auth::attempt($credentials, $remember)) {
 			return response()->json(['errors' => [['title' => 'Username or password is incorrect.', 'status' => '401']]], 401);
 		}
 
 		$user = User::where('username', '=', $credentials['username'])->first();
 		$token = $user->createToken('api');
 
-		return response()->json(['id' => $user->id, 'token' => $token->plainTextToken]);
+		return response()->json([
+			'id' => $user->id,
+			'token' => $token->plainTextToken,
+			'remember' => $remember,
+		]);
 	}
 
 	/**
@@ -94,7 +99,11 @@ class AuthController extends Controller
 		$token = $user->createToken('api');
 		DB::commit();
 
-		return response()->json(['id' => $user->id, 'token' => $token->plainTextToken]);
+		return response()->json([
+			'id' => $user->id,
+			'token' => $token->plainTextToken,
+			'remember' => false,
+		]);
 	}
 
 	/**
