@@ -21,7 +21,7 @@ class Authenticate extends Middleware
 	public function handle(Request $request, Closure $next, $guard = null)
 	{
 		if (!Auth::guard($guard)->check()) {
-			throw new NotFoundException();
+			throw NotFoundException::generate();
 		}
 
 		return $next($request);

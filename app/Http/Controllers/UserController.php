@@ -26,7 +26,7 @@ class UserController extends AuthorizedResourceController
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
-			throw new NotFoundException();
+			throw NotFoundException::generate();
 		}
 
 		$data = $request->input('data');
@@ -68,7 +68,7 @@ class UserController extends AuthorizedResourceController
 	{
 		$user = User::find($id);
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
-			throw new NotFoundException();
+			throw NotFoundException::generate();
 		}
 
 		$data = $request->input('data');
