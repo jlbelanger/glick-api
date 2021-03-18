@@ -18,7 +18,7 @@ class CreateActionTypesTable extends Migration
 			$table->foreignId('user_id')->constrained();
 			$table->string('label');
 			$table->boolean('is_continuous')->default(false);
-			$table->enum('field_type', ['button', 'number']);
+			$table->enum('field_type', ['button', 'number', 'text']);
 			$table->string('suffix')->nullable();
 			$table->integer('order_num')->default(0);
 			$table->timestamps();

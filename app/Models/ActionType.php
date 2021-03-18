@@ -131,7 +131,7 @@ class ActionType extends Model
 		];
 		if ($method === 'POST') {
 			$rules['attributes.label'][] = 'required';
-			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number'])];
+			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number', 'text'])];
 			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($data, $method, 'button', $this), 'boolean'];
 			$rules['relationships.options'][] = new TempIdsOnly();
 			$rules['relationships.user'] = [new NotPresent()];

@@ -76,12 +76,16 @@ class Action extends Model
 			],
 		];
 		if ($method === 'POST') {
-			$rules['attributes.value'] = ['bail', new ActionValueCreate($data), new ActionValueNumeric()];
+			$actionType = null;
+			if (!empty($data['relationships']['action_type']['data']['id'])) {
+				$actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
+			}
+			$rules['attributes.value'] = ['bail', new ActionValueCreate($data), new ActionValueNumeric($actionType)];
 			$rules['attributes.start_date'] = ['bail', 'required', 'date_format:"Y-m-d H:i:s"'];
 			$rules['attributes.end_date'] = [new NotPresent()];
 			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $data)];
 		} elseif ($method === 'PUT') {
-			$rules['attributes.value'] = ['bail', new ActionValueUpdate($this), new ActionValueNumeric()];
+			$rules['attributes.value'] = ['bail', new ActionValueUpdate($this), new ActionValueNumeric($this->actionType)];
 			$rules['attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['relationships.action_type'] = [new CannotChange()];

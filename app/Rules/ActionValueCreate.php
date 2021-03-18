@@ -34,10 +34,10 @@ class ActionValueCreate implements ImplicitRule
 		if (!$this->actionType) {
 			return true;
 		}
-		if ($this->actionType->field_type === 'number') {
-			return $value !== null && $value !== '';
+		if ($this->actionType->field_type === 'button') {
+			return $value === null || $value === '';
 		}
-		return $value === null || $value === '';
+		return $value !== null && $value !== '';
 	}
 
 	/**
@@ -47,9 +47,9 @@ class ActionValueCreate implements ImplicitRule
 	 */
 	public function message()
 	{
-		if ($this->actionType->field_type === 'number') {
-			return 'The :attribute is required.';
+		if ($this->actionType->field_type === 'button') {
+			return 'The :attribute cannot be present.';
 		}
-		return 'The :attribute cannot be present.';
+		return 'The :attribute is required.';
 	}
 }

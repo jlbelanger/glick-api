@@ -111,5 +111,13 @@ class DatabaseSeeder extends Seeder
 			'action_type_id' => $painId,
 			'created_at' => $date,
 		]);
+
+		DB::table('action_types')->insert([
+			'label' => 'Note',
+			'is_continuous' => false,
+			'field_type' => 'text',
+			'user_id' => $userId,
+			'created_at' => $date,
+		]);
 	}
 }
