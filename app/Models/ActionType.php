@@ -158,7 +158,7 @@ class ActionType extends Model
 	 */
 	public function multiRelationships() : array
 	{
-		return ['options'];
+		return ['actions', 'options'];
 	}
 
 	// ========================================================================
@@ -170,7 +170,7 @@ class ActionType extends Model
 	 */
 	public function actions() : HasMany
 	{
-		return $this->hasMany(Action::class);
+		return $this->hasMany(Action::class)->orderBy('start_date', 'DESC');
 	}
 
 	/**
