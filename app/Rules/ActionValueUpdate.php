@@ -29,7 +29,7 @@ class ActionValueUpdate implements Rule
 	 */
 	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
 	{
-		if ($this->actionType->field_type === 'number') {
+		if ($this->actionType->field_type !== 'button') {
 			return $value !== null && $value !== '';
 		}
 		return $value === null || $value === '';
@@ -42,7 +42,7 @@ class ActionValueUpdate implements Rule
 	 */
 	public function message()
 	{
-		if ($this->actionType->field_type === 'number') {
+		if ($this->actionType->field_type !== 'button') {
 			return 'The :attribute is required.';
 		}
 		return 'The :attribute cannot be present.';

@@ -6,7 +6,7 @@ use App\Models\ActionType;
 use App\Models\Option;
 use App\Rules\ActionActionType;
 use App\Rules\ActionOptionForButton;
-use App\Rules\ActionOptionForNumber;
+use App\Rules\ActionOptionForNonButton;
 use App\Rules\ActionStartEndDate;
 use App\Rules\ActionValueCreate;
 use App\Rules\ActionValueNumeric;
@@ -71,7 +71,7 @@ class Action extends Model
 		$rules = [
 			'relationships.option' => [
 				'bail',
-				new ActionOptionForNumber($this, $data),
+				new ActionOptionForNonButton($this, $data),
 				new ActionOptionForButton($this, $data),
 			],
 		];

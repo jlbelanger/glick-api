@@ -6,7 +6,7 @@ use App\Models\Action;
 use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ActionOptionForNumber implements ImplicitRule
+class ActionOptionForNonButton implements ImplicitRule
 {
 	protected $actionType;
 	protected $hasOption;
@@ -43,7 +43,7 @@ class ActionOptionForNumber implements ImplicitRule
 		if (!$this->actionType) {
 			return true;
 		}
-		if ($this->actionType->field_type === 'number') {
+		if ($this->actionType->field_type !== 'button') {
 			return !$this->hasOption;
 		}
 		return true;

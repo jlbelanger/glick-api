@@ -3,11 +3,11 @@
 namespace Tests\Unit\Rules;
 
 use App\Models\Action;
-use App\Rules\ActionOptionForNumber;
+use App\Rules\ActionOptionForNonButton;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ActionOptionForNumberTest extends TestCase
+class ActionOptionForNonButtonTest extends TestCase
 {
 	use RefreshDatabase;
 
@@ -23,7 +23,7 @@ class ActionOptionForNumberTest extends TestCase
 	{
 		$this->markAsSkipped();
 		$args['action'] = Action::factory()->create($args['action']);
-		$rule = new ActionOptionForNumber($args['action'], $args['data']);
+		$rule = new ActionOptionForNonButton($args['action'], $args['data']);
 		$output = $rule->passes('foo', $args['value']);
 		$this->assertSame($args['expected'], $output);
 	}

@@ -23,6 +23,7 @@ class ActionTest extends TestCase
 		$this->actionType = ActionType::factory()->create(['user_id' => $this->user->id]);
 		$this->actionTypeOptions = ActionType::factory()->create(['user_id' => $this->user->id]);
 		$this->actionTypeNumber = ActionType::factory()->create(['user_id' => $this->user->id, 'field_type' => 'number']);
+		$this->actionTypeText = ActionType::factory()->create(['user_id' => $this->user->id, 'field_type' => 'text']);
 		$this->actionTypeOtherUser = ActionType::factory()->create(['user_id' => $this->otherUser->id]);
 		$this->optionA = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'A']);
 		$this->optionB = Option::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'label' => 'B']);
@@ -30,6 +31,7 @@ class ActionTest extends TestCase
 		$this->action = Action::factory()->create(['action_type_id' => $this->actionType->id]);
 		$this->actionOptions = Action::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'option_id' => $this->optionA->id]);
 		$this->actionNumber = Action::factory()->create(['action_type_id' => $this->actionTypeNumber->id, 'value' => '100']);
+		$this->actionText = Action::factory()->create(['action_type_id' => $this->actionTypeText->id, 'value' => 'foo']);
 		$this->actionOtherUser = Action::factory()->create(['action_type_id' => $this->actionTypeOtherUser->id, 'option_id' => $this->optionOtherUser->id]);
 		$this->actionWithEndDate = Action::factory()->create(['action_type_id' => $this->actionType->id, 'start_date' => '2001-01-01 01:00:00', 'end_date' => '2001-01-01 02:00:00']);
 	}
@@ -64,6 +66,15 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => '100',
+					],
+				],
+				[
+					'id' => (string) $this->actionText->id,
+					'type' => 'actions',
+					'attributes' => [
+						'start_date' => '2001-02-03 04:05:06',
+						'end_date' => null,
+						'value' => 'foo',
 					],
 				],
 				[
@@ -141,7 +152,7 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with missing value' => [[
+			'with missing value for number' => [[
 				'body' => [
 					'data' => [
 						'type' => 'actions',
@@ -172,7 +183,38 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with empty string value' => [[
+			'with missing value for text' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with empty string value for number' => [[
 				'body' => [
 					'data' => [
 						'type' => 'actions',
@@ -204,7 +246,39 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with null value' => [[
+			'with empty string value for text' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with null value for number' => [[
 				'body' => [
 					'data' => [
 						'type' => 'actions',
@@ -236,7 +310,39 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with non-numeric value' => [[
+			'with null value for text' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => null,
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with non-numeric value for number' => [[
 				'body' => [
 					'data' => [
 						'type' => 'actions',
@@ -312,6 +418,44 @@ class ActionTest extends TestCase
 							'action_type' => [
 								'data' => [
 									'id' => '%actionTypeNumber.id%',
+									'type' => 'action-types',
+								],
+							],
+							'option' => [
+								'data' => [
+									'id' => '123',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option for text' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => '0',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
 									'type' => 'action-types',
 								],
 							],
@@ -785,6 +929,61 @@ class ActionTest extends TestCase
 				],
 				'code' => 201,
 			]],
+			'with minimal valid attributes for text' => [[
+				'body' => [
+					'data' => [
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'value' => 'bar',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+				],
+				'params' => '?include=action_type',
+				'response' => [
+					'data' => [
+						'id' => '%id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => 'bar',
+						],
+						'relationships' => [
+							'action_type' => [
+								'data' => [
+									'id' => '%actionTypeText.id%',
+									'type' => 'action-types',
+								],
+							],
+						],
+					],
+					'included' => [
+						[
+							'id' => '%actionTypeText.id%',
+							'type' => 'action-types',
+							'attributes' => [
+								'label' => 'Foo',
+								'is_continuous' => 0,
+								'field_type' => 'text',
+								'suffix' => null,
+								'order_num' => 0,
+								'in_progress' => null,
+								'slug' => 'foo',
+							],
+						],
+					],
+				],
+				'code' => 201,
+			]],
 		];
 	}
 
@@ -797,6 +996,7 @@ class ActionTest extends TestCase
 			'%actionType.id%' => $this->actionType->id,
 			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
 			'%actionTypeNumber.id%' => $this->actionTypeNumber->id,
+			'%actionTypeText.id%' => $this->actionTypeText->id,
 			'%actionTypeOtherUser.id%' => $this->actionTypeOtherUser->id,
 			'%optionOtherUser.id%' => $this->optionOtherUser->id,
 			'%optionA.id%' => $this->optionA->id,
@@ -897,7 +1097,7 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with empty string value' => [[
+			'with empty string value for number' => [[
 				'key' => 'actionNumber',
 				'body' => [
 					'data' => [
@@ -922,7 +1122,32 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with null value' => [[
+			'with empty string value for text' => [[
+				'key' => 'actionText',
+				'body' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with null value for number' => [[
 				'key' => 'actionNumber',
 				'body' => [
 					'data' => [
@@ -947,7 +1172,32 @@ class ActionTest extends TestCase
 				],
 				'code' => 422,
 			]],
-			'with non-numeric value' => [[
+			'with null value for text' => [[
+				'key' => 'actionText',
+				'body' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => null,
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The value is required.',
+							'source' => [
+								'pointer' => '/data/attributes/value',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with non-numeric value for number' => [[
 				'key' => 'actionNumber',
 				'body' => [
 					'data' => [
@@ -1002,6 +1252,39 @@ class ActionTest extends TestCase
 				'body' => [
 					'data' => [
 						'id' => '%actionNumber.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => '123',
+						],
+						'relationships' => [
+							'option' => [
+								'data' => [
+									'id' => '123',
+									'type' => 'options',
+								],
+							],
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The option cannot be present.',
+							'source' => [
+								'pointer' => '/data/relationships/option',
+							],
+							'status' => '422',
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with option for text' => [[
+				'key' => 'actionText',
+				'body' => [
+					'data' => [
+						'id' => '%actionText.id%',
 						'type' => 'actions',
 						'attributes' => [
 							'value' => '123',
@@ -1271,7 +1554,7 @@ class ActionTest extends TestCase
 				],
 				'code' => 200,
 			]],
-			'with valid value' => [[
+			'with valid value for number' => [[
 				'key' => 'actionNumber',
 				'body' => [
 					'data' => [
@@ -1371,6 +1654,31 @@ class ActionTest extends TestCase
 				],
 				'code' => 200,
 			]],
+			'with valid value for text' => [[
+				'key' => 'actionText',
+				'body' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'value' => 'bar',
+						],
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => 'bar',
+						],
+					],
+				],
+				'code' => 200,
+			]],
 			'with no attributes for number' => [[
 				'key' => 'actionNumber',
 				'body' => [
@@ -1388,6 +1696,28 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '100',
+						],
+					],
+				],
+				'code' => 200,
+			]],
+			'with no attributes for text' => [[
+				'key' => 'actionText',
+				'body' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+					],
+				],
+				'params' => '',
+				'response' => [
+					'data' => [
+						'id' => '%actionText.id%',
+						'type' => 'actions',
+						'attributes' => [
+							'start_date' => '2001-02-03 04:05:06',
+							'end_date' => null,
+							'value' => 'foo',
 						],
 					],
 				],
@@ -1474,6 +1804,7 @@ class ActionTest extends TestCase
 		$tokens = [
 			'%id%' => $this->action->id,
 			'%actionNumber.id%' => $this->actionNumber->id,
+			'%actionText.id%' => $this->actionText->id,
 			'%actionOptions.id%' => $this->actionOptions->id,
 			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
 			'%optionOtherUser.id%' => $this->optionOtherUser->id,
