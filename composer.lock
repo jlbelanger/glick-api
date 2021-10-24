@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fbe2b611afd72a33f5cbfdb457e70d3",
+    "content-hash": "6fd610d8ad1ecb9e3aba8c2673003eb8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -759,12 +759,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/laravel-json-api.git",
-                "reference": "72e0149b859f286dc24dd5823a0cb78a0f6c26ba"
+                "reference": "2b7f10634465c0019d6c3dd17ffd5d6231e48892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/72e0149b859f286dc24dd5823a0cb78a0f6c26ba",
-                "reference": "72e0149b859f286dc24dd5823a0cb78a0f6c26ba",
+                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/2b7f10634465c0019d6c3dd17ffd5d6231e48892",
+                "reference": "2b7f10634465c0019d6c3dd17ffd5d6231e48892",
                 "shasum": ""
             },
             "require-dev": {
@@ -772,6 +772,7 @@
                 "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -804,7 +805,7 @@
                 "source": "https://github.com/jlbelanger/laravel-json-api/tree/master",
                 "issues": "https://github.com/jlbelanger/laravel-json-api/issues"
             },
-            "time": "2020-12-28T20:14:34+00:00"
+            "time": "2021-10-24T23:51:25+00:00"
         },
         {
             "name": "laravel/framework",
@@ -6841,5 +6842,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }

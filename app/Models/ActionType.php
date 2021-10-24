@@ -87,9 +87,10 @@ class ActionType extends Model
 	}
 
 	/**
+	 * @param  array $data
 	 * @return array
 	 */
-	public function defaultAttributes() : array
+	public function defaultAttributes(array $data) : array
 	{
 		return [
 			'user_id' => Auth::guard('sanctum')->id(),

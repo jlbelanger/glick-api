@@ -633,6 +633,7 @@ class ActionTypeTest extends TestCase
 							'type' => 'options',
 							'attributes' => [
 								'label' => 'Bar',
+								'action_type_id' => 'temp-this-id',
 							],
 						],
 					],
@@ -1503,6 +1504,7 @@ class ActionTypeTest extends TestCase
 							'type' => 'options',
 							'attributes' => [
 								'label' => 'Bar',
+								'action_type_id' => 'temp-this-id',
 							],
 						],
 					],
