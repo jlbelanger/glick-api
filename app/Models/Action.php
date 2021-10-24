@@ -87,7 +87,7 @@ class Action extends Model
 		} elseif ($method === 'PUT') {
 			$rules['attributes.value'] = ['bail', new ActionValueUpdate($this), new ActionValueNumeric($this->actionType)];
 			$rules['attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
-			$rules['attributes.end_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
+			$rules['attributes.end_date'] = ['bail', 'nullable', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
 			$rules['relationships.action_type'] = [new CannotChange()];
 		}
 		return $rules;
