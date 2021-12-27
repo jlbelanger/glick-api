@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e88692088a34df68fa75b59776920ae",
+    "content-hash": "b05a7b99778e77cdc6cd257634fba3d0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -965,18 +965,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/laravel-json-api.git",
-                "reference": "2b7f10634465c0019d6c3dd17ffd5d6231e48892"
+                "reference": "d3fe5524b15753c1c4c6df8da257b19ca03c6ccd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/2b7f10634465c0019d6c3dd17ffd5d6231e48892",
-                "reference": "2b7f10634465c0019d6c3dd17ffd5d6231e48892",
+                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/d3fe5524b15753c1c4c6df8da257b19ca03c6ccd",
+                "reference": "d3fe5524b15753c1c4c6df8da257b19ca03c6ccd",
                 "shasum": ""
             },
             "require-dev": {
-                "orchestra/testbench": "^6.7",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.5"
+                "orchestra/testbench": "^6.23.2",
+                "phpunit/phpunit": "^9.5.11",
+                "squizlabs/php_codesniffer": "^3.6.2"
             },
             "default-branch": true,
             "type": "library",
@@ -1011,7 +1011,7 @@
                 "source": "https://github.com/jlbelanger/laravel-json-api/tree/master",
                 "issues": "https://github.com/jlbelanger/laravel-json-api/issues"
             },
-            "time": "2021-10-24T23:51:25+00:00"
+            "time": "2021-12-26T22:54:35+00:00"
         },
         {
             "name": "laravel/framework",
