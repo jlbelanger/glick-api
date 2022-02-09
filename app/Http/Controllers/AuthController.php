@@ -62,7 +62,7 @@ class AuthController extends Controller
 	 * @param  Request $request
 	 * @return JsonResponse
 	 */
-	public function logout(Request $request) : JsonResponse
+	public function logout(Request $request) : JsonResponse // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 	{
 		Auth::guard('sanctum')->user()->currentAccessToken()->delete();
 
