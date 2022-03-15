@@ -1,48 +1,47 @@
 # Glick API
 
-## Demo
-
 View the app at https://glick.jennybelanger.com/
 
-## Development setup
+## Development
 
-### Install requirements
+### Requirements
 
 - [Composer](https://getcomposer.org/)
+- [Git](https://git-scm.com/)
+- Database
+- Web server with PHP
 
-You'll also need a database and web server with PHP to serve the API and app. Maybe one day, I'll add a Dockerfile to this repo, but probably not, because no one is ever going to set this up except me.
-
-### Clone the API repo
+### Setup
 
 ``` bash
+# Clone the API repo
 git clone https://github.com/jlbelanger/glick-api.git
 cd glick-api
-```
 
-All other commands should be run in the `glick-api` folder.
-
-### Configure environment settings
-
-``` bash
+# Configure the environment settings
 cp .env.example .env
-```
 
-### Install dependencies
-
-``` bash
+# Install dependencies
 composer install
-```
 
-### Run database migrations
-
-``` bash
+# Run database migrations
 php artisan migrate
 php artisan db:seed
 ```
 
-### Setup the app
+Then, setup the [Glick app](https://github.com/jlbelanger/glick-app).
 
-See [Glick app](https://github.com/jlbelanger/glick-app).
+### Lint
+
+``` bash
+./vendor/bin/phpcs
+```
+
+### Test
+
+``` bash
+./vendor/bin/phpunit
+```
 
 ## Deployment
 
@@ -72,23 +71,4 @@ Note: The deploy script included in this repo depends on other scripts that only
 
 ``` bash
 ./deploy.sh
-```
-
-## Helpful development stuff
-
-### Credentials
-
-- **Username**: demo
-- **Password**: demo
-
-### Lint
-
-``` bash
-./vendor/bin/phpcs
-```
-
-### Test
-
-``` bash
-./vendor/bin/phpunit
 ```
