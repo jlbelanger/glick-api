@@ -37,6 +37,16 @@ class Action extends Model
 		'value',
 	];
 
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'action_type_id' => 'integer',
+		'option_id' => 'integer',
+	];
+
 	// ========================================================================
 	// JSON API
 	// ========================================================================

@@ -39,6 +39,17 @@ class ActionType extends Model
 		'order_num',
 	];
 
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'user_id' => 'integer',
+		'is_continuous' => 'boolean',
+		'order_num' => 'integer',
+	];
+
 	// ========================================================================
 	// Attributes
 	// ========================================================================

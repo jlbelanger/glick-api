@@ -39,7 +39,7 @@ class ActionTypeTest extends TestCase
 					'type' => 'action-types',
 					'attributes' => [
 						'label' => 'Foo',
-						'is_continuous' => 0,
+						'is_continuous' => false,
 						'field_type' => 'button',
 						'suffix' => null,
 						'order_num' => 0,
@@ -52,7 +52,7 @@ class ActionTypeTest extends TestCase
 					'type' => 'action-types',
 					'attributes' => [
 						'label' => 'Foo',
-						'is_continuous' => 0,
+						'is_continuous' => false,
 						'field_type' => 'button',
 						'suffix' => null,
 						'order_num' => 0,
@@ -65,7 +65,7 @@ class ActionTypeTest extends TestCase
 					'type' => 'action-types',
 					'attributes' => [
 						'label' => 'Foo',
-						'is_continuous' => 0,
+						'is_continuous' => false,
 						'field_type' => 'number',
 						'suffix' => null,
 						'order_num' => 0,
@@ -577,7 +577,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -645,7 +645,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 1,
+							'is_continuous' => true,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 1,
@@ -707,7 +707,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'number',
 							'suffix' => null,
 							'order_num' => 0,
@@ -755,7 +755,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'number',
 							'suffix' => 'bar',
 							'order_num' => 1,
@@ -828,7 +828,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1325,7 +1325,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1354,7 +1354,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Bar',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1383,7 +1383,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'number',
 							'suffix' => 'bar',
 							'order_num' => 0,
@@ -1412,7 +1412,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'number',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1441,7 +1441,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 1,
@@ -1470,7 +1470,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1516,7 +1516,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1585,7 +1585,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,
@@ -1653,7 +1653,7 @@ class ActionTypeTest extends TestCase
 						'type' => 'action-types',
 						'attributes' => [
 							'label' => 'Foo',
-							'is_continuous' => 0,
+							'is_continuous' => false,
 							'field_type' => 'button',
 							'suffix' => null,
 							'order_num' => 0,

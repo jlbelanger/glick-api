@@ -26,6 +26,15 @@ class Option extends Model
 		'label',
 	];
 
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'action_type_id' => 'integer',
+	];
+
 	// ========================================================================
 	// Attributes
 	// ========================================================================

@@ -692,7 +692,7 @@ class ActionTest extends TestCase
 							'type' => 'action-types',
 							'attributes' => [
 								'label' => 'Foo',
-								'is_continuous' => 0,
+								'is_continuous' => false,
 								'field_type' => 'button',
 								'suffix' => null,
 								'order_num' => 0,
@@ -758,7 +758,7 @@ class ActionTest extends TestCase
 							'type' => 'action-types',
 							'attributes' => [
 								'label' => 'Foo',
-								'is_continuous' => 0,
+								'is_continuous' => false,
 								'field_type' => 'button',
 								'suffix' => null,
 								'order_num' => 0,
@@ -821,7 +821,7 @@ class ActionTest extends TestCase
 							'type' => 'action-types',
 							'attributes' => [
 								'label' => 'Foo',
-								'is_continuous' => 0,
+								'is_continuous' => false,
 								'field_type' => 'number',
 								'suffix' => null,
 								'order_num' => 0,
@@ -972,7 +972,7 @@ class ActionTest extends TestCase
 							'type' => 'action-types',
 							'attributes' => [
 								'label' => 'Foo',
-								'is_continuous' => 0,
+								'is_continuous' => false,
 								'field_type' => 'text',
 								'suffix' => null,
 								'order_num' => 0,
