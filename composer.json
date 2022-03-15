@@ -15,7 +15,7 @@
 		"php": "^7.3|^8.0",
 		"fruitcake/laravel-cors": "^2.0.4",
 		"guzzlehttp/guzzle": "^7.4.1",
-		"jlbelanger/laravel-json-api": "dev-master#d3fe5524b15753c1c4c6df8da257b19ca03c6ccd",
+		"jlbelanger/laravel-json-api": "dev-master#38c630012fab02d5bd4a6d68502dcd7ae0d0bc8e",
 		"laravel/framework": "^8.77.1",
 		"laravel/sanctum": "^2.13.0"
 	},
