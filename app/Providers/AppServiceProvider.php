@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
 	/**
 	 * Bootstraps any application services.
 	 *
+	 * @param  Kernel $kernel
 	 * @return void
 	 */
 	public function boot(Kernel $kernel)
