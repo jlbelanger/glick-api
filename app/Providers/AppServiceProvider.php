@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Kernel;
 use App\Models\Action;
 use App\Observers\ActionObserver;
 use DB;
@@ -25,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
 	 *
 	 * @return void
 	 */
-	public function boot()
+	public function boot(Kernel $kernel)
 	{
 		if (env('LOG_DATABASE_QUERIES') === '1') {
 			DB::listen(function ($query) {
@@ -35,6 +36,10 @@ class AppServiceProvider extends ServiceProvider
 					$query->time
 				);
 			});
+		}
+
+		if ($this->app->environment() !== 'local') {
+			$kernel->appendMiddlewareToGroup('api', \Illuminate\Routing\Middleware\ThrottleRequests::class);
 		}
 
 		ResetPassword::createUrlUsing(function ($notifiable, string $token) {
