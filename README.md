@@ -24,9 +24,15 @@ cp .env.example .env
 # Install dependencies
 composer install
 
+# Generate key
+php artisan key:generate
+
 # Run database migrations
 php artisan migrate
 php artisan db:seed
+
+# Set permissions
+chown -R www-data:www-data storage
 ```
 
 Then, setup the [Glick app](https://github.com/jlbelanger/glick-app).
@@ -53,6 +59,9 @@ cd glick-api
 cp .env.example .env
 # Then configure the values in .env.
 composer install
+php artisan key:generate
+php artisan migrate
+chown -R www-data:www-data storage
 ```
 
 For subsequent deploys, push changes to master, then run the following on the server:
