@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2152ca3f481cd0249246540a19d3ab01",
+    "content-hash": "56b86384318f30a86900860a7f4a987b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -960,17 +960,17 @@
             "time": "2021-10-06T17:43:30+00:00"
         },
         {
-            "name": "jlbelanger/laravel-json-api",
-            "version": "dev-master",
+            "name": "jlbelanger/tapioca",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jlbelanger/laravel-json-api.git",
-                "reference": "38c630012fab02d5bd4a6d68502dcd7ae0d0bc8e"
+                "url": "https://github.com/jlbelanger/tapioca.git",
+                "reference": "e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/laravel-json-api/zipball/38c630012fab02d5bd4a6d68502dcd7ae0d0bc8e",
-                "reference": "38c630012fab02d5bd4a6d68502dcd7ae0d0bc8e",
+                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a",
+                "reference": "e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a",
                 "shasum": ""
             },
             "require-dev": {
@@ -1008,10 +1008,10 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/jlbelanger/laravel-json-api/tree/master",
-                "issues": "https://github.com/jlbelanger/laravel-json-api/issues"
+                "source": "https://github.com/jlbelanger/tapioca/tree/main",
+                "issues": "https://github.com/jlbelanger/tapioca/issues"
             },
-            "time": "2022-03-15T19:41:58+00:00"
+            "time": "2022-03-20T20:36:45+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7790,7 +7790,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "jlbelanger/laravel-json-api": 20
+        "jlbelanger/tapioca": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

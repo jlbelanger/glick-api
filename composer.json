@@ -15,7 +15,7 @@
 		"php": "^7.3|^8.0",
 		"fruitcake/laravel-cors": "^2.0.4",
 		"guzzlehttp/guzzle": "^7.4.1",
-		"jlbelanger/laravel-json-api": "dev-master#38c630012fab02d5bd4a6d68502dcd7ae0d0bc8e",
+		"jlbelanger/tapioca": "dev-main#e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a",
 		"laravel/framework": "^8.77.1",
 		"laravel/sanctum": "^2.13.0"
 	},
@@ -44,7 +44,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "git@github.com:jlbelanger/laravel-json-api.git"
+			"url": "git@github.com:jlbelanger/tapioca.git"
 		}
 	],
 	"config": {
