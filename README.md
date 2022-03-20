@@ -64,7 +64,7 @@ php artisan migrate
 chown -R www-data:www-data storage
 ```
 
-For subsequent deploys, push changes to master, then run the following on the server:
+For subsequent deploys, push changes to the main branch, then run the following on the server:
 
 ``` bash
 cd glick-api
