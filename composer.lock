@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56b86384318f30a86900860a7f4a987b",
+    "content-hash": "c7609a3cb687577e185f9294c20106bb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -965,12 +965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/tapioca.git",
-                "reference": "e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a"
+                "reference": "dedab7b5949f92556b16cb8fb615b5cd09226853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a",
-                "reference": "e8edc3aff77c0cedec04a70bcd1e3d7dbb78f27a",
+                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/dedab7b5949f92556b16cb8fb615b5cd09226853",
+                "reference": "dedab7b5949f92556b16cb8fb615b5cd09226853",
                 "shasum": ""
             },
             "require-dev": {
@@ -983,18 +983,18 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Jlbelanger\\LaravelJsonApi\\LaravelJsonApiServiceProvider"
+                        "Jlbelanger\\Tapioca\\TapiocaServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Jlbelanger\\LaravelJsonApi\\": "src"
+                    "Jlbelanger\\Tapioca\\": "src"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Jlbelanger\\LaravelJsonApi\\Tests\\": "tests"
+                    "Jlbelanger\\Tapioca\\Tests\\": "tests"
                 }
             },
             "license": [
@@ -1011,7 +1011,7 @@
                 "source": "https://github.com/jlbelanger/tapioca/tree/main",
                 "issues": "https://github.com/jlbelanger/tapioca/issues"
             },
-            "time": "2022-03-20T20:36:45+00:00"
+            "time": "2022-03-25T23:44:06+00:00"
         },
         {
             "name": "laravel/framework",

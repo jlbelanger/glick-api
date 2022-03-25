@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Jlbelanger\LaravelJsonApi\Traits\Resource;
+use Jlbelanger\Tapioca\Traits\Resource;
 
 class Option extends Model
 {

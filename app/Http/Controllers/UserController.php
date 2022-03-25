@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
-use Jlbelanger\LaravelJsonApi\Exceptions\NotFoundException;
-use Jlbelanger\LaravelJsonApi\Exceptions\ValidationException;
-use Jlbelanger\LaravelJsonApi\Helpers\Utilities;
+use Jlbelanger\Tapioca\Controllers\AuthorizedResourceController;
+use Jlbelanger\Tapioca\Exceptions\NotFoundException;
+use Jlbelanger\Tapioca\Exceptions\ValidationException;
+use Jlbelanger\Tapioca\Helpers\Utilities;
 use Validator;
 
 class UserController extends AuthorizedResourceController

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Jlbelanger\LaravelJsonApi\Exceptions\NotFoundException;
+use Jlbelanger\Tapioca\Exceptions\NotFoundException;
 
 Route::get('/', function () {
 	return response()->json(['success' => true]);

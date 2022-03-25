@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Jlbelanger\LaravelJsonApi\Controllers\AuthorizedResourceController;
+use Jlbelanger\Tapioca\Controllers\AuthorizedResourceController;
 
 class ActionTypeController extends AuthorizedResourceController
 {
