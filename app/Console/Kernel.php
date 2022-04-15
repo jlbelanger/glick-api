@@ -12,7 +12,9 @@ class Kernel extends ConsoleKernel
 	 *
 	 * @var array
 	 */
-	protected $commands = [];
+	protected $commands = [
+		Commands\ResetAuth::class,
+	];
 
 	/**
 	 * Defines the application's command schedule.

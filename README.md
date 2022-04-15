@@ -33,6 +33,9 @@ php artisan db:seed
 
 # Set permissions
 chown -R www-data:www-data storage
+
+# Create account with username "test" and password "test" (or reset existing account password to "test")
+php artisan reset-auth
 ```
 
 Then, setup the [Glick app](https://github.com/jlbelanger/glick-app).
