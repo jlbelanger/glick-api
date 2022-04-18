@@ -101,7 +101,7 @@ class ActionType extends Model
 	 * @param  array $data
 	 * @return array
 	 */
-	public function defaultAttributes(array $data) : array
+	public function defaultAttributes(array $data) : array // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 	{
 		return [
 			'user_id' => Auth::guard('sanctum')->id(),

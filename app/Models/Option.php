@@ -76,7 +76,7 @@ class Option extends Model
 	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(array $data, string $method) : array
+	protected function rules(array $data, string $method) : array // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
 	{
 		$rules = [
 			'attributes.label' => ['max:255'],

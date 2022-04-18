@@ -1456,7 +1456,7 @@ class ActionTest extends TestCase
 						'id' => '%actionWithEndDate.id%',
 						'type' => 'actions',
 						'attributes' => [
-							'start_date' => '2001-01-01 03:00:00'
+							'start_date' => '2001-01-01 03:00:00',
 						],
 					],
 				],

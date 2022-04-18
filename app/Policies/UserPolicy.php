@@ -28,7 +28,7 @@ class UserPolicy
 	 * @param  User $user
 	 * @return boolean
 	 */
-	public function create(User $currentUser, User $user) : bool
+	public function create(User $currentUser, User $user) : bool // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	{
 		return false;
 	}
@@ -64,7 +64,7 @@ class UserPolicy
 	 * @param  User $user
 	 * @return boolean
 	 */
-	public function viewAny(User $currentUser, User $user) : bool
+	public function viewAny(User $currentUser, User $user) : bool // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	{
 		return false;
 	}

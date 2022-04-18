@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
 	 */
 	public function register()
 	{
-		$this->renderable(function (MethodNotAllowedHttpException $e) {
+		$this->renderable(function (MethodNotAllowedHttpException $e) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404', 'detail' => 'Method not allowed.']]], 404);
 		});
 

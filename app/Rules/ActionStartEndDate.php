@@ -43,7 +43,9 @@ class ActionStartEndDate implements Rule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+	public function passes($attribute, $value)
 	{
 		if ($this->isSettingStartDate && $this->isSettingEndDate && $attribute === 'attributes.start_date') {
 			return true;

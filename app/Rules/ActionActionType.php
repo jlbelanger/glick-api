@@ -19,6 +19,7 @@ class ActionActionType implements Rule
 	 * @param  array  $data
 	 * @return void
 	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
 	public function __construct(Action $action, array $data)
 	{
 		if (!empty($data['relationships']['action_type']['data']['id'])) {
@@ -34,7 +35,9 @@ class ActionActionType implements Rule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
+	public function passes($attribute, $value)
 	{
 		if (!$this->actionType) {
 			return false;

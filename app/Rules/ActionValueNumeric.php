@@ -26,7 +26,8 @@ class ActionValueNumeric implements Rule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+	public function passes($attribute, $value)
 	{
 		if ($this->actionType->field_type !== 'number') {
 			return true;

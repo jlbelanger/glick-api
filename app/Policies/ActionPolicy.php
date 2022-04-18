@@ -29,7 +29,7 @@ class ActionPolicy
 	 * @param  Action $action
 	 * @return boolean
 	 */
-	public function create(User $currentUser, Action $action) : bool
+	public function create(User $currentUser, Action $action) : bool // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	{
 		return true;
 	}
@@ -65,7 +65,7 @@ class ActionPolicy
 	 * @param  Action $action
 	 * @return boolean
 	 */
-	public function viewAny(User $currentUser, Action $action) : bool
+	public function viewAny(User $currentUser, Action $action) : bool // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	{
 		return true;
 	}

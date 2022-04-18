@@ -13,7 +13,8 @@ class TempIdsOnly implements Rule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+	public function passes($attribute, $value)
 	{
 		foreach ($value['data'] as $option) {
 			if (strpos($option['id'], 'temp-') !== 0) {

@@ -28,7 +28,8 @@ class CannotRemoveWithEvents implements Rule
 	 * @param  mixed  $value
 	 * @return boolean
 	 */
-	public function passes($attribute, $value) // phpcs:ignore Squiz.Commenting.FunctionComment.ScalarTypeHintMissing
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
+	public function passes($attribute, $value)
 	{
 		$newOptionIds = array_column($value['data'], 'id');
 		$removedOptionIds = array_diff($this->optionIds, $newOptionIds);
