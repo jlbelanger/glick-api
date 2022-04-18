@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use App\Policies\ActionPolicy;
-use App\Policies\ActionTypePolicy;
-use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -12,12 +9,12 @@ class AuthServiceProvider extends ServiceProvider
 	/**
 	 * The policy mappings for the application.
 	 *
-	 * @var array
+	 * @var array<class-string, class-string>
 	 */
 	protected $policies = [
-		'App\Models\Action' => ActionPolicy::class,
-		'App\Models\ActionType' => ActionTypePolicy::class,
-		'App\Models\User' => UserPolicy::class,
+		'App\Models\Action' => \App\Policies\ActionPolicy::class,
+		'App\Models\ActionType' => \App\Policies\ActionTypePolicy::class,
+		'App\Models\User' => \App\Policies\UserPolicy::class,
 	];
 
 	/**

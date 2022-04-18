@@ -31,11 +31,7 @@ class AppServiceProvider extends ServiceProvider
 	{
 		if (env('LOG_DATABASE_QUERIES') === '1') {
 			DB::listen(function ($query) {
-				Log::info(
-					$query->sql,
-					$query->bindings,
-					$query->time
-				);
+				Log::info($query->sql, $query->bindings, $query->time);
 			});
 		}
 

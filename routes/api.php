@@ -8,21 +8,21 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['api', 'guest']], function () {
-	Route::post('/auth/login', '\App\Http\Controllers\AuthController@login');
-	Route::post('/auth/register', '\App\Http\Controllers\AuthController@register');
-	Route::post('/auth/forgot-password', '\App\Http\Controllers\AuthController@forgotPassword');
-	Route::put('/auth/reset-password/{token}', '\App\Http\Controllers\AuthController@resetPassword');
+	Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login']);
+	Route::post('/auth/register', [\App\Http\Controllers\AuthController::class, 'register']);
+	Route::post('/auth/forgot-password', [\App\Http\Controllers\AuthController::class, 'forgotPassword']);
+	Route::put('/auth/reset-password/{token}', [\App\Http\Controllers\AuthController::class, 'resetPassword']);
 });
 
 Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
-	Route::delete('/auth/logout', '\App\Http\Controllers\AuthController@logout');
-	Route::put('/users/{id}/change-email', '\App\Http\Controllers\UserController@changeEmail');
-	Route::put('/users/{id}/change-password', '\App\Http\Controllers\UserController@changePassword');
+	Route::delete('/auth/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+	Route::put('/users/{id}/change-email', [\App\Http\Controllers\UserController::class, 'changeEmail']);
+	Route::put('/users/{id}/change-password', [\App\Http\Controllers\UserController::class, 'changePassword']);
 
 	Route::apiResources([
-		'actions' => '\App\Http\Controllers\ActionController',
-		'action-types' => '\App\Http\Controllers\ActionTypeController',
-		'users' => '\App\Http\Controllers\UserController',
+		'actions' => \App\Http\Controllers\ActionController::class,
+		'action-types' => \App\Http\Controllers\ActionTypeController::class,
+		'users' => \App\Http\Controllers\UserController::class,
 	]);
 });
 
