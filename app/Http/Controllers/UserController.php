@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Jlbelanger\Tapioca\Controllers\AuthorizedResourceController;
+use Jlbelanger\Tapioca\Exceptions\JsonApiException;
 use Jlbelanger\Tapioca\Exceptions\NotFoundException;
 use Jlbelanger\Tapioca\Exceptions\ValidationException;
 use Jlbelanger\Tapioca\Helpers\Utilities;
@@ -25,6 +26,9 @@ class UserController extends AuthorizedResourceController
 	public function changeEmail(Request $request, string $id) : JsonResponse
 	{
 		$user = User::find($id);
+		if ($user->username === 'demo') {
+			throw JsonApiException::generate([['title' => 'You do not have permission to update this record.', 'status' => '403']], 403);
+		}
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
 			throw NotFoundException::generate();
 		}
@@ -67,6 +71,9 @@ class UserController extends AuthorizedResourceController
 	public function changePassword(Request $request, string $id) : JsonResponse
 	{
 		$user = User::find($id);
+		if ($user->username === 'demo') {
+			throw JsonApiException::generate([['title' => 'You do not have permission to update this record.', 'status' => '403']], 403);
+		}
 		if (!$user || !Auth::guard('sanctum')->user()->can('update', $user)) {
 			throw NotFoundException::generate();
 		}

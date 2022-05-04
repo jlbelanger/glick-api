@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7609a3cb687577e185f9294c20106bb",
+    "content-hash": "c376de399e167d9575557b2c7b40cd7b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -965,12 +965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/tapioca.git",
-                "reference": "dedab7b5949f92556b16cb8fb615b5cd09226853"
+                "reference": "8503dd0e5c4ed4fd4c9b343eb3ef8e8719e142b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/dedab7b5949f92556b16cb8fb615b5cd09226853",
-                "reference": "dedab7b5949f92556b16cb8fb615b5cd09226853",
+                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/8503dd0e5c4ed4fd4c9b343eb3ef8e8719e142b8",
+                "reference": "8503dd0e5c4ed4fd4c9b343eb3ef8e8719e142b8",
                 "shasum": ""
             },
             "require-dev": {
@@ -1011,7 +1011,7 @@
                 "source": "https://github.com/jlbelanger/tapioca/tree/main",
                 "issues": "https://github.com/jlbelanger/tapioca/issues"
             },
-            "time": "2022-03-25T23:44:06+00:00"
+            "time": "2022-05-04T01:37:43+00:00"
         },
         {
             "name": "laravel/framework",
@@ -7798,5 +7798,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

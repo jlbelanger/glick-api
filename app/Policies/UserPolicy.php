@@ -42,7 +42,7 @@ class UserPolicy
 	 */
 	public function delete(User $currentUser, User $user) : bool
 	{
-		return $this->view($currentUser, $user);
+		return $this->view($currentUser, $user) && $currentUser->username !== 'demo';
 	}
 
 	/**
@@ -54,7 +54,7 @@ class UserPolicy
 	 */
 	public function update(User $currentUser, User $user) : bool
 	{
-		return $this->view($currentUser, $user);
+		return $this->view($currentUser, $user) && $currentUser->username !== 'demo';
 	}
 
 	/**

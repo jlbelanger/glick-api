@@ -15,7 +15,7 @@
 		"php": "^7.3|^8.0",
 		"fruitcake/laravel-cors": "^2.0.4",
 		"guzzlehttp/guzzle": "^7.4.1",
-		"jlbelanger/tapioca": "dev-main#dedab7b5949f92556b16cb8fb615b5cd09226853",
+		"jlbelanger/tapioca": "dev-main#8503dd0e5c4ed4fd4c9b343eb3ef8e8719e142b8",
 		"laravel/framework": "^8.77.1",
 		"laravel/sanctum": "^2.13.0"
 	},
