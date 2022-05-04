@@ -19,7 +19,7 @@ return [
 
 	'allowed_methods' => ['OPTIONS', 'GET', 'PUT', 'POST', 'DELETE'],
 
-	'allowed_origins' => ['http://localhost:3000', env('APP_URL')],
+	'allowed_origins' => ['https://localhost:3000', env('APP_URL')],
 
 	'allowed_origins_patterns' => [],
 
