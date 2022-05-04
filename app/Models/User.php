@@ -55,7 +55,7 @@ class User extends Authenticatable
 	protected function rules() : array
 	{
 		return [
-			'attributes.username' => ['filled', 'max:255', 'unique:users,username,' . $this->id],
+			'attributes.username' => ['filled', 'alpha_num', 'max:255', 'unique:users,username,' . $this->id],
 			'attributes.email' => [new CannotChange()],
 			'attributes.password' => [new CannotChange()],
 		];
