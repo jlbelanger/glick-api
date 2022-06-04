@@ -42,6 +42,18 @@ class User extends Authenticatable
 	// ========================================================================
 
 	/**
+	 * @param  boolean $remember
+	 * @return array
+	 */
+	public function getAuthInfo(bool $remember) : array
+	{
+		return [
+			'id' => $this->id,
+			'remember' => $remember,
+		];
+	}
+
+	/**
 	 * @return array
 	 */
 	public function defaultSort() : array
