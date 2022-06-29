@@ -45,6 +45,7 @@ class ActionTypeTest extends TestCase
 						'order_num' => 0,
 						'in_progress' => null,
 						'slug' => 'foo',
+						'is_archived' => false,
 					],
 				],
 				[
@@ -58,6 +59,7 @@ class ActionTypeTest extends TestCase
 						'order_num' => 0,
 						'in_progress' => null,
 						'slug' => 'foo',
+						'is_archived' => false,
 					],
 				],
 				[
@@ -71,6 +73,7 @@ class ActionTypeTest extends TestCase
 						'order_num' => 0,
 						'in_progress' => null,
 						'slug' => 'foo',
+						'is_archived' => false,
 					],
 				],
 			],
@@ -583,6 +586,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'user' => [
@@ -651,6 +655,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 1,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'options' => [
@@ -713,6 +718,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'user' => [
@@ -761,6 +767,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 1,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'user' => [
@@ -834,6 +841,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1331,6 +1339,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1360,6 +1369,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'bar',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1389,6 +1399,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1418,6 +1429,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1447,6 +1459,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 1,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1476,6 +1489,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 					],
 				],
@@ -1522,6 +1536,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'options' => [
@@ -1591,6 +1606,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'options' => [
@@ -1659,6 +1675,7 @@ class ActionTypeTest extends TestCase
 							'order_num' => 0,
 							'in_progress' => null,
 							'slug' => 'foo',
+							'is_archived' => false,
 						],
 						'relationships' => [
 							'options' => [

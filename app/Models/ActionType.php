@@ -37,6 +37,7 @@ class ActionType extends Model
 		'field_type',
 		'suffix',
 		'order_num',
+		'is_archived',
 	];
 
 	/**
@@ -48,6 +49,7 @@ class ActionType extends Model
 		'user_id' => 'integer',
 		'is_continuous' => 'boolean',
 		'order_num' => 'integer',
+		'is_archived' => 'boolean',
 	];
 
 	// ========================================================================
@@ -139,6 +141,7 @@ class ActionType extends Model
 			'attributes.label' => ['max:255'],
 			'attributes.suffix' => ['bail', new OnlyIfFieldType($data, $method, 'number', $this), 'max:255'],
 			'attributes.order_num' => ['integer'],
+			'attributes.is_archived' => ['boolean'],
 			'relationships.options' => [new ActionTypeOptions($this, $data)],
 		];
 		if ($method === 'POST') {
