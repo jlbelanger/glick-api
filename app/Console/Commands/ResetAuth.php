@@ -22,7 +22,7 @@ class ResetAuth extends Command
 	protected $description = 'Reset authentication';
 
 	/**
-	 * Execute the console command.
+	 * Executes the console command.
 	 *
 	 * @return mixed
 	 */
