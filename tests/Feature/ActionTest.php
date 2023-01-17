@@ -48,6 +48,7 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => null,
+						'notes' => null,
 					],
 				],
 				[
@@ -57,6 +58,7 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => null,
+						'notes' => null,
 					],
 				],
 				[
@@ -66,6 +68,7 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => '100',
+						'notes' => null,
 					],
 				],
 				[
@@ -75,6 +78,7 @@ class ActionTest extends TestCase
 						'start_date' => '2001-02-03 04:05:06',
 						'end_date' => null,
 						'value' => 'foo',
+						'notes' => null,
 					],
 				],
 				[
@@ -84,6 +88,7 @@ class ActionTest extends TestCase
 						'start_date' => '2001-01-01 01:00:00',
 						'end_date' => '2001-01-01 02:00:00',
 						'value' => null,
+						'notes' => null,
 					],
 				],
 			],
@@ -676,6 +681,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 						'relationships' => [
 							'action_type' => [
@@ -737,6 +743,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 						'relationships' => [
 							'action_type' => [
@@ -807,6 +814,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '123',
+							'notes' => null,
 						],
 						'relationships' => [
 							'action_type' => [
@@ -863,6 +871,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '0',
+							'notes' => null,
 						],
 					],
 				],
@@ -895,6 +904,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '1.5',
+							'notes' => null,
 						],
 					],
 				],
@@ -927,6 +937,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '120/80',
+							'notes' => null,
 						],
 					],
 				],
@@ -959,6 +970,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => 'bar',
+							'notes' => null,
 						],
 						'relationships' => [
 							'action_type' => [
@@ -1040,6 +1052,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 					],
 				],
@@ -1528,6 +1541,7 @@ class ActionTest extends TestCase
 							'start_date' => '2002-02-02 02:02:02',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 					],
 				],
@@ -1553,6 +1567,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => '2002-02-02 02:02:02',
 							'value' => null,
+							'notes' => null,
 						],
 					],
 				],
@@ -1578,6 +1593,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '200',
+							'notes' => null,
 						],
 					],
 				],
@@ -1603,6 +1619,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '0',
+							'notes' => null,
 						],
 					],
 				],
@@ -1628,6 +1645,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '1.5',
+							'notes' => null,
 						],
 					],
 				],
@@ -1653,6 +1671,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '120/80',
+							'notes' => null,
 						],
 					],
 				],
@@ -1678,6 +1697,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => 'bar',
+							'notes' => null,
 						],
 					],
 				],
@@ -1700,6 +1720,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => '100',
+							'notes' => null,
 						],
 					],
 				],
@@ -1722,6 +1743,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => 'foo',
+							'notes' => null,
 						],
 					],
 				],
@@ -1744,6 +1766,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 					],
 				],
@@ -1774,6 +1797,7 @@ class ActionTest extends TestCase
 							'start_date' => '2001-02-03 04:05:06',
 							'end_date' => null,
 							'value' => null,
+							'notes' => null,
 						],
 						'relationships' => [
 							'option' => [

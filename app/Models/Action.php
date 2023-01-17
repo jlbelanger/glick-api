@@ -35,6 +35,7 @@ class Action extends Model
 		'start_date',
 		'end_date',
 		'value',
+		'notes',
 	];
 
 	/**
@@ -79,6 +80,7 @@ class Action extends Model
 	protected function rules(array $data, string $method) : array
 	{
 		$rules = [
+			'attributes.notes' => ['nullable', 'max:65535'],
 			'relationships.option' => [
 				'bail',
 				new ActionOptionForNonButton($this, $data),
