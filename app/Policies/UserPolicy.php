@@ -54,7 +54,7 @@ class UserPolicy
 	 */
 	public function update(User $currentUser, User $user) : bool
 	{
-		return $this->view($currentUser, $user) && $currentUser->username !== 'demo';
+		return $this->view($currentUser, $user);
 	}
 
 	/**

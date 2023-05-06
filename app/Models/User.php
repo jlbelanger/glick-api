@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Jlbelanger\Tapioca\Traits\Resource;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -64,13 +66,32 @@ class User extends Authenticatable
 	/**
 	 * @return array
 	 */
-	protected function rules() : array
+	protected function rules(array $data, string $method) : array // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
 	{
-		return [
-			'attributes.username' => ['filled', 'alpha_num', 'max:255', 'unique:users,username,' . $this->id],
+		$required = $method === 'POST' ? 'required' : 'filled';
+		$rules = [
+			'attributes.username' => [$required, 'alpha_num', 'max:255'],
 			'attributes.email' => [new CannotChange()],
 			'attributes.password' => [new CannotChange()],
 		];
+
+		if (Auth::guard('sanctum')->user()->username === 'demo') {
+			$rules['attributes.username'][] = new CannotChange();
+		}
+
+		$unique = Rule::unique($this->getTable(), 'username');
+		if ($this->id) {
+			$unique->ignore($this->id);
+		}
+		$rules['attributes.username'][] = $unique;
+
+		$unique = Rule::unique($this->getTable(), 'email');
+		if ($this->id) {
+			$unique->ignore($this->id);
+		}
+		$rules['attributes.email'][] = $unique;
+
+		return $rules;
 	}
 
 	/**
