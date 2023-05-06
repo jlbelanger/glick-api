@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Action;
+use App\Models\Option;
+use App\Models\ActionType;
 use App\Models\User;
+use DB;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -108,6 +112,42 @@ class UserController extends AuthorizedResourceController
 		])->save();
 		$user->setRememberToken(Str::random(60));
 		event(new PasswordReset($user));
+
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return JsonResponse
+	 */
+	public function deleteData(Request $request) : JsonResponse
+	{
+		$user = Auth::guard('sanctum')->user();
+		if (!$user) {
+			throw NotFoundException::generate();
+		}
+
+		$types = $request->input('types');
+		if (empty($types)) {
+			return response()->json(['message' => 'Please select at least one type of data to delete.'], 422);
+		}
+
+		DB::beginTransaction();
+
+		if (in_array('events', $types) || in_array('event types', $types)) {
+			Action::whereHas('actionType', function ($q) use ($user) {
+				$q->where('user_id', '=', $user->id);
+			})->delete();
+		}
+
+		if (in_array('event types', $types)) {
+			Option::whereHas('actionType', function ($q) use ($user) {
+				$q->where('user_id', '=', $user->id);
+			})->delete();
+			ActionType::where('user_id', '=', $user->id)->delete();
+		}
+
+		DB::commit();
 
 		return response()->json(null, 204);
 	}
