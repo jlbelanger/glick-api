@@ -64,6 +64,8 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * @param  array  $data
+	 * @param  string $method
 	 * @return array
 	 */
 	protected function rules(array $data, string $method) : array // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
