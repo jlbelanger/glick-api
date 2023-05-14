@@ -1036,7 +1036,7 @@ class ActionTest extends TestCase
 					'errors' => [
 						[
 							'status' => '404',
-							'title' => 'URL does not exist.',
+							'title' => 'This record does not exist.',
 						],
 					],
 				],
@@ -1083,7 +1083,7 @@ class ActionTest extends TestCase
 					'errors' => [
 						[
 							'status' => '404',
-							'title' => 'URL does not exist.',
+							'title' => 'This record does not exist.',
 						],
 					],
 				],
@@ -1855,7 +1855,7 @@ class ActionTest extends TestCase
 					'errors' => [
 						[
 							'status' => '404',
-							'title' => 'URL does not exist.',
+							'title' => 'This record does not exist.',
 						],
 					],
 				],

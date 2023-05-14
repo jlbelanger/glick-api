@@ -39,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
 			$kernel->appendMiddlewareToGroup('api', \Illuminate\Routing\Middleware\ThrottleRequests::class);
 		}
 
-		ResetPassword::createUrlUsing(function ($notifiable, string $token) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
+		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
+		ResetPassword::createUrlUsing(function ($notifiable, string $token) {
 			return env('FRONTEND_URL') . '/reset-password/' . $token;
 		});
 

@@ -122,17 +122,13 @@ class UserController extends AuthorizedResourceController
 	 */
 	public function deleteData(Request $request) : JsonResponse
 	{
-		$user = Auth::guard('sanctum')->user();
-		if (!$user) {
-			throw NotFoundException::generate();
-		}
-
 		$types = $request->input('types');
 		if (empty($types)) {
 			return response()->json(['message' => 'Please select at least one type of data to delete.'], 422);
 		}
 
 		DB::beginTransaction();
+		$user = Auth::guard('sanctum')->user();
 
 		if (in_array('events', $types) || in_array('event types', $types)) {
 			Action::whereHas('actionType', function ($q) use ($user) {
