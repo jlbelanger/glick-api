@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
 
 		$this->renderable(function (Throwable $e) {
 			$code = $e->getCode() ? $e->getCode() : 500;
-			$error = ['title' => 'There was an error connecting to the server.', 'status' => (string) $code];
+			$error = ['title' => 'Unable to connect to the server. Please try again later.', 'status' => (string) $code];
 			if (config('app.debug')) {
 				$error['detail'] = $e->getMessage();
 				$error['meta'] = [
