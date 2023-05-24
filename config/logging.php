@@ -101,4 +101,6 @@ return [
 		],
 	],
 
+	'database' => env('LOG_DATABASE_QUERIES', false),
+
 ];

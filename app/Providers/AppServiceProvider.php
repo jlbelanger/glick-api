@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot(Kernel $kernel)
 	{
-		if (env('LOG_DATABASE_QUERIES') === '1') {
+		if (config('logging.database')) {
 			DB::listen(function ($query) {
 				Log::info($query->sql, $query->bindings, $query->time);
 			});
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
 		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
 		ResetPassword::createUrlUsing(function ($notifiable, string $token) {
-			return env('FRONTEND_URL') . '/reset-password/' . $token;
+			return config('app.frontend_url') . '/reset-password/' . $token;
 		});
 
 		Action::observe(ActionObserver::class);
