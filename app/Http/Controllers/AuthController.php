@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 use Jlbelanger\Tapioca\Exceptions\ValidationException;
 use Jlbelanger\Tapioca\Helpers\Utilities;
 use Validator;
@@ -28,8 +29,8 @@ class AuthController extends Controller
 	{
 		$data = $request->input('data');
 		$rules = [
-			'attributes.username' => 'required',
-			'attributes.password' => 'required',
+			'attributes.username' => ['required'],
+			'attributes.password' => ['required'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
@@ -78,10 +79,10 @@ class AuthController extends Controller
 	{
 		$data = $request->input('data');
 		$rules = [
-			'attributes.username' => 'required|max:255|unique:users,username',
-			'attributes.email' => 'required|email|max:255|unique:users,email',
-			'attributes.password' => 'required|confirmed',
-			'attributes.password_confirmation' => 'required',
+			'attributes.username' => ['required', 'max:255', 'unique:users,username'],
+			'attributes.email' => ['required', 'email', 'max:255', 'unique:users,email'],
+			'attributes.password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'attributes.password_confirmation' => ['required'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
@@ -112,7 +113,7 @@ class AuthController extends Controller
 	{
 		$data = $request->input('data');
 		$rules = [
-			'attributes.email' => 'required|email',
+			'attributes.email' => ['required', 'email'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
@@ -138,9 +139,9 @@ class AuthController extends Controller
 	{
 		$data = $request->input('data');
 		$rules = [
-			'attributes.email' => 'required|email',
-			'attributes.new_password' => 'required|confirmed',
-			'attributes.new_password_confirmation' => 'required',
+			'attributes.email' => ['required', 'email'],
+			'attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'attributes.new_password_confirmation' => ['required'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {

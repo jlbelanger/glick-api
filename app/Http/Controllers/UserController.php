@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 use Jlbelanger\Tapioca\Controllers\AuthorizedResourceController;
 use Jlbelanger\Tapioca\Exceptions\JsonApiException;
 use Jlbelanger\Tapioca\Exceptions\NotFoundException;
@@ -39,8 +40,8 @@ class UserController extends AuthorizedResourceController
 
 		$data = $request->input('data');
 		$rules = [
-			'attributes.password' => 'required',
-			'attributes.email' => 'required|email|max:255|unique:users,email,' . $user->id,
+			'attributes.password' => ['required'],
+			'attributes.email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
@@ -84,9 +85,9 @@ class UserController extends AuthorizedResourceController
 
 		$data = $request->input('data');
 		$rules = [
-			'attributes.password' => 'required',
-			'attributes.new_password' => 'required|confirmed',
-			'attributes.new_password_confirmation' => 'required',
+			'attributes.password' => ['required'],
+			'attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'attributes.new_password_confirmation' => ['required'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
