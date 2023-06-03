@@ -7,7 +7,7 @@ Route::get('/', function () {
 	return response()->json(['success' => true]);
 });
 
-Route::group(['middleware' => ['api', 'guest']], function () {
+Route::group(['middleware' => ['api', 'guest', 'throttle:' . config('auth.throttle_max_attempts') . ',1']], function () {
 	Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login']);
 	Route::post('/auth/register', [\App\Http\Controllers\AuthController::class, 'register']);
 	Route::post('/auth/forgot-password', [\App\Http\Controllers\AuthController::class, 'forgotPassword']);

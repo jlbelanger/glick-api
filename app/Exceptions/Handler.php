@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Jlbelanger\Tapioca\Exceptions\JsonApiException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -50,6 +51,10 @@ class Handler extends ExceptionHandler
 
 		$this->renderable(function (HttpException $e) {
 			return response()->json(['errors' => [['title' => $e->getMessage(), 'status' => $e->getStatusCode()]]], $e->getStatusCode());
+		});
+
+		$this->renderable(function (ThrottleRequestsException $e) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
+			return response()->json(['errors' => [['title' => 'Please wait before retrying.', 'status' => '429']]], 429);
 		});
 
 		$this->renderable(function (Throwable $e) {
