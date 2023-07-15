@@ -14,3 +14,4 @@ deploy_git
 deploy_composer
 deploy_laravel
 clear_laravel_cache
+printf "\e[0;32mDone.\n\e[0m"
