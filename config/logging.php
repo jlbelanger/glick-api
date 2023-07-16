@@ -99,6 +99,13 @@ return [
 		'emergency' => [
 			'path' => storage_path('logs/laravel.log'),
 		],
+
+		// Custom log for database queries.
+		'database' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/database.log'),
+			'level' => env('LOG_LEVEL', 'debug'),
+		],
 	],
 
 	'database' => env('LOG_DATABASE_QUERIES', false),
