@@ -1,6 +1,6 @@
 # Glick API
 
-View the app at https://glick.jennybelanger.com/
+[View the site](https://glick.jennybelanger.com/).
 
 ## Development
 
