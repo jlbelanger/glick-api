@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$date = date('Y-m-d H:i:s');
+		$date = Carbon::now();
 
 		DB::table('users')->insert([
 			'username' => 'demo',

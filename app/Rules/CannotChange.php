@@ -26,6 +26,6 @@ class CannotChange implements Rule
 	 */
 	public function message()
 	{
-		return 'The :attribute cannot be changed.';
+		return __('validation.cannot_change', $this->attribute);
 	}
 }

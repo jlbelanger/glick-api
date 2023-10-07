@@ -44,7 +44,7 @@ class AuthController extends Controller
 		];
 		$remember = !empty($data['attributes']['remember']);
 		if (!Auth::attempt($credentials, $remember)) {
-			return response()->json(['errors' => [['title' => 'Username or password is incorrect.', 'status' => '401']]], 401);
+			return response()->json(['errors' => [['title' => __('auth.failed'), 'status' => '401']]], 401);
 		}
 
 		$user = User::where('username', '=', $credentials['username'])->first();
