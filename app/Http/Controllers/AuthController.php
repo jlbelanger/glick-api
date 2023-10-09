@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use DB;
+use Exception;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -48,10 +53,12 @@ class AuthController extends Controller
 		}
 
 		$user = User::where('username', '=', $credentials['username'])->first();
-		$token = $user->createToken('api');
+		if ($user instanceof MustVerifyEmail && !$user->email_verified_at) {
+			return response()->json(['errors' => [['title' => __('auth.unverified'), 'status' => '401', 'code' => 'auth.unverified']]], 401);
+		}
 
 		return response()->json([
-			'token' => $token->plainTextToken,
+			'token' => $user->createToken('api')->plainTextToken,
 			'user' => $user->getAuthInfo($remember),
 		]);
 	}
@@ -79,7 +86,7 @@ class AuthController extends Controller
 	{
 		$data = $request->input('data');
 		$rules = [
-			'attributes.username' => ['required', 'max:255', 'unique:users,username'],
+			'attributes.username' => ['required', 'alpha_num', 'max:255', 'unique:users,username'],
 			'attributes.email' => ['required', 'email', 'max:255', 'unique:users,email'],
 			'attributes.password' => ['required', 'confirmed', Rules\Password::defaults()],
 			'attributes.password_confirmation' => ['required'],
@@ -96,11 +103,15 @@ class AuthController extends Controller
 			'password' => Hash::make($data['attributes']['password']),
 		])->save();
 		$user->save();
-		$token = $user->createToken('api');
+		event(new Registered($user));
 		DB::commit();
 
+		if ($user instanceof MustVerifyEmail) {
+			return response()->json(null, 204);
+		}
+
 		return response()->json([
-			'token' => $token->plainTextToken,
+			'token' => $user->createToken('api')->plainTextToken,
 			'user' => $user->getAuthInfo(false),
 		]);
 	}
@@ -124,7 +135,7 @@ class AuthController extends Controller
 		try {
 			Password::sendResetLink(['email' => $data['attributes']['email']]);
 		} catch (Exception $e) {
-			return response()->json(['errors' => [['title' => 'We were unable to send a password reset email. Please try again later.', 'status' => '500']]], 500);
+			return response()->json(['errors' => [['title' => __('passwords.send_error'), 'status' => '500']]], 500);
 		}
 
 		return response()->json(null, 204);
@@ -141,15 +152,15 @@ class AuthController extends Controller
 		$rules = [
 			'attributes.email' => ['required', 'email'],
 			'attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
-			'attributes.new_password_confirmation' => ['required'],
 		];
 		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
 		if ($validator->fails()) {
 			$errors = ValidationException::formatErrors($validator->errors()->toArray());
 			return response()->json(['errors' => $errors], 422);
 		}
-		if (!empty($errors)) {
-			return response()->json(['errors' => $errors], 422);
+
+		if ($request->query('expires') < Carbon::now()->timestamp) {
+			return response()->json(['errors' => [['title' => __('passwords.expired'), 'status' => '403']]], 403);
 		}
 
 		$status = Password::reset(
@@ -159,21 +170,54 @@ class AuthController extends Controller
 				'password_confirmation' => $data['attributes']['new_password_confirmation'],
 				'token' => $token,
 			],
-			function ($user, $password) use ($request) {
-				$user->forceFill([
+			function ($user, $password) {
+				$userData = [
 					'password' => Hash::make($password),
-				])->save();
-
-				$user->setRememberToken(Str::random(60));
+					'remember_token' => Str::random(60),
+				];
+				if ($user instanceof MustVerifyEmail && !$user->email_verified_at) {
+					$userData['email_verified_at'] = Carbon::now();
+				}
+				$user->forceFill($userData)->save();
 
 				event(new PasswordReset($user));
 			}
 		);
 
 		if ($status !== Password::PASSWORD_RESET) {
+			if ($status === 'passwords.user') {
+				$status = 'passwords.token';
+			}
 			return response()->json(['errors' => [['title' => __($status), 'status' => '422']]], 422);
 		}
 
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return Response
+	 */
+	public function verifyEmail(Request $request) : JsonResponse
+	{
+		$user = User::find($request->query('id'));
+		if (!$user->hasVerifiedEmail()) {
+			$user->markEmailAsVerified();
+			event(new Verified($user));
+		}
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return Response
+	 */
+	public function resendVerification(Request $request) : JsonResponse
+	{
+		$user = User::where('username', '=', $request->input('username'))->first();
+		if ($user) {
+			$user->sendEmailVerificationNotification();
+		}
 		return response()->json(null, 204);
 	}
 }

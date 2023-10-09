@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class ResetAuth extends Command
 {
@@ -39,8 +41,9 @@ class ResetAuth extends Command
 			$user = new User();
 			$user->username = 'test';
 			$user->email = 'test@example.com';
+			$user->email_verified_at = Carbon::now();
 		}
-		$user->password = bcrypt('test');
+		$user->password = Hash::make('test');
 		$user->save();
 		echo "Success!\n";
 	}

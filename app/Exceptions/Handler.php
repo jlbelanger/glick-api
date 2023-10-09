@@ -4,9 +4,11 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Jlbelanger\Tapioca\Exceptions\JsonApiException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -16,9 +18,7 @@ class Handler extends ExceptionHandler
 	 *
 	 * @var array<int, class-string<Throwable>>
 	 */
-	protected $dontReport = [
-		JsonApiException::class,
-	];
+	protected $dontReport = [JsonApiException::class];
 
 	/**
 	 * A list of the inputs that are never flashed for validation exceptions.
@@ -41,20 +41,32 @@ class Handler extends ExceptionHandler
 	public function register()
 	{
 		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
+		$this->renderable(function (InvalidSignatureException $e) {
+			if (!url()->signatureHasNotExpired(request())) {
+				return response()->json(['errors' => [['title' => __('passwords.expired'), 'status' => '403']]], 403);
+			}
+			return response()->json(['errors' => [['title' => __('passwords.token'), 'status' => '403']]], 403);
+		});
+
+		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 		$this->renderable(function (MethodNotAllowedHttpException $e) {
 			return response()->json(['errors' => [['title' => 'URL does not exist.', 'status' => '404', 'detail' => 'Method not allowed.']]], 404);
 		});
 
-		$this->renderable(function (JsonApiException $e) {
-			return response()->json(['errors' => $e->getErrors()], $e->getCode());
-		});
-
-		$this->renderable(function (HttpException $e) {
-			return response()->json(['errors' => [['title' => $e->getMessage(), 'status' => $e->getStatusCode()]]], $e->getStatusCode());
+		$this->renderable(function (NotFoundHttpException $e) {
+			return response()->json(['errors' => [['title' => $e->getMessage() ? $e->getMessage() : 'URL does not exist.', 'status' => '404']]], 404);
 		});
 
 		$this->renderable(function (ThrottleRequestsException $e) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 			return response()->json(['errors' => [['title' => 'Please wait before retrying.', 'status' => '429']]], 429);
+		});
+
+		$this->renderable(function (HttpException $e) {
+			return response()->json(['errors' => [['title' => $e->getMessage(), 'status' => (string) $e->getStatusCode()]]], $e->getStatusCode());
+		});
+
+		$this->renderable(function (JsonApiException $e) {
+			return response()->json(['errors' => $e->getErrors()], $e->getCode());
 		});
 
 		$this->renderable(function (Throwable $e) {

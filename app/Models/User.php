@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\ActionType;
-use App\Rules\CannotChange;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 use Jlbelanger\Tapioca\Traits\Resource;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
 	use HasApiTokens, HasFactory, Notifiable, Resource, SoftDeletes;
 
@@ -37,6 +37,15 @@ class User extends Authenticatable
 	protected $hidden = [
 		'password',
 		'remember_token',
+	];
+
+	/**
+	 * The attributes that should be cast.
+	 *
+	 * @var array<string, string>
+	 */
+	protected $casts = [
+		'email_verified_at' => 'datetime',
 	];
 
 	// ========================================================================
@@ -73,12 +82,12 @@ class User extends Authenticatable
 		$required = $method === 'POST' ? 'required' : 'filled';
 		$rules = [
 			'attributes.username' => [$required, 'alpha_num', 'max:255'],
-			'attributes.email' => [new CannotChange()],
-			'attributes.password' => [new CannotChange()],
+			'attributes.email' => ['prohibited'],
+			'attributes.password' => ['prohibited'],
 		];
 
 		if (Auth::guard('sanctum')->user()->username === 'demo') {
-			$rules['attributes.username'][] = new CannotChange();
+			$rules['attributes.username'][] = 'prohibited';
 		}
 
 		$unique = Rule::unique($this->getTable(), 'username');
@@ -86,12 +95,6 @@ class User extends Authenticatable
 			$unique->ignore($this->id);
 		}
 		$rules['attributes.username'][] = $unique;
-
-		$unique = Rule::unique($this->getTable(), 'email');
-		if ($this->id) {
-			$unique->ignore($this->id);
-		}
-		$rules['attributes.email'][] = $unique;
 
 		return $rules;
 	}

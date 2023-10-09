@@ -6,7 +6,6 @@ use App\Models\Action;
 use App\Models\Option;
 use App\Models\User;
 use App\Rules\ActionTypeOptions;
-use App\Rules\CannotChange;
 use App\Rules\CannotRemoveWithEvents;
 use App\Rules\NotPresent;
 use App\Rules\OnlyIfFieldType;
@@ -152,10 +151,10 @@ class ActionType extends Model
 			$rules['relationships.user'] = [new NotPresent()];
 		} elseif ($method === 'PUT') {
 			$rules['attributes.label'][] = 'filled';
-			$rules['attributes.field_type'] = [new CannotChange()];
-			$rules['attributes.is_continuous'] = [new CannotChange()];
+			$rules['attributes.field_type'] = ['prohibited'];
+			$rules['attributes.is_continuous'] = ['prohibited'];
 			$rules['relationships.options'][] = new CannotRemoveWithEvents($this);
-			$rules['relationships.user'] = [new CannotChange()];
+			$rules['relationships.user'] = ['prohibited'];
 		}
 		return $rules;
 	}

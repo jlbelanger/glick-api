@@ -125,7 +125,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The label may not be greater than 255 characters.',
+							'title' => 'The label must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/data/attributes/label',
 							],
@@ -175,7 +175,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The suffix may not be greater than 255 characters.',
+							'title' => 'The suffix must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/data/attributes/suffix',
 							],
@@ -413,7 +413,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The label may not be greater than 255 characters.',
+							'title' => 'The label must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/included/0/attributes/label',
 							],
@@ -893,7 +893,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The label may not be greater than 255 characters.',
+							'title' => 'The label must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/data/attributes/label',
 							],
@@ -968,7 +968,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The suffix may not be greater than 255 characters.',
+							'title' => 'The suffix must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/data/attributes/suffix',
 							],
@@ -1196,7 +1196,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The label may not be greater than 255 characters.',
+							'title' => 'The label must not be greater than 255 characters.',
 							'source' => [
 								'pointer' => '/included/0/attributes/label',
 							],
@@ -1253,7 +1253,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The field type cannot be changed.',
+							'title' => 'The field type field is prohibited.',
 							'source' => [
 								'pointer' => '/data/attributes/field_type',
 							],
@@ -1278,7 +1278,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The is continuous cannot be changed.',
+							'title' => 'The is continuous field is prohibited.',
 							'source' => [
 								'pointer' => '/data/attributes/is_continuous',
 							],
@@ -1308,7 +1308,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The user cannot be changed.',
+							'title' => 'The user field is prohibited.',
 							'source' => [
 								'pointer' => '/data/relationships/user',
 							],

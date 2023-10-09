@@ -1511,7 +1511,7 @@ class ActionTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The action type cannot be changed.',
+							'title' => 'The action type field is prohibited.',
 							'source' => [
 								'pointer' => '/data/relationships/action_type',
 							],

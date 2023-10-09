@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use DB;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,7 +21,8 @@ class DatabaseSeeder extends Seeder
 		DB::table('users')->insert([
 			'username' => 'demo',
 			'email' => 'demo@example.com',
-			'password' => bcrypt('demo'),
+			'email_verified_at' => $date,
+			'password' => Hash::make('demo'),
 			'created_at' => $date,
 		]);
 		$userId = DB::getPdo()->lastInsertId();
