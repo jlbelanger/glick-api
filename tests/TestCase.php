@@ -16,13 +16,17 @@ abstract class TestCase extends BaseTestCase
 		return $rows;
 	}
 
-	protected function replaceToken(string $token, string $replaceWith, array $rows) : array
+	protected function replaceToken(string $token, $replaceWith, array $rows) : array
 	{
 		foreach ($rows as $key => $row) {
 			if (is_array($row)) {
 				$rows[$key] = $this->replaceToken($token, $replaceWith, $row);
 			} elseif (strpos($row, $token) !== false) {
-				$rows[$key] = str_replace($token, $replaceWith, $row);
+				if ($rows[$key] === $token) {
+					$rows[$key] = $replaceWith;
+				} else {
+					$rows[$key] = str_replace($token, $replaceWith, $row);
+				}
 			}
 		}
 		return $rows;

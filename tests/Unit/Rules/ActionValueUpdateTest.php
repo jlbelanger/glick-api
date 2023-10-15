@@ -12,7 +12,7 @@ class ActionValueUpdateTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			'with number action with value set to null' => [[
@@ -61,7 +61,7 @@ class ActionValueUpdateTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$actionType = ActionType::factory()->create($args['actionType']);
 		$action = Action::factory()->create(['action_type_id' => $actionType->id]);

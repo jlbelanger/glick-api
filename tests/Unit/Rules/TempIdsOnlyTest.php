@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class TempIdsOnlyTest extends TestCase
 {
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			[[
@@ -48,7 +48,7 @@ class TempIdsOnlyTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$rule = new TempIdsOnly();
 		$output = $rule->passes('foo', ['data' => $args['value']]);

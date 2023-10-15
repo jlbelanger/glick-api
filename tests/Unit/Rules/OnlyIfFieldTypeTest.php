@@ -11,7 +11,7 @@ class OnlyIfFieldTypeTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			'with POST and the field types match and the value is set' => [[
@@ -101,7 +101,7 @@ class OnlyIfFieldTypeTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$args['actionType'] = ActionType::factory()->create($args['actionType']);
 		$rule = new OnlyIfFieldType($args['data'], $args['method'], $args['allowedFieldType'], $args['actionType']);

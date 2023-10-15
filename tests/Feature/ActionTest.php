@@ -36,7 +36,7 @@ class ActionTest extends TestCase
 		$this->actionWithEndDate = Action::factory()->create(['action_type_id' => $this->actionType->id, 'start_date' => '2001-01-01 01:00:00', 'end_date' => '2001-01-01 02:00:00']);
 	}
 
-	public function testIndex()
+	public function testIndex() : void
 	{
 		$response = $this->actingAs($this->user)->json('GET', $this->path);
 		$response->assertExactJson([
@@ -96,7 +96,7 @@ class ActionTest extends TestCase
 		->assertStatus(200);
 	}
 
-	public function storeProvider()
+	public function storeProvider() : array
 	{
 		return [
 			'with missing required fields' => [[
@@ -1006,16 +1006,16 @@ class ActionTest extends TestCase
 	/**
 	 * @dataProvider storeProvider
 	 */
-	public function testStore($args)
+	public function testStore(array $args) : void
 	{
 		$tokens = [
-			'%actionType.id%' => $this->actionType->id,
-			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
-			'%actionTypeNumber.id%' => $this->actionTypeNumber->id,
-			'%actionTypeText.id%' => $this->actionTypeText->id,
-			'%actionTypeOtherUser.id%' => $this->actionTypeOtherUser->id,
-			'%optionOtherUser.id%' => $this->optionOtherUser->id,
-			'%optionA.id%' => $this->optionA->id,
+			'%actionType.id%' => (string) $this->actionType->id,
+			'%actionTypeOptions.id%' => (string) $this->actionTypeOptions->id,
+			'%actionTypeNumber.id%' => (string) $this->actionTypeNumber->id,
+			'%actionTypeText.id%' => (string) $this->actionTypeText->id,
+			'%actionTypeOtherUser.id%' => (string) $this->actionTypeOtherUser->id,
+			'%optionOtherUser.id%' => (string) $this->optionOtherUser->id,
+			'%optionA.id%' => (string) $this->optionA->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
@@ -1027,7 +1027,7 @@ class ActionTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function showProvider()
+	public function showProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1064,15 +1064,15 @@ class ActionTest extends TestCase
 	/**
 	 * @dataProvider showProvider
 	 */
-	public function testShow($args)
+	public function testShow(array $args) : void
 	{
-		$args['response'] = $this->replaceToken('%id%', $this->action->id, $args['response']);
+		$args['response'] = $this->replaceToken('%id%', (string) $this->action->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
 
-	public function updateProvider()
+	public function updateProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1827,17 +1827,17 @@ class ActionTest extends TestCase
 	/**
 	 * @dataProvider updateProvider
 	 */
-	public function testUpdate($args)
+	public function testUpdate(array $args) : void
 	{
 		$tokens = [
-			'%id%' => $this->action->id,
-			'%actionNumber.id%' => $this->actionNumber->id,
-			'%actionText.id%' => $this->actionText->id,
-			'%actionOptions.id%' => $this->actionOptions->id,
-			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
-			'%optionOtherUser.id%' => $this->optionOtherUser->id,
-			'%actionWithEndDate.id%' => $this->actionWithEndDate->id,
-			'%optionB.id%' => $this->optionB->id,
+			'%id%' => (string) $this->action->id,
+			'%actionNumber.id%' => (string) $this->actionNumber->id,
+			'%actionText.id%' => (string) $this->actionText->id,
+			'%actionOptions.id%' => (string) $this->actionOptions->id,
+			'%actionTypeOptions.id%' => (string) $this->actionTypeOptions->id,
+			'%optionOtherUser.id%' => (string) $this->optionOtherUser->id,
+			'%actionWithEndDate.id%' => (string) $this->actionWithEndDate->id,
+			'%optionB.id%' => (string) $this->optionB->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
@@ -1846,7 +1846,7 @@ class ActionTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function destroyProvider()
+	public function destroyProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1872,7 +1872,7 @@ class ActionTest extends TestCase
 	/**
 	 * @dataProvider destroyProvider
 	 */
-	public function testDestroy($args)
+	public function testDestroy(array $args) : void
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {

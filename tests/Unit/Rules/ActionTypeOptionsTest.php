@@ -11,7 +11,7 @@ class ActionTypeOptionsTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			'with an existing button with options' => [[
@@ -84,7 +84,7 @@ class ActionTypeOptionsTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$args['actionType'] = ActionType::factory()->create($args['actionType']);
 		$rule = new ActionTypeOptions($args['actionType'], $args['data']);

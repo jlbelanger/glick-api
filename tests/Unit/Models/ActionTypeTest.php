@@ -12,7 +12,7 @@ class ActionTypeTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function testGetInProgressAttribute()
+	public function testGetInProgressAttribute() : void
 	{
 		// Non-continuous action type.
 		$actionType = ActionType::factory()->create(['is_continuous' => false]);
@@ -46,7 +46,7 @@ class ActionTypeTest extends TestCase
 		], $actionType->inProgress);
 	}
 
-	public function testGetSlugAttribute()
+	public function testGetSlugAttribute() : void
 	{
 		$actionType = ActionType::factory()->make(['label' => 'Foo Bar']);
 		$this->assertSame('foo-bar', $actionType->slug);

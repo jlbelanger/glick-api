@@ -19,31 +19,31 @@ class UserPolicyTest extends TestCase
 		$this->otherUser = User::factory()->create(['email' => 'bar@example.com', 'username' => 'bar']);
 	}
 
-	public function testView()
+	public function testView() : void
 	{
 		$this->assertSame(true, $this->policy->view($this->user, $this->user));
 		$this->assertSame(false, $this->policy->view($this->user, $this->otherUser));
 	}
 
-	public function testCreate()
+	public function testCreate() : void
 	{
 		$this->assertSame(false, $this->policy->create($this->user, $this->user));
 		$this->assertSame(false, $this->policy->create($this->user, $this->otherUser));
 	}
 
-	public function testDelete()
+	public function testDelete() : void
 	{
 		$this->assertSame(true, $this->policy->delete($this->user, $this->user));
 		$this->assertSame(false, $this->policy->delete($this->user, $this->otherUser));
 	}
 
-	public function testUpdate()
+	public function testUpdate() : void
 	{
 		$this->assertSame(true, $this->policy->update($this->user, $this->user));
 		$this->assertSame(false, $this->policy->update($this->user, $this->otherUser));
 	}
 
-	public function testViewAny()
+	public function testViewAny() : void
 	{
 		$this->assertSame(false, $this->policy->viewAny($this->user, $this->user));
 		$this->assertSame(false, $this->policy->viewAny($this->user, $this->otherUser));

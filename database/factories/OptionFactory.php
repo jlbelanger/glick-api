@@ -2,19 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\ActionType;
-use App\Models\Option;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OptionFactory extends Factory
 {
-	/**
-	 * The name of the factory's corresponding model.
-	 *
-	 * @var string
-	 */
-	protected $model = Option::class;
-
 	/**
 	 * Defines the model's default state.
 	 *
@@ -23,7 +14,7 @@ class OptionFactory extends Factory
 	public function definition()
 	{
 		return [
-			'action_type_id' => ActionType::factory(),
+			'action_type_id' => \App\Models\ActionType::factory(),
 			'label' => 'Foo',
 		];
 	}

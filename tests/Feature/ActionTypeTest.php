@@ -29,7 +29,7 @@ class ActionTypeTest extends TestCase
 		$this->action = Action::factory()->create(['action_type_id' => $this->actionTypeOptions->id, 'option_id' => $this->optionB]);
 	}
 
-	public function testIndex()
+	public function testIndex() : void
 	{
 		$response = $this->actingAs($this->user)->json('GET', $this->path);
 		$response->assertExactJson([
@@ -81,7 +81,7 @@ class ActionTypeTest extends TestCase
 		->assertStatus(200);
 	}
 
-	public function storeProvider()
+	public function storeProvider() : array
 	{
 		return [
 			'with missing required fields' => [[
@@ -797,11 +797,11 @@ class ActionTypeTest extends TestCase
 	/**
 	 * @dataProvider storeProvider
 	 */
-	public function testStore($args)
+	public function testStore(array $args) : void
 	{
-		$args['body'] = $this->replaceToken('%optionA.id%', $this->optionA->id, $args['body']);
+		$args['body'] = $this->replaceToken('%optionA.id%', (string) $this->optionA->id, $args['body']);
 		$response = $this->actingAs($this->user)->json('POST', $this->path . $args['params'], $args['body']);
-		$args['response'] = $this->replaceToken('%user_id%', $this->user->id, $args['response']);
+		$args['response'] = $this->replaceToken('%user_id%', (string) $this->user->id, $args['response']);
 		if (!empty($response['data']['id'])) {
 			$args['response'] = $this->replaceToken('%id%', $response['data']['id'], $args['response']);
 		}
@@ -812,7 +812,7 @@ class ActionTypeTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function showProvider()
+	public function showProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -853,15 +853,15 @@ class ActionTypeTest extends TestCase
 	/**
 	 * @dataProvider showProvider
 	 */
-	public function testShow($args)
+	public function testShow(array $args) : void
 	{
-		$args['response'] = $this->replaceToken('%id%', $this->actionType->id, $args['response']);
+		$args['response'] = $this->replaceToken('%id%', (string) $this->actionType->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
 
-	public function updateProvider()
+	public function updateProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1707,14 +1707,14 @@ class ActionTypeTest extends TestCase
 	/**
 	 * @dataProvider updateProvider
 	 */
-	public function testUpdate($args)
+	public function testUpdate(array $args) : void
 	{
 		$tokens = [
-			'%actionType.id%' => $this->actionType->id,
-			'%actionTypeNumber.id%' => $this->actionTypeNumber->id,
-			'%actionTypeOptions.id%' => $this->actionTypeOptions->id,
-			'%optionA.id%' => $this->optionA->id,
-			'%optionB.id%' => $this->optionB->id,
+			'%actionType.id%' => (string) $this->actionType->id,
+			'%actionTypeNumber.id%' => (string) $this->actionTypeNumber->id,
+			'%actionTypeOptions.id%' => (string) $this->actionTypeOptions->id,
+			'%optionA.id%' => (string) $this->optionA->id,
+			'%optionB.id%' => (string) $this->optionB->id,
 		];
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
@@ -1726,7 +1726,7 @@ class ActionTypeTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function destroyProvider()
+	public function destroyProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1752,7 +1752,7 @@ class ActionTypeTest extends TestCase
 	/**
 	 * @dataProvider destroyProvider
 	 */
-	public function testDestroy($args)
+	public function testDestroy(array $args) : void
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {

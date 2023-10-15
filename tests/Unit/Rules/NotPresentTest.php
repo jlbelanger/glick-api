@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class NotPresentTest extends TestCase
 {
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			[[
@@ -32,7 +32,7 @@ class NotPresentTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$rule = new NotPresent();
 		$output = $rule->passes('foo', $args['value']);

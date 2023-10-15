@@ -12,7 +12,7 @@ class OptionTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function testGetHasEventsAttributee()
+	public function testGetHasEventsAttributee() : void
 	{
 		// With no actions.
 		$actionType = ActionType::factory()->create();

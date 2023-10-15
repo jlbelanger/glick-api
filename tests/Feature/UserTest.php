@@ -19,7 +19,7 @@ class UserTest extends TestCase
 		$this->otherUser = User::factory()->create(['email' => 'bar@example.com', 'username' => 'bar']);
 	}
 
-	public function testIndex()
+	public function testIndex() : void
 	{
 		$response = $this->actingAs($this->user)->json('GET', $this->path);
 		$response->assertExactJson([
@@ -33,7 +33,7 @@ class UserTest extends TestCase
 		->assertStatus(404);
 	}
 
-	public function testStore()
+	public function testStore() : void
 	{
 		$response = $this->actingAs($this->user)->json('POST', $this->path);
 		$response->assertExactJson([
@@ -47,7 +47,7 @@ class UserTest extends TestCase
 		->assertStatus(404);
 	}
 
-	public function showProvider()
+	public function showProvider() : array
 	{
 		return [
 			'with another user' => [[
@@ -82,15 +82,15 @@ class UserTest extends TestCase
 	/**
 	 * @dataProvider showProvider
 	 */
-	public function testShow($args)
+	public function testShow(array $args) : void
 	{
-		$args['response'] = $this->replaceToken('%id%', $this->user->id, $args['response']);
+		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
 
-	public function updateProvider()
+	public function updateProvider() : array
 	{
 		return [
 			'with another user' => [[
@@ -275,16 +275,16 @@ class UserTest extends TestCase
 	/**
 	 * @dataProvider updateProvider
 	 */
-	public function testUpdate($args)
+	public function testUpdate(array $args) : void
 	{
-		$args['body'] = $this->replaceToken('%id%', $this->user->id, $args['body']);
-		$args['response'] = $this->replaceToken('%id%', $this->user->id, $args['response']);
+		$args['body'] = $this->replaceToken('%id%', (string) $this->user->id, $args['body']);
+		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id, $args['body']);
 		$response->assertExactJson($args['response'])
 			->assertStatus($args['code']);
 	}
 
-	public function destroyProvider()
+	public function destroyProvider() : array
 	{
 		return [
 			'with another user' => [[
@@ -310,7 +310,7 @@ class UserTest extends TestCase
 	/**
 	 * @dataProvider destroyProvider
 	 */
-	public function testDestroy($args)
+	public function testDestroy(array $args) : void
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {

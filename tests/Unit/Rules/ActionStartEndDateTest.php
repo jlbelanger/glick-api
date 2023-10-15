@@ -11,7 +11,7 @@ class ActionStartEndDateTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [];
 	}
@@ -19,7 +19,7 @@ class ActionStartEndDateTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		$this->markAsSkipped();
 		$args['action'] = Action::factory()->create($args['action']);

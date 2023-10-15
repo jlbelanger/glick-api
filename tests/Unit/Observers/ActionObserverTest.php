@@ -11,7 +11,7 @@ class ActionObserverTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function testCreating()
+	public function testCreating() : void
 	{
 		$actionType = ActionType::factory()->create(['is_continuous' => true]);
 

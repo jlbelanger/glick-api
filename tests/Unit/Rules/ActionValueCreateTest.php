@@ -11,7 +11,7 @@ class ActionValueCreateTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider()
+	public function passesProvider() : array
 	{
 		return [
 			'with no action type' => [[
@@ -65,7 +65,7 @@ class ActionValueCreateTest extends TestCase
 	/**
 	 * @dataProvider passesProvider
 	 */
-	public function testPasses($args)
+	public function testPasses(array $args) : void
 	{
 		if ($args['actionType'] !== null) {
 			$actionType = ActionType::factory()->create($args['actionType']);

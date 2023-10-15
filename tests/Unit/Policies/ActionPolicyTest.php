@@ -25,31 +25,31 @@ class ActionPolicyTest extends TestCase
 		$this->actionNotOwned = Action::factory()->create(['action_type_id' => $this->actionTypeNotOwned->id]);
 	}
 
-	public function testView()
+	public function testView() : void
 	{
 		$this->assertSame(true, $this->policy->view($this->user, $this->actionOwned));
 		$this->assertSame(false, $this->policy->view($this->user, $this->actionNotOwned));
 	}
 
-	public function testCreate()
+	public function testCreate() : void
 	{
 		$this->assertSame(true, $this->policy->create($this->user, $this->actionOwned));
 		$this->assertSame(true, $this->policy->create($this->user, $this->actionNotOwned));
 	}
 
-	public function testDelete()
+	public function testDelete() : void
 	{
 		$this->assertSame(true, $this->policy->delete($this->user, $this->actionOwned));
 		$this->assertSame(false, $this->policy->delete($this->user, $this->actionNotOwned));
 	}
 
-	public function testUpdate()
+	public function testUpdate() : void
 	{
 		$this->assertSame(true, $this->policy->update($this->user, $this->actionOwned));
 		$this->assertSame(false, $this->policy->update($this->user, $this->actionNotOwned));
 	}
 
-	public function testViewAny()
+	public function testViewAny() : void
 	{
 		$this->assertSame(true, $this->policy->viewAny($this->user, $this->actionOwned));
 		$this->assertSame(true, $this->policy->viewAny($this->user, $this->actionNotOwned));
