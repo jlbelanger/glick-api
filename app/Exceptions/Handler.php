@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Illuminate\Validation\ValidationException;
 use Jlbelanger\Tapioca\Exceptions\JsonApiException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -59,6 +60,23 @@ class Handler extends ExceptionHandler
 
 		$this->renderable(function (ThrottleRequestsException $e) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 			return response()->json(['errors' => [['title' => 'Please wait before retrying.', 'status' => '429']]], 429);
+		});
+
+		$this->renderable(function (ValidationException $e) {
+			$output = [];
+			$errors = $e->validator->errors()->toArray();
+			foreach ($errors as $pointer => $titles) {
+				foreach ($titles as $title) {
+					$output[] = [
+						'title' => $title,
+						'source' => [
+							'pointer' => '/' . str_replace('.', '/', $pointer),
+						],
+						'status' => '422',
+					];
+				}
+			}
+			return response()->json(['errors' => $output], 422);
 		});
 
 		$this->renderable(function (HttpException $e) {

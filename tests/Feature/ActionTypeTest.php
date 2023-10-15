@@ -150,7 +150,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The suffix cannot be set unless the field type is "number".',
+							'title' => 'The suffix field is prohibited.',
 							'source' => [
 								'pointer' => '/data/attributes/suffix',
 							],
@@ -243,7 +243,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The options cannot be present.',
+							'title' => 'The options field is prohibited.',
 							'source' => [
 								'pointer' => '/data/relationships/options',
 							],
@@ -496,7 +496,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The is continuous cannot be set unless the field type is "button".',
+							'title' => 'The is continuous field is prohibited.',
 							'source' => [
 								'pointer' => '/data/attributes/is_continuous',
 							],
@@ -943,7 +943,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The suffix cannot be set unless the field type is "number".',
+							'title' => 'The suffix field is prohibited.',
 							'source' => [
 								'pointer' => '/data/attributes/suffix',
 							],
@@ -1034,7 +1034,7 @@ class ActionTypeTest extends TestCase
 				'response' => [
 					'errors' => [
 						[
-							'title' => 'The options cannot be present.',
+							'title' => 'The options field is prohibited.',
 							'source' => [
 								'pointer' => '/data/relationships/options',
 							],

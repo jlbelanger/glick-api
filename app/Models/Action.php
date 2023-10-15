@@ -72,35 +72,41 @@ class Action extends Model
 	}
 
 	/**
-	 * @param  array  $data
-	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(array $data, string $method) : array
+	public function rules() : array
 	{
+		$actionType = $this->actionType;
+		if (!empty(request()->input('data.relationships.action_type.data.id'))) {
+			$actionType = ActionType::find(request()->input('data.relationships.action_type.data.id'));
+		}
+		$optionId = request()->input('data.relationships.option.data.id');
+
 		$rules = [
-			'attributes.notes' => ['nullable', 'max:65535'],
-			'relationships.option' => [
+			'data.attributes.notes' => ['nullable', 'max:65535'],
+			'data.relationships.option' => [
 				'bail',
-				new ActionOptionForNonButton($this, $data),
-				new ActionOptionForButton($this, $data),
+				new ActionOptionForNonButton($this, $actionType, $optionId),
+				new ActionOptionForButton($actionType, $optionId),
 			],
 		];
-		if ($method === 'POST') {
-			$actionType = null;
-			if (!empty($data['relationships']['action_type']['data']['id'])) {
-				$actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
-			}
-			$rules['attributes.value'] = ['bail', new ActionValueCreate($data), new ActionValueNumeric($actionType)];
-			$rules['attributes.start_date'] = ['bail', 'required', 'date_format:"Y-m-d H:i:s"'];
-			$rules['attributes.end_date'] = [new NotPresent()];
-			$rules['relationships.action_type'] = ['required', new ActionActionType($this, $data)];
-		} elseif ($method === 'PUT') {
-			$rules['attributes.value'] = ['bail', new ActionValueUpdate($this), new ActionValueNumeric($this->actionType)];
-			$rules['attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
-			$rules['attributes.end_date'] = ['bail', 'nullable', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($this, $data)];
-			$rules['relationships.action_type'] = ['prohibited'];
+
+		if ($this->getKey()) {
+			$originalStartDate = $this->start_date;
+			$originalEndDate = $this->end_date;
+			$startDate = request()->input('data.attributes.start_date');
+			$endDate = request()->input('data.attributes.end_date');
+			$rules['data.attributes.value'] = ['bail', new ActionValueUpdate($this), new ActionValueNumeric($this->actionType)];
+			$rules['data.attributes.start_date'] = ['bail', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($originalStartDate, $originalEndDate, $startDate, $endDate)];
+			$rules['data.attributes.end_date'] = ['bail', 'nullable', 'date_format:"Y-m-d H:i:s"', new ActionStartEndDate($originalStartDate, $originalEndDate, $startDate, $endDate)];
+			$rules['data.relationships.action_type'] = ['prohibited'];
+		} else {
+			$rules['data.attributes.value'] = ['bail', new ActionValueCreate($actionType), new ActionValueNumeric($actionType)];
+			$rules['data.attributes.start_date'] = ['bail', 'required', 'date_format:"Y-m-d H:i:s"'];
+			$rules['data.attributes.end_date'] = [new NotPresent()];
+			$rules['data.relationships.action_type'] = ['required', new ActionActionType($actionType)];
 		}
+
 		return $rules;
 	}
 

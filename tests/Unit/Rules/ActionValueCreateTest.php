@@ -69,19 +69,10 @@ class ActionValueCreateTest extends TestCase
 	{
 		if ($args['actionType'] !== null) {
 			$actionType = ActionType::factory()->create($args['actionType']);
-			$data = [
-				'relationships' => [
-					'action_type' => [
-						'data' => [
-							'id' => $actionType->id,
-						],
-					],
-				],
-			];
 		} else {
-			$data = [];
+			$actionType = null;
 		}
-		$rule = new ActionValueCreate($data);
+		$rule = new ActionValueCreate($actionType);
 		$output = $rule->passes('foo', $args['value']);
 		$this->assertSame($args['expected'], $output);
 	}

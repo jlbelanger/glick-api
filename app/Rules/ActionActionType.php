@@ -2,8 +2,6 @@
 
 namespace App\Rules;
 
-use App\Models\Action;
-use App\Models\ActionType;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,16 +13,13 @@ class ActionActionType implements Rule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
-	 * @param  array  $data
+	 * @param  ActionType $actionType
 	 * @return void
 	 */
 	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed
-	public function __construct(Action $action, array $data)
+	public function __construct($actionType)
 	{
-		if (!empty($data['relationships']['action_type']['data']['id'])) {
-			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
-		}
+		$this->actionType = $actionType;
 		$this->userId = Auth::guard('sanctum')->id();
 	}
 

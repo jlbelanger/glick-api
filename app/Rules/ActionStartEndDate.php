@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\Models\Action;
 use Illuminate\Contracts\Validation\Rule;
 
 class ActionStartEndDate implements Rule
@@ -15,25 +14,18 @@ class ActionStartEndDate implements Rule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
-	 * @param  array  $data
+	 * @param  string|null $originalStartDate
+	 * @param  string|null $originalEndDate
+	 * @param  string|null $startDate
+	 * @param  string|null $endDate
 	 * @return void
 	 */
-	public function __construct(Action $action, array $data)
+	public function __construct($originalStartDate, $originalEndDate, $startDate, $endDate)
 	{
-		$this->startDate = $action->start_date;
-		$this->isSettingStartDate = false;
-		if (!empty($data['attributes']['start_date'])) {
-			$this->startDate = $data['attributes']['start_date'];
-			$this->isSettingStartDate = true;
-		}
-
-		$this->endDate = $action->end_date;
-		$this->isSettingEndDate = false;
-		if (!empty($data['attributes']['end_date'])) {
-			$this->endDate = $data['attributes']['end_date'];
-			$this->isSettingEndDate = true;
-		}
+		$this->startDate = $startDate ? $startDate : $originalStartDate;
+		$this->isSettingStartDate = $startDate && $startDate !== $originalStartDate;
+		$this->endDate = $endDate ? $endDate : $originalEndDate;
+		$this->isSettingEndDate = $endDate && $endDate !== $originalEndDate;
 	}
 
 	/**
@@ -47,7 +39,7 @@ class ActionStartEndDate implements Rule
 	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceAfterLastUsed
 	public function passes($attribute, $value)
 	{
-		if ($this->isSettingStartDate && $this->isSettingEndDate && $attribute === 'attributes.start_date') {
+		if ($this->isSettingStartDate && $this->isSettingEndDate && $attribute === 'data.attributes.start_date') {
 			return true;
 		}
 		if (!$this->endDate) {

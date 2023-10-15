@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
-use Jlbelanger\Tapioca\Exceptions\ValidationException;
 use Jlbelanger\Tapioca\Helpers\Utilities;
-use Validator;
 
 class AuthController extends Controller
 {
@@ -32,22 +30,18 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request) : JsonResponse
 	{
-		$data = $request->input('data');
 		$rules = [
-			'attributes.username' => ['required'],
-			'attributes.password' => ['required'],
+			'data.attributes.username' => ['required'],
+			'data.attributes.password' => ['required'],
+			'data.attributes.remember' => ['boolean'],
 		];
-		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
-		if ($validator->fails()) {
-			$errors = ValidationException::formatErrors($validator->errors()->toArray());
-			return response()->json(['errors' => $errors], 422);
-		}
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
 
 		$credentials = [
-			'username' => $data['attributes']['username'],
-			'password' => $data['attributes']['password'],
+			'username' => $request->input('data.attributes.username'),
+			'password' => $request->input('data.attributes.password'),
 		];
-		$remember = !empty($data['attributes']['remember']);
+		$remember = !empty($request->input('data.attributes.remember'));
 		if (!Auth::attempt($credentials, $remember)) {
 			return response()->json(['errors' => [['title' => __('auth.failed'), 'status' => '401']]], 401);
 		}
@@ -77,63 +71,18 @@ class AuthController extends Controller
 	}
 
 	/**
-	 * Handles an authentication attempt.
-	 *
-	 * @param  Request $request
-	 * @return Response
-	 */
-	public function register(Request $request) : JsonResponse
-	{
-		$data = $request->input('data');
-		$rules = [
-			'attributes.username' => ['required', 'alpha_num', 'max:255', 'unique:users,username'],
-			'attributes.email' => ['required', 'email', 'max:255', 'unique:users,email'],
-			'attributes.password' => ['required', 'confirmed', Rules\Password::defaults()],
-			'attributes.password_confirmation' => ['required'],
-		];
-		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
-		if ($validator->fails()) {
-			$errors = ValidationException::formatErrors($validator->errors()->toArray());
-			return response()->json(['errors' => $errors], 422);
-		}
-
-		DB::beginTransaction();
-		$user = User::create($data['attributes']);
-		$user->forceFill([
-			'password' => Hash::make($data['attributes']['password']),
-		])->save();
-		$user->save();
-		event(new Registered($user));
-		DB::commit();
-
-		if ($user instanceof MustVerifyEmail) {
-			return response()->json(null, 204);
-		}
-
-		return response()->json([
-			'token' => $user->createToken('api')->plainTextToken,
-			'user' => $user->getAuthInfo(false),
-		]);
-	}
-
-	/**
 	 * @param  Request $request
 	 * @return JsonResponse
 	 */
 	public function forgotPassword(Request $request) : JsonResponse
 	{
-		$data = $request->input('data');
 		$rules = [
-			'attributes.email' => ['required', 'email'],
+			'data.attributes.email' => ['required', 'email'],
 		];
-		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
-		if ($validator->fails()) {
-			$errors = ValidationException::formatErrors($validator->errors()->toArray());
-			return response()->json(['errors' => $errors], 422);
-		}
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
 
 		try {
-			Password::sendResetLink(['email' => $data['attributes']['email']]);
+			Password::sendResetLink(['email' => $request->input('data.attributes.email')]);
 		} catch (Exception $e) {
 			return response()->json(['errors' => [['title' => __('passwords.send_error'), 'status' => '500']]], 500);
 		}
@@ -148,16 +97,11 @@ class AuthController extends Controller
 	 */
 	public function resetPassword(Request $request, string $token) : JsonResponse
 	{
-		$data = $request->input('data');
 		$rules = [
-			'attributes.email' => ['required', 'email'],
-			'attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'data.attributes.email' => ['required', 'email'],
+			'data.attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
 		];
-		$validator = Validator::make($data, $rules, [], Utilities::prettyAttributeNames($rules));
-		if ($validator->fails()) {
-			$errors = ValidationException::formatErrors($validator->errors()->toArray());
-			return response()->json(['errors' => $errors], 422);
-		}
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
 
 		if ($request->query('expires') < Carbon::now()->timestamp) {
 			return response()->json(['errors' => [['title' => __('passwords.expired'), 'status' => '403']]], 403);
@@ -165,9 +109,9 @@ class AuthController extends Controller
 
 		$status = Password::reset(
 			[
-				'email' => $data['attributes']['email'],
-				'password' => $data['attributes']['new_password'],
-				'password_confirmation' => $data['attributes']['new_password_confirmation'],
+				'email' => $request->input('data.attributes.email'),
+				'password' => $request->input('data.attributes.new_password'),
+				'password_confirmation' => $request->input('data.attributes.new_password_confirmation'),
 				'token' => $token,
 			],
 			function ($user, $password) {
@@ -188,7 +132,7 @@ class AuthController extends Controller
 			if ($status === 'passwords.user') {
 				$status = 'passwords.token';
 			}
-			return response()->json(['errors' => [['title' => __($status), 'status' => '422']]], 422);
+			return response()->json(['errors' => [['title' => __($status), 'status' => '403']]], 403);
 		}
 
 		return response()->json(null, 204);
@@ -196,7 +140,92 @@ class AuthController extends Controller
 
 	/**
 	 * @param  Request $request
-	 * @return Response
+	 * @return JsonResponse
+	 */
+	public function changeEmail(Request $request) : JsonResponse
+	{
+		$user = Auth::guard('sanctum')->user();
+		if ($user->username === 'demo') {
+			abort(403, 'You do not have permission to update this record.');
+		}
+
+		$rules = [
+			'data.attributes.password' => ['required', 'current_password:sanctum'],
+			'data.attributes.email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->getKey()],
+		];
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
+
+		$user->email = $request->input('data.attributes.email');
+		if ($user instanceof MustVerifyEmail && !$user->email_verified_at) {
+			$user->email_verified_at = null;
+		}
+		$user->save();
+
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return JsonResponse
+	 */
+	public function changePassword(Request $request) : JsonResponse
+	{
+		$user = Auth::guard('sanctum')->user();
+		if ($user->username === 'demo') {
+			abort(403, 'You do not have permission to update this record.');
+		}
+
+		$rules = [
+			'data.attributes.password' => ['required', 'current_password:sanctum'],
+			'data.attributes.new_password' => ['required', 'confirmed', Rules\Password::defaults()],
+		];
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
+
+		$user->forceFill([
+			'password' => Hash::make($request->input('data.attributes.new_password')),
+			'remember_token' => Str::random(60),
+		])->save();
+		event(new PasswordReset($user));
+
+		return response()->json(null, 204);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return JsonResponse
+	 */
+	public function register(Request $request) : JsonResponse
+	{
+		$rules = [
+			'data.attributes.username' => ['required', 'alpha_num', 'max:255', 'unique:users,username'],
+			'data.attributes.email' => ['required', 'email', 'max:255', 'unique:users,email'],
+			'data.attributes.password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'data.attributes.password_confirmation' => ['required'],
+		];
+		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
+
+		DB::beginTransaction();
+		$user = User::create($request->input('data.attributes'));
+		$user->forceFill([
+			'password' => Hash::make($request->input('data.attributes.password')),
+		])->save();
+		$user->save();
+		event(new Registered($user));
+		DB::commit();
+
+		if ($user instanceof MustVerifyEmail) {
+			return response()->json(null, 204);
+		}
+
+		return response()->json([
+			'token' => $user->createToken('api')->plainTextToken,
+			'user' => $user->getAuthInfo(false),
+		]);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @return JsonResponse
 	 */
 	public function verifyEmail(Request $request) : JsonResponse
 	{
@@ -210,7 +239,7 @@ class AuthController extends Controller
 
 	/**
 	 * @param  Request $request
-	 * @return Response
+	 * @return JsonResponse
 	 */
 	public function resendVerification(Request $request) : JsonResponse
 	{

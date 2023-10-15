@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\Models\Action;
 use App\Models\ActionType;
 use App\Models\Option;
 use Illuminate\Contracts\Validation\ImplicitRule;
@@ -16,21 +15,16 @@ class ActionOptionForButton implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
-	 * @param  array  $data
+	 * @param  ActionType|null $actionType
+	 * @param  integer|null    $optionId
 	 * @return void
 	 */
-	public function __construct(Action $action, array $data)
+	public function __construct($actionType, $optionId)
 	{
-		$this->actionType = $action->actionType;
-		if (!empty($data['relationships']['action_type']['data']['id'])) {
-			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
-		}
-
-		$this->isSettingOption = false;
-		if (!empty($data['relationships']['option']['data']['id'])) {
-			$this->isSettingOption = true;
-			$this->option = Option::find($data['relationships']['option']['data']['id']);
+		$this->actionType = $actionType;
+		$this->isSettingOption = !empty($optionId);
+		if (!empty($optionId)) {
+			$this->option = Option::find($optionId);
 		}
 	}
 

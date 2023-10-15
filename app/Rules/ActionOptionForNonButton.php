@@ -14,21 +14,15 @@ class ActionOptionForNonButton implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  Action $action
-	 * @param  array  $data
+	 * @param  Action          $action
+	 * @param  ActionType|null $actionType
+	 * @param  integer|null    $optionId
 	 * @return void
 	 */
-	public function __construct(Action $action, array $data)
+	public function __construct(Action $action, $actionType, $optionId)
 	{
-		$this->actionType = $action->actionType;
-		if (!empty($data['relationships']['action_type']['data']['id'])) {
-			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
-		}
-
-		$this->hasOption = !empty($action->option_id);
-		if (!empty($data['relationships']['option']['data'])) {
-			$this->hasOption = true;
-		}
+		$this->actionType = $actionType;
+		$this->hasOption = !empty($action->option_id) || !empty($optionId);
 	}
 
 	/**

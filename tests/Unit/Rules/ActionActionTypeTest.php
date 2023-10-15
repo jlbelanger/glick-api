@@ -23,7 +23,7 @@ class ActionActionTypeTest extends TestCase
 	{
 		$this->markAsSkipped();
 		$args['action'] = Action::factory()->create($args['action']);
-		$rule = new ActionActionType($args['action'], $args['data']);
+		$rule = new ActionActionType($args['action_type']);
 		$output = $rule->passes('foo', $args['value']);
 		$this->assertSame($args['expected'], $output);
 	}

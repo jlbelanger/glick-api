@@ -5,10 +5,8 @@ namespace App\Models;
 use App\Models\Action;
 use App\Models\Option;
 use App\Models\User;
-use App\Rules\ActionTypeOptions;
 use App\Rules\CannotRemoveWithEvents;
 use App\Rules\NotPresent;
-use App\Rules\OnlyIfFieldType;
 use App\Rules\TempIdsOnly;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -130,31 +128,37 @@ class ActionType extends Model
 	}
 
 	/**
-	 * @param  array  $data
-	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(array $data, string $method) : array
+	public function rules() : array
 	{
+		$fieldType = request()->input('data.attributes.field_type', $this->field_type);
 		$rules = [
-			'attributes.label' => ['max:255'],
-			'attributes.suffix' => ['bail', new OnlyIfFieldType($data, $method, 'number', $this), 'max:255'],
-			'attributes.order_num' => ['integer'],
-			'attributes.is_archived' => ['boolean'],
-			'relationships.options' => [new ActionTypeOptions($this, $data)],
+			'data.attributes.label' => [$this->requiredOnCreate(), 'max:255'],
+			'data.attributes.suffix' => ['max:255'],
+			'data.attributes.order_num' => ['integer'],
+			'data.attributes.is_archived' => ['boolean'],
+			'data.relationships.options' => [],
 		];
-		if ($method === 'POST') {
-			$rules['attributes.label'][] = 'required';
-			$rules['attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number', 'text'])];
-			$rules['attributes.is_continuous'] = ['bail', new OnlyIfFieldType($data, $method, 'button', $this), 'boolean'];
-			$rules['relationships.options'][] = new TempIdsOnly();
-			$rules['relationships.user'] = [new NotPresent()];
-		} elseif ($method === 'PUT') {
-			$rules['attributes.label'][] = 'filled';
-			$rules['attributes.field_type'] = ['prohibited'];
-			$rules['attributes.is_continuous'] = ['prohibited'];
-			$rules['relationships.options'][] = new CannotRemoveWithEvents($this);
-			$rules['relationships.user'] = ['prohibited'];
+		if ($fieldType !== 'number') {
+			$rules['data.attributes.suffix'][] = 'prohibited';
+		}
+		if ($fieldType !== 'button') {
+			$rules['data.relationships.options'][] = 'prohibited';
+		}
+		if ($this->getKey()) {
+			$rules['data.attributes.field_type'] = ['prohibited'];
+			$rules['data.attributes.is_continuous'] = ['prohibited'];
+			$rules['data.relationships.options'][] = new CannotRemoveWithEvents($this);
+			$rules['data.relationships.user'] = ['prohibited'];
+		} else {
+			$rules['data.attributes.field_type'] = ['bail', 'required', Rule::in(['button', 'number', 'text'])];
+			$rules['data.attributes.is_continuous'] = ['boolean'];
+			$rules['data.relationships.options'][] = new TempIdsOnly();
+			$rules['data.relationships.user'] = [new NotPresent()];
+			if ($fieldType !== 'button') {
+				$rules['data.attributes.is_continuous'][] = 'prohibited';
+			}
 		}
 		return $rules;
 	}

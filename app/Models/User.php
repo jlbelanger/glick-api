@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Jlbelanger\Tapioca\Traits\Resource;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -73,28 +72,19 @@ class User extends Authenticatable implements MustVerifyEmail
 	}
 
 	/**
-	 * @param  array  $data
-	 * @param  string $method
 	 * @return array
 	 */
-	protected function rules(array $data, string $method) : array // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
+	public function rules() : array
 	{
-		$required = $method === 'POST' ? 'required' : 'filled';
 		$rules = [
-			'attributes.username' => [$required, 'alpha_num', 'max:255'],
-			'attributes.email' => ['prohibited'],
-			'attributes.password' => ['prohibited'],
+			'data.attributes.username' => [$this->requiredOnCreate(), 'alpha_num', 'max:255', $this->unique('username')],
+			'data.attributes.email' => ['prohibited'],
+			'data.attributes.password' => ['prohibited'],
 		];
 
 		if (Auth::guard('sanctum')->user()->username === 'demo') {
-			$rules['attributes.username'][] = 'prohibited';
+			$rules['data.attributes.username'][] = 'prohibited';
 		}
-
-		$unique = Rule::unique($this->getTable(), 'username');
-		if ($this->id) {
-			$unique->ignore($this->id);
-		}
-		$rules['attributes.username'][] = $unique;
 
 		return $rules;
 	}

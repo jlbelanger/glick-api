@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\Models\ActionType;
 use Illuminate\Contracts\Validation\ImplicitRule;
 
 class ActionValueCreate implements ImplicitRule
@@ -12,14 +11,12 @@ class ActionValueCreate implements ImplicitRule
 	/**
 	 * Creates a new rule instance.
 	 *
-	 * @param  array $data
+	 * @param  ActionType|null $actionType
 	 * @return void
 	 */
-	public function __construct(array $data)
+	public function __construct($actionType)
 	{
-		if (!empty($data['relationships']['action_type']['data']['id'])) {
-			$this->actionType = ActionType::find($data['relationships']['action_type']['data']['id']);
-		}
+		$this->actionType = $actionType;
 	}
 
 	/**
