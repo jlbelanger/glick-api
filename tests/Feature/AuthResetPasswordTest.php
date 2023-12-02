@@ -74,6 +74,74 @@ class AuthResetPasswordTest extends TestCase
 				],
 				'code' => 422,
 			]],
+			'with unconfirmed password' => [[
+				'body' => [
+					'data' => [
+						'attributes' => [
+							'email' => 'foo@example.com',
+							'new_password' => 'password2',
+						],
+					],
+				],
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The new password confirmation does not match.',
+							'status' => '422',
+							'source' => [
+								'pointer' => '/data/attributes/new_password',
+							],
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with mismatched confirmation' => [[
+				'body' => [
+					'data' => [
+						'attributes' => [
+							'email' => 'foo@example.com',
+							'new_password' => 'password2',
+							'new_password_confirmation' => 'password3',
+						],
+					],
+				],
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The new password confirmation does not match.',
+							'status' => '422',
+							'source' => [
+								'pointer' => '/data/attributes/new_password',
+							],
+						],
+					],
+				],
+				'code' => 422,
+			]],
+			'with short password' => [[
+				'body' => [
+					'data' => [
+						'attributes' => [
+							'email' => 'foo@example.com',
+							'new_password' => 'a',
+							'new_password_confirmation' => 'a',
+						],
+					],
+				],
+				'response' => [
+					'errors' => [
+						[
+							'title' => 'The new password must be at least 8 characters.',
+							'status' => '422',
+							'source' => [
+								'pointer' => '/data/attributes/new_password',
+							],
+						],
+					],
+				],
+				'code' => 422,
+			]],
 		];
 	}
 
@@ -97,7 +165,99 @@ class AuthResetPasswordTest extends TestCase
 		}
 	}
 
-	public function testPasswordCanBeResetWithValidToken() : void
+	public function testPasswordCannotBeResetWithInvalidToken() : void
+	{
+		$url = URL::temporarySignedRoute(
+			'password.update',
+			Carbon::now()->addMinutes(60),
+			['token' => $this->token],
+			false
+		);
+		$url = str_replace('?', 'a?', $url);
+
+		$response = $this->json('PUT', $url, [
+			'data' => [
+				'attributes' => [
+					'email' => $this->user->email,
+					'new_password' => 'password2',
+					'new_password_confirmation' => 'password2',
+				],
+			],
+		]);
+
+		$response->assertExactJson([
+			'errors' => [
+				[
+					'title' => 'This password reset link is invalid or the email is incorrect.',
+					'status' => '403',
+				],
+			],
+		]);
+		$response->assertStatus(403);
+	}
+
+	public function testPasswordCannotBeResetWithInvalidSignature() : void
+	{
+		$url = URL::temporarySignedRoute(
+			'password.update',
+			Carbon::now()->addMinutes(60),
+			['token' => $this->token],
+			false
+		);
+		$url = str_replace('signature=', 'signature=a', $url);
+
+		$response = $this->json('PUT', $url, [
+			'data' => [
+				'attributes' => [
+					'email' => $this->user->email,
+					'new_password' => 'password2',
+					'new_password_confirmation' => 'password2',
+				],
+			],
+		]);
+
+		$response->assertExactJson([
+			'errors' => [
+				[
+					'title' => 'This password reset link is invalid or the email is incorrect.',
+					'status' => '403',
+				],
+			],
+		]);
+		$response->assertStatus(403);
+	}
+
+	public function testPasswordCannotBeResetWithWrongEmail() : void
+	{
+		$url = URL::temporarySignedRoute(
+			'password.update',
+			Carbon::now()->addMinutes(60),
+			['token' => $this->token],
+			false
+		);
+
+		$response = $this->json('PUT', $url, [
+			'data' => [
+				'attributes' => [
+					'email' => 'wrongemail@example.com',
+					'new_password' => 'password2',
+					'new_password_confirmation' => 'password2',
+				],
+			],
+		]);
+
+		$response->assertExactJson([
+			'errors' => [
+				[
+					'title' => 'This password reset link is invalid or the email is incorrect.',
+					'status' => '403',
+				],
+			],
+		]);
+		$response->assertStatus(403);
+	}
+
+	public function testPasswordCanBeResetWithValidSubmission() : void
 	{
 		$url = URL::temporarySignedRoute(
 			'password.update',
@@ -161,36 +321,6 @@ class AuthResetPasswordTest extends TestCase
 		$response->assertStatus(403);
 	}
 
-	public function testPasswordCannotBeResetWithWrongEmail() : void
-	{
-		$url = URL::temporarySignedRoute(
-			'password.update',
-			Carbon::now()->addMinutes(60),
-			['token' => $this->token],
-			false
-		);
-
-		$response = $this->json('PUT', $url, [
-			'data' => [
-				'attributes' => [
-					'email' => 'wrongemail@example.com',
-					'new_password' => 'password2',
-					'new_password_confirmation' => 'password2',
-				],
-			],
-		]);
-
-		$response->assertExactJson([
-			'errors' => [
-				[
-					'title' => 'This password reset link is invalid or the email is incorrect.',
-					'status' => '403',
-				],
-			],
-		]);
-		$response->assertStatus(403);
-	}
-
 	public function testPasswordCannotBeResetWithExpiredToken() : void
 	{
 		$url = URL::temporarySignedRoute(
@@ -214,37 +344,6 @@ class AuthResetPasswordTest extends TestCase
 			'errors' => [
 				[
 					'title' => 'This link has expired.',
-					'status' => '403',
-				],
-			],
-		]);
-		$response->assertStatus(403);
-	}
-
-	public function testPasswordCannotBeResetWithInvalidToken() : void
-	{
-		$url = URL::temporarySignedRoute(
-			'password.update',
-			Carbon::now()->addMinutes(60),
-			['token' => $this->token],
-			false
-		);
-		$url = str_replace('?', 'a?', $url);
-
-		$response = $this->json('PUT', $url, [
-			'data' => [
-				'attributes' => [
-					'email' => $this->user->email,
-					'new_password' => 'password2',
-					'new_password_confirmation' => 'password2',
-				],
-			],
-		]);
-
-		$response->assertExactJson([
-			'errors' => [
-				[
-					'title' => 'This password reset link is invalid or the email is incorrect.',
 					'status' => '403',
 				],
 			],

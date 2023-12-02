@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use Log;
 use Jlbelanger\Tapioca\Helpers\Utilities;
 
 class AuthController extends Controller
@@ -31,8 +32,8 @@ class AuthController extends Controller
 	public function login(Request $request) : JsonResponse
 	{
 		$rules = [
-			'data.attributes.username' => ['required'],
-			'data.attributes.password' => ['required'],
+			'data.attributes.username' => ['required', 'string'],
+			'data.attributes.password' => ['required', 'string'],
 			'data.attributes.remember' => ['boolean'],
 		];
 		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
@@ -43,14 +44,17 @@ class AuthController extends Controller
 		];
 		$remember = !empty($request->input('data.attributes.remember'));
 		if (!Auth::attempt($credentials, $remember)) {
+			self::logWarning(['action' => 'login', 'username' => $credentials['username']]);
 			return response()->json(['errors' => [['title' => __('auth.failed'), 'status' => '401']]], 401);
 		}
 
 		$user = User::where('username', '=', $credentials['username'])->first();
 		if ($user instanceof MustVerifyEmail && !$user->email_verified_at) {
+			self::logWarning(['action' => 'login', 'email' => $user->email, 'info' => 'unverified']);
 			return response()->json(['errors' => [['title' => __('auth.unverified'), 'status' => '401', 'code' => 'auth.unverified']]], 401);
 		}
 
+		self::log(['action' => 'login', 'email' => $user->email]);
 		return response()->json([
 			'token' => $user->createToken('api')->plainTextToken,
 			'user' => $user->getAuthInfo($remember),
@@ -65,7 +69,9 @@ class AuthController extends Controller
 	 */
 	public function logout(Request $request) : JsonResponse // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 	{
-		Auth::guard('sanctum')->user()->currentAccessToken()->delete();
+		$user = Auth::guard('sanctum')->user();
+		$user->currentAccessToken()->delete();
+		self::log(['action' => 'logout', 'email' => $user->email]);
 
 		return response()->json(null, 204);
 	}
@@ -81,12 +87,20 @@ class AuthController extends Controller
 		];
 		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
 
+		$email = $request->input('data.attributes.email');
 		try {
-			Password::sendResetLink(['email' => $request->input('data.attributes.email')]);
+			$status = Password::sendResetLink(['email' => $email]);
 		} catch (Exception $e) {
+			self::logWarning(['action' => 'forgotPassword', 'email' => $email]);
 			return response()->json(['errors' => [['title' => __('passwords.send_error'), 'status' => '500']]], 500);
 		}
 
+		$success = $status === Password::RESET_LINK_SENT;
+		if ($status === Password::RESET_LINK_SENT) {
+			self::log(['action' => 'forgotPassword', 'email' => $email]);
+		} else {
+			self::logWarning(['action' => 'forgotPassword', 'email' => $email, 'info' => $status]);
+		}
 		return response()->json(null, 204);
 	}
 
@@ -103,18 +117,20 @@ class AuthController extends Controller
 		];
 		$this->validate($request, $rules, [], Utilities::prettyAttributeNames($rules));
 
+		$email = $request->input('data.attributes.email');
 		if ($request->query('expires') < Carbon::now()->timestamp) {
+			self::logWarning(['action' => 'resetPassword', 'email' => $email, 'info' => 'expired']);
 			return response()->json(['errors' => [['title' => __('passwords.expired'), 'status' => '403']]], 403);
 		}
 
 		$status = Password::reset(
 			[
-				'email' => $request->input('data.attributes.email'),
+				'email' => $email,
 				'password' => $request->input('data.attributes.new_password'),
 				'password_confirmation' => $request->input('data.attributes.new_password_confirmation'),
 				'token' => $token,
 			],
-			function ($user, $password) {
+			function ($user, $password) use ($email) {
 				$userData = [
 					'password' => Hash::make($password),
 					'remember_token' => Str::random(60),
@@ -123,12 +139,14 @@ class AuthController extends Controller
 					$userData['email_verified_at'] = Carbon::now();
 				}
 				$user->forceFill($userData)->save();
+				self::log(['action' => 'resetPassword', 'email' => $user->email]);
 
 				event(new PasswordReset($user));
 			}
 		);
 
 		if ($status !== Password::PASSWORD_RESET) {
+			self::logWarning(['action' => 'resetPassword', 'email' => $email, 'info' => $status]);
 			if ($status === 'passwords.user') {
 				$status = 'passwords.token';
 			}
@@ -160,6 +178,7 @@ class AuthController extends Controller
 			$user->email_verified_at = null;
 		}
 		$user->save();
+		self::log(['action' => 'changeEmail', 'email' => $user->email]);
 
 		return response()->json(null, 204);
 	}
@@ -186,6 +205,7 @@ class AuthController extends Controller
 			'remember_token' => Str::random(60),
 		])->save();
 		event(new PasswordReset($user));
+		self::log(['action' => 'changePassword', 'email' => $user->email]);
 
 		return response()->json(null, 204);
 	}
@@ -211,6 +231,7 @@ class AuthController extends Controller
 		])->save();
 		$user->save();
 		event(new Registered($user));
+		self::log(['action' => 'register', 'email' => $user->email]);
 		DB::commit();
 
 		if ($user instanceof MustVerifyEmail) {
@@ -233,6 +254,7 @@ class AuthController extends Controller
 		if (!$user->hasVerifiedEmail()) {
 			$user->markEmailAsVerified();
 			event(new Verified($user));
+			self::log(['action' => 'verifyEmail', 'email' => $user->email]);
 		}
 		return response()->json(null, 204);
 	}
@@ -246,7 +268,18 @@ class AuthController extends Controller
 		$user = User::where('username', '=', $request->input('username'))->first();
 		if ($user) {
 			$user->sendEmailVerificationNotification();
+			self::log(['action' => 'resendVerification', 'email' => $user->email]);
 		}
 		return response()->json(null, 204);
+	}
+
+	protected static function logWarning($s) : void
+	{
+		self::log($s, 'warning');
+	}
+
+	protected static function log($s, string $level = 'info') : void
+	{
+		Log::channel('auth')->$level(json_encode(array_merge($s, ['ip' => request()->ip()])));
 	}
 }

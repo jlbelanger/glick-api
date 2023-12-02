@@ -37,14 +37,16 @@ class ResetAuth extends Command
 
 		echo "Resetting password...\n";
 		$user = User::first();
+		$data = [
+			'password' => Hash::make('password'),
+		];
 		if (!$user) {
 			$user = new User();
-			$user->username = 'test';
-			$user->email = 'test@example.com';
-			$user->email_verified_at = Carbon::now();
+			$data['username'] = 'test';
+			$data['email'] = 'test@example.com';
+			$data['email_verified_at'] = Carbon::now();
 		}
-		$user->password = Hash::make('test');
-		$user->save();
+		$user->forceFill($data)->save();
 		echo "Success!\n";
 	}
 }

@@ -100,6 +100,13 @@ return [
 			'path' => storage_path('logs/laravel.log'),
 		],
 
+		// Custom log for authentication.
+		'auth' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/auth.log'),
+			'level' => env('LOG_LEVEL', 'debug'),
+		],
+
 		// Custom log for database queries.
 		'database' => [
 			'driver' => 'single',

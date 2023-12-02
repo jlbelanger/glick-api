@@ -34,7 +34,7 @@ php artisan db:seed
 # Set permissions
 chown -R www-data:www-data storage
 
-# Create account with username "test" and password "test" (or reset existing account password to "test")
+# Create account with username "test" and password "password" (or reset existing account password to "password")
 php artisan reset-auth
 ```
 

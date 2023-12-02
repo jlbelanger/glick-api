@@ -17,9 +17,26 @@ class AuthLogoutTest extends TestCase
 		$this->token = $this->user->createToken('api')->plainTextToken;
 	}
 
-	public function testLogout() : void
+	public function testValidLogout() : void
 	{
 		$response = $this->withHeaders(['Authorization' => 'Bearer ' . $this->token])->json('DELETE', '/auth/logout');
 		$response->assertNoContent(204);
+
+		$response = $this->withHeaders(['Authorization' => 'Bearer ' . $this->token])->json('DELETE', '/auth/logout');
+		$response->assertNoContent(204);
+	}
+
+	public function testInvalidLogout() : void
+	{
+		$response = $this->json('DELETE', '/auth/logout');
+		$response->assertExactJson([
+			'errors' => [
+				[
+					'title' => 'You are not logged in.',
+					'status' => '401',
+				],
+			],
+		]);
+		$response->assertStatus(401);
 	}
 }
