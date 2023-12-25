@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class NotPresentTest extends TestCase
 {
-	public function passesProvider() : array
+	public static function passesProvider() : array
 	{
 		return [
 			[[

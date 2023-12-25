@@ -11,7 +11,7 @@ class ActionValueCreateTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider() : array
+	public static function passesProvider() : array
 	{
 		return [
 			'with no action type' => [[

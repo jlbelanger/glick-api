@@ -9,9 +9,9 @@ class OptionFactory extends Factory
 	/**
 	 * Defines the model's default state.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
-	public function definition()
+	public function definition() : array
 	{
 		return [
 			'action_type_id' => \App\Models\ActionType::factory(),

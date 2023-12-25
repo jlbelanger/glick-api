@@ -22,7 +22,7 @@ class AuthResetPasswordTest extends TestCase
 		DB::table('password_resets')->insert(['email' => $this->user->email, 'token' => Hash::make($this->token)]);
 	}
 
-	public function resetPasswordProvider() : array
+	public static function resetPasswordProvider() : array
 	{
 		return [
 			'with missing fields' => [[

@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsArchivedToActionTypesTable extends Migration
+return new class extends Migration
 {
 	/**
 	 * Runs the migrations.
 	 *
 	 * @return void
 	 */
-	public function up()
+	public function up() : void
 	{
 		Schema::table('action_types', function (Blueprint $table) {
 			$table->boolean('is_archived')->default(false);
@@ -23,10 +23,10 @@ class AddIsArchivedToActionTypesTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
+	public function down() : void
 	{
 		Schema::table('action_types', function (Blueprint $table) {
 			$table->dropColumn('is_archived');
 		});
 	}
-}
+};

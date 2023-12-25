@@ -16,7 +16,7 @@ class AuthLoginTest extends TestCase
 		$this->user = User::factory()->create();
 	}
 
-	public function loginProvider() : array
+	public static function loginProvider() : array
 	{
 		return [
 			'with missing username' => [[

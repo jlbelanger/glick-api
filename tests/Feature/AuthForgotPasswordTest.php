@@ -18,7 +18,7 @@ class AuthForgotPasswordTest extends TestCase
 		$this->user = User::factory()->create();
 	}
 
-	public function forgotPasswordProvider() : array
+	public static function forgotPasswordProvider() : array
 	{
 		return [
 			'with missing email' => [[

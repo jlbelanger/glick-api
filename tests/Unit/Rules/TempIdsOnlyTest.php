@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class TempIdsOnlyTest extends TestCase
 {
-	public function passesProvider() : array
+	public static function passesProvider() : array
 	{
 		return [
 			[[

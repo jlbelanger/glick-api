@@ -6,6 +6,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
 {
@@ -15,9 +16,9 @@ class RedirectIfAuthenticated
 	 * @param  Request     $request
 	 * @param  Closure     $next
 	 * @param  string|null ...$guards
-	 * @return Response|RedirectResponse
+	 * @return Response
 	 */
-	public function handle(Request $request, Closure $next, ...$guards)
+	public function handle(Request $request, Closure $next, string ...$guards) : Response
 	{
 		$guards = empty($guards) ? [null] : $guards;
 

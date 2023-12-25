@@ -14,7 +14,7 @@ use Illuminate\Validation\Rules\Password;
 class AuthServiceProvider extends ServiceProvider
 {
 	/**
-	 * The policy mappings for the application.
+	 * The model to policy mappings for the application.
 	 *
 	 * @var array<class-string, class-string>
 	 */
@@ -25,11 +25,11 @@ class AuthServiceProvider extends ServiceProvider
 	 *
 	 * @return void
 	 */
-	public function boot()
+	public function boot() : void
 	{
 		$this->registerPolicies();
 
-		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
+		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 		ResetPassword::toMailUsing(function ($notifiable, $token) {
 			$url = config('app.frontend_url') . str_replace('/auth/', '/', URL::temporarySignedRoute(
 				'password.update',
@@ -45,7 +45,7 @@ class AuthServiceProvider extends ServiceProvider
 				->line('If you did not request a password reset, no further action is required.');
 		});
 
-		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed
+		// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 		VerifyEmail::toMailUsing(function ($notifiable, $url) {
 			return (new MailMessage)
 				->subject('[' . config('app.name') . '] Verify Email Address')

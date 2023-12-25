@@ -12,7 +12,7 @@ class ActionValueUpdateTest extends TestCase
 {
 	use RefreshDatabase;
 
-	public function passesProvider() : array
+	public static function passesProvider() : array
 	{
 		return [
 			'with number action with value set to null' => [[

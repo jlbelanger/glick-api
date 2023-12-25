@@ -81,7 +81,7 @@ class ActionTypeTest extends TestCase
 		->assertStatus(200);
 	}
 
-	public function storeProvider() : array
+	public static function storeProvider() : array
 	{
 		return [
 			'with missing required fields' => [[
@@ -812,7 +812,7 @@ class ActionTypeTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function showProvider() : array
+	public static function showProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -861,7 +861,7 @@ class ActionTypeTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function updateProvider() : array
+	public static function updateProvider() : array
 	{
 		return [
 			"with another user's record" => [[
@@ -1726,7 +1726,7 @@ class ActionTypeTest extends TestCase
 			->assertStatus($args['code']);
 	}
 
-	public function destroyProvider() : array
+	public static function destroyProvider() : array
 	{
 		return [
 			"with another user's record" => [[
