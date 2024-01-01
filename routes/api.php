@@ -6,7 +6,7 @@ Route::get('/', function () {
 	return response()->json(['success' => true]);
 });
 
-Route::group(['middleware' => ['api', 'guest', 'throttle:' . config('auth.throttle_max_attempts') . ',1']], function () {
+Route::group(['middleware' => ['api', 'guest', 'throttle:auth']], function () {
 	Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login']);
 	Route::post('/auth/register', [\App\Http\Controllers\AuthController::class, 'register']);
 	Route::post('/auth/forgot-password', [\App\Http\Controllers\AuthController::class, 'forgotPassword']);
@@ -15,7 +15,7 @@ Route::group(['middleware' => ['api', 'guest', 'throttle:' . config('auth.thrott
 	Route::post('/auth/resend-verification', [\App\Http\Controllers\AuthController::class, 'resendVerification'])->name('verification.send');
 });
 
-Route::group(['middleware' => ['api', 'auth:sanctum']], function () {
+Route::group(['middleware' => ['api', 'auth:sanctum', 'throttle:api']], function () {
 	Route::delete('/auth/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 	Route::put('/auth/change-email', [\App\Http\Controllers\AuthController::class, 'changeEmail']);
 	Route::put('/auth/change-password', [\App\Http\Controllers\AuthController::class, 'changePassword']);
