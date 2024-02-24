@@ -10,6 +10,8 @@ class AuthLoginTest extends TestCase
 {
 	use RefreshDatabase;
 
+	protected $user;
+
 	protected function setUp() : void
 	{
 		parent::setUp();
@@ -213,7 +215,7 @@ class AuthLoginTest extends TestCase
 	{
 		$response = $this->json('POST', '/auth/login', $args['body']);
 
-		$args['response'] = $this->replaceToken('%id%', $this->user->id, $args['response']);
+		$args['response'] = $this->replaceToken('%id%', $this->user->getKey(), $args['response']);
 		if (!empty($response['token'])) {
 			$args['response'] = $this->replaceToken('%token%', $response['token'], $args['response']);
 		}

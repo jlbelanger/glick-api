@@ -14,7 +14,7 @@
 	"require": {
 		"php": "^8.2",
 		"guzzlehttp/guzzle": "^7.8.1",
-		"jlbelanger/tapioca": "dev-main#8032ccc2cc982b312e368f2b04a59f4583f36bbe",
+		"jlbelanger/tapioca": "dev-main#39ccb63e70662b1c32701082443c1c3505cff702",
 		"laravel/framework": "^10.35.0",
 		"laravel/sanctum": "^3.3.2"
 	},
@@ -56,6 +56,9 @@
 		"post-autoload-dump": [
 			"Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
 			"@php artisan package:discover --ansi"
+		],
+		"post-update-cmd": [
+			"@php artisan vendor:publish --tag=laravel-assets --ansi --force"
 		],
 		"post-root-package-install": [
 			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
