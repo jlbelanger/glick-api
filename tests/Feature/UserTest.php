@@ -12,6 +12,10 @@ class UserTest extends TestCase
 
 	protected $path = '/users';
 
+	protected $user;
+
+	protected $otherUser;
+
 	protected function setUp() : void
 	{
 		parent::setUp();

@@ -15,6 +15,24 @@ class ActionTypeTest extends TestCase
 
 	protected $path = '/action-types';
 
+	protected $user;
+
+	protected $otherUser;
+
+	protected $actionType;
+
+	protected $actionTypeOptions;
+
+	protected $actionTypeNumber;
+
+	protected $actionTypeOtherUser;
+
+	protected $optionA;
+
+	protected $optionB;
+
+	protected $action;
+
 	protected function setUp() : void
 	{
 		parent::setUp();

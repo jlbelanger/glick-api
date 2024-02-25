@@ -14,6 +14,10 @@ class AuthResetPasswordTest extends TestCase
 {
 	use RefreshDatabase;
 
+	protected $user;
+
+	protected $token;
+
 	protected function setUp() : void
 	{
 		parent::setUp();

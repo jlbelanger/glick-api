@@ -15,6 +15,38 @@ class ActionTest extends TestCase
 
 	protected $path = '/actions';
 
+	protected $user;
+
+	protected $otherUser;
+
+	protected $actionType;
+
+	protected $actionTypeOptions;
+
+	protected $actionTypeNumber;
+
+	protected $actionTypeText;
+
+	protected $actionTypeOtherUser;
+
+	protected $optionA;
+
+	protected $optionB;
+
+	protected $optionOtherUser;
+
+	protected $action;
+
+	protected $actionOptions;
+
+	protected $actionNumber;
+
+	protected $actionText;
+
+	protected $actionOtherUser;
+
+	protected $actionWithEndDate;
+
 	protected function setUp() : void
 	{
 		parent::setUp();
@@ -672,7 +704,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
-				'params' => '?include=action_type',
+				'params' => '?include=action_type,option',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -689,6 +721,9 @@ class ActionTest extends TestCase
 									'id' => '%actionType.id%',
 									'type' => 'action-types',
 								],
+							],
+							'option' => [
+								'data' => null,
 							],
 						],
 					],
@@ -805,7 +840,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
-				'params' => '?include=action_type',
+				'params' => '?include=action_type,option',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -822,6 +857,9 @@ class ActionTest extends TestCase
 									'id' => '%actionTypeNumber.id%',
 									'type' => 'action-types',
 								],
+							],
+							'option' => [
+								'data' => null,
 							],
 						],
 					],
@@ -961,7 +999,7 @@ class ActionTest extends TestCase
 						],
 					],
 				],
-				'params' => '?include=action_type',
+				'params' => '?include=action_type,option',
 				'response' => [
 					'data' => [
 						'id' => '%id%',
@@ -978,6 +1016,9 @@ class ActionTest extends TestCase
 									'id' => '%actionTypeText.id%',
 									'type' => 'action-types',
 								],
+							],
+							'option' => [
+								'data' => null,
 							],
 						],
 					],
