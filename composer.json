@@ -14,7 +14,7 @@
 	"require": {
 		"php": "^8.2",
 		"guzzlehttp/guzzle": "^7.8.1",
-		"jlbelanger/tapioca": "dev-main#39ccb63e70662b1c32701082443c1c3505cff702",
+		"jlbelanger/tapioca": "dev-main#a0cb2d6cc636ee95193ee7f686102f6e2d331bb9",
 		"laravel/framework": "^10.35.0",
 		"laravel/sanctum": "^3.3.2"
 	},

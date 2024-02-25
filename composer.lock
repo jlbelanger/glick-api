@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5df0ab36377f92209b5a55981710fca",
+    "content-hash": "630e36824764f236edbdb15aa469197c",
     "packages": [
         {
             "name": "brick/math",
@@ -1051,12 +1051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jlbelanger/tapioca.git",
-                "reference": "39ccb63e70662b1c32701082443c1c3505cff702"
+                "reference": "a0cb2d6cc636ee95193ee7f686102f6e2d331bb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/39ccb63e70662b1c32701082443c1c3505cff702",
-                "reference": "39ccb63e70662b1c32701082443c1c3505cff702",
+                "url": "https://api.github.com/repos/jlbelanger/tapioca/zipball/a0cb2d6cc636ee95193ee7f686102f6e2d331bb9",
+                "reference": "a0cb2d6cc636ee95193ee7f686102f6e2d331bb9",
                 "shasum": ""
             },
             "require": {
@@ -1101,7 +1101,7 @@
                 "source": "https://github.com/jlbelanger/tapioca/tree/main",
                 "issues": "https://github.com/jlbelanger/tapioca/issues"
             },
-            "time": "2024-02-24T21:46:45+00:00"
+            "time": "2024-02-25T19:23:29+00:00"
         },
         {
             "name": "laravel/framework",
