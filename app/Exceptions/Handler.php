@@ -95,8 +95,10 @@ class Handler extends ExceptionHandler
 					'exception' => get_class($e),
 					'file' => $e->getFile(),
 					'line' => $e->getLine(),
-					'trace' => $e->getTrace(),
 				];
+				if (config('app.env') !== 'testing') {
+					$error['meta']['trace'] = $e->getTrace();
+				}
 			}
 			return response()->json(['errors' => [$error]], 500);
 		});
