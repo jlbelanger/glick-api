@@ -827,7 +827,7 @@ class ActionTypeTest extends TestCase
 			$args['response'] = $this->replaceToken('%option_id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
 		}
 		$response->assertExactJson($args['response']);
-$response->assertStatus($args['code']);
+		$response->assertStatus($args['code']);
 	}
 
 	public static function showProvider() : array
@@ -876,7 +876,7 @@ $response->assertStatus($args['code']);
 		$args['response'] = $this->replaceToken('%id%', (string) $this->actionType->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
 		$response->assertExactJson($args['response']);
-$response->assertStatus($args['code']);
+		$response->assertStatus($args['code']);
 	}
 
 	public static function updateProvider() : array
@@ -1741,7 +1741,7 @@ $response->assertStatus($args['code']);
 			$args['response'] = $this->replaceToken('%option.id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
 		}
 		$response->assertExactJson($args['response']);
-$response->assertStatus($args['code']);
+		$response->assertStatus($args['code']);
 	}
 
 	public static function destroyProvider() : array

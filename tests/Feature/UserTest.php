@@ -91,7 +91,7 @@ class UserTest extends TestCase
 		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
 		$response->assertExactJson($args['response']);
-$response->assertStatus($args['code']);
+		$response->assertStatus($args['code']);
 	}
 
 	public static function updateProvider() : array
@@ -285,7 +285,7 @@ $response->assertStatus($args['code']);
 		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id, $args['body']);
 		$response->assertExactJson($args['response']);
-$response->assertStatus($args['code']);
+		$response->assertStatus($args['code']);
 	}
 
 	public static function destroyProvider() : array
