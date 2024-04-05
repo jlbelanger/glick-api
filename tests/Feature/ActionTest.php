@@ -124,8 +124,8 @@ class ActionTest extends TestCase
 					],
 				],
 			],
-		])
-		->assertStatus(200);
+		]);
+		$response->assertStatus(200);
 	}
 
 	public static function storeProvider() : array
@@ -1064,8 +1064,8 @@ class ActionTest extends TestCase
 		if (!empty($response['data']['id'])) {
 			$args['response'] = $this->replaceToken('%id%', $response['data']['id'], $args['response']);
 		}
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function showProvider() : array
@@ -1109,8 +1109,8 @@ class ActionTest extends TestCase
 	{
 		$args['response'] = $this->replaceToken('%id%', (string) $this->action->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function updateProvider() : array
@@ -1883,8 +1883,8 @@ class ActionTest extends TestCase
 		$args['body'] = $this->replaceTokens($tokens, $args['body']);
 		$args['response'] = $this->replaceTokens($tokens, $args['response']);
 		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id . $args['params'], $args['body']);
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function destroyProvider() : array
@@ -1917,8 +1917,8 @@ class ActionTest extends TestCase
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {
-			$response->assertExactJson($args['response'])
-				->assertStatus($args['code']);
+			$response->assertExactJson($args['response']);
+			$response->assertStatus($args['code']);
 		} else {
 			$response->assertNoContent($args['code']);
 		}

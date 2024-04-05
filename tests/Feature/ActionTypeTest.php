@@ -95,8 +95,8 @@ class ActionTypeTest extends TestCase
 					],
 				],
 			],
-		])
-		->assertStatus(200);
+		]);
+		$response->assertStatus(200);
 	}
 
 	public static function storeProvider() : array
@@ -826,8 +826,8 @@ class ActionTypeTest extends TestCase
 		if (!empty($response['data']['relationships']['options']['data'][0]['id'])) {
 			$args['response'] = $this->replaceToken('%option_id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
 		}
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function showProvider() : array
@@ -875,8 +875,8 @@ class ActionTypeTest extends TestCase
 	{
 		$args['response'] = $this->replaceToken('%id%', (string) $this->actionType->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function updateProvider() : array
@@ -1740,8 +1740,8 @@ class ActionTypeTest extends TestCase
 		if (!empty($response['data']['relationships']['options']['data'][0]['id'])) {
 			$args['response'] = $this->replaceToken('%option.id%', $response['data']['relationships']['options']['data'][0]['id'], $args['response']);
 		}
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function destroyProvider() : array
@@ -1774,8 +1774,8 @@ class ActionTypeTest extends TestCase
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {
-			$response->assertExactJson($args['response'])
-				->assertStatus($args['code']);
+			$response->assertExactJson($args['response']);
+			$response->assertStatus($args['code']);
 		} else {
 			$response->assertNoContent($args['code']);
 		}

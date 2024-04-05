@@ -33,8 +33,8 @@ class UserTest extends TestCase
 					'title' => 'URL does not exist.',
 				],
 			],
-		])
-		->assertStatus(404);
+		]);
+		$response->assertStatus(404);
 	}
 
 	public function testStore() : void
@@ -47,8 +47,8 @@ class UserTest extends TestCase
 					'title' => 'URL does not exist.',
 				],
 			],
-		])
-		->assertStatus(404);
+		]);
+		$response->assertStatus(404);
 	}
 
 	public static function showProvider() : array
@@ -90,8 +90,8 @@ class UserTest extends TestCase
 	{
 		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('GET', $this->path . '/' . $this->{$args['key']}->id);
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function updateProvider() : array
@@ -284,8 +284,8 @@ class UserTest extends TestCase
 		$args['body'] = $this->replaceToken('%id%', (string) $this->user->id, $args['body']);
 		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
 		$response = $this->actingAs($this->user)->json('PUT', $this->path . '/' . $this->{$args['key']}->id, $args['body']);
-		$response->assertExactJson($args['response'])
-			->assertStatus($args['code']);
+		$response->assertExactJson($args['response']);
+$response->assertStatus($args['code']);
 	}
 
 	public static function destroyProvider() : array
@@ -318,8 +318,8 @@ class UserTest extends TestCase
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);
 		if ($args['response']) {
-			$response->assertExactJson($args['response'])
-				->assertStatus($args['code']);
+			$response->assertExactJson($args['response']);
+			$response->assertStatus($args['code']);
 		} else {
 			$response->assertNoContent($args['code']);
 		}
