@@ -3,6 +3,7 @@
 namespace Tests\Unit\Rules;
 
 use App\Rules\TempIdsOnly;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class TempIdsOnlyTest extends TestCase
@@ -45,9 +46,7 @@ class TempIdsOnlyTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider passesProvider
-	 */
+	#[DataProvider('passesProvider')]
 	public function testPasses(array $args) : void
 	{
 		$rule = new TempIdsOnly();

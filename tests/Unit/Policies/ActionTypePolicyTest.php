@@ -12,6 +12,16 @@ class ActionTypePolicyTest extends TestCase
 {
 	use RefreshDatabase;
 
+	protected $policy;
+
+	protected $user;
+
+	protected $otherUser;
+
+	protected $actionTypeOwned;
+
+	protected $actionTypeNotOwned;
+
 	protected function setUp() : void
 	{
 		parent::setUp();

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AuthResetPasswordTest extends TestCase
@@ -149,9 +150,7 @@ class AuthResetPasswordTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider resetPasswordProvider
-	 */
+	#[DataProvider('resetPasswordProvider')]
 	public function testResetPassword(array $args) : void
 	{
 		$url = URL::temporarySignedRoute(

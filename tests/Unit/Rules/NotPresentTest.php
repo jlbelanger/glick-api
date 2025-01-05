@@ -3,6 +3,7 @@
 namespace Tests\Unit\Rules;
 
 use App\Rules\NotPresent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class NotPresentTest extends TestCase
@@ -29,9 +30,7 @@ class NotPresentTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider passesProvider
-	 */
+	#[DataProvider('passesProvider')]
 	public function testPasses(array $args) : void
 	{
 		$rule = new NotPresent();

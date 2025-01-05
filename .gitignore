@@ -2,5 +2,6 @@
 .env
 .phpunit.result.cache
 *.log
+/bootstrap/cache/*.php
 /vendor
 TODO.md

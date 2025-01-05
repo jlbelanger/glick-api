@@ -12,19 +12,19 @@
 		}
 	],
 	"require": {
-		"php": "^8.2",
-		"guzzlehttp/guzzle": "^7.8.1",
-		"jlbelanger/tapioca": "dev-main#a0cb2d6cc636ee95193ee7f686102f6e2d331bb9",
-		"laravel/framework": "^10.35.0",
-		"laravel/sanctum": "^3.3.2"
+		"php": "^8.4",
+		"guzzlehttp/guzzle": "^7.9.2",
+		"jlbelanger/tapioca": "dev-main#831c1b22159eccdfdefbdf369b3fb1d876ec88ed",
+		"laravel/framework": "^11.36.1",
+		"laravel/sanctum": "^4.0.7"
 	},
 	"require-dev": {
-		"fakerphp/faker": "^1.23.0",
-		"filp/whoops": "^2.15.4",
-		"mockery/mockery": "^1.6.6",
-		"nunomaduro/collision": "^7.9.0",
-		"phpunit/phpunit": "^10.5.2",
-		"squizlabs/php_codesniffer": "^3.8.0"
+		"fakerphp/faker": "^1.24.1",
+		"filp/whoops": "^2.16.0",
+		"mockery/mockery": "^1.6.12",
+		"nunomaduro/collision": "^8.5.0",
+		"phpunit/phpunit": "^11.5.2",
+		"squizlabs/php_codesniffer": "^3.11.2"
 	},
 	"autoload": {
 		"psr-4": {

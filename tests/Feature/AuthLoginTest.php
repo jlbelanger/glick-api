@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AuthLoginTest extends TestCase
@@ -208,9 +209,7 @@ class AuthLoginTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider loginProvider
-	 */
+	#[DataProvider('loginProvider')]
 	public function testLogin(array $args) : void
 	{
 		$response = $this->json('POST', '/auth/login', $args['body']);

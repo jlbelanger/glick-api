@@ -11,6 +11,12 @@ class UserPolicyTest extends TestCase
 {
 	use RefreshDatabase;
 
+	protected $policy;
+
+	protected $user;
+
+	protected $otherUser;
+
 	protected function setUp() : void
 	{
 		parent::setUp();

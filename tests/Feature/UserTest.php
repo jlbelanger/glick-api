@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -83,9 +84,7 @@ class UserTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider showProvider
-	 */
+	#[DataProvider('showProvider')]
 	public function testShow(array $args) : void
 	{
 		$args['response'] = $this->replaceToken('%id%', (string) $this->user->id, $args['response']);
@@ -276,9 +275,7 @@ class UserTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider updateProvider
-	 */
+	#[DataProvider('updateProvider')]
 	public function testUpdate(array $args) : void
 	{
 		$args['body'] = $this->replaceToken('%id%', (string) $this->user->id, $args['body']);
@@ -311,9 +308,7 @@ class UserTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider destroyProvider
-	 */
+	#[DataProvider('destroyProvider')]
 	public function testDestroy(array $args) : void
 	{
 		$response = $this->actingAs($this->user)->json('DELETE', $this->path . '/' . $this->{$args['key']}->id);

@@ -5,6 +5,7 @@ namespace Tests\Unit\Rules;
 use App\Models\ActionType;
 use App\Rules\ActionValueCreate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ActionValueCreateTest extends TestCase
@@ -62,9 +63,7 @@ class ActionValueCreateTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider passesProvider
-	 */
+	#[DataProvider('passesProvider')]
 	public function testPasses(array $args) : void
 	{
 		if ($args['actionType'] !== null) {

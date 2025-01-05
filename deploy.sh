@@ -10,6 +10,7 @@ source "${HOME}/Websites/infrastructure/deploy/laravel.sh"
 
 check_git_branch
 check_git_changes
+set_laravel_permissions
 deploy_git
 deploy_composer
 deploy_laravel

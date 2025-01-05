@@ -6,8 +6,6 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-	use CreatesApplication;
-
 	protected function replaceTokens(array $tokens, array $rows) : array
 	{
 		foreach ($tokens as $token => $replaceWith) {
@@ -21,7 +19,7 @@ abstract class TestCase extends BaseTestCase
 		foreach ($rows as $key => $row) {
 			if (is_array($row)) {
 				$rows[$key] = $this->replaceToken($token, $replaceWith, $row);
-			} elseif (strpos($row, $token) !== false) {
+			} elseif ($row && strpos($row, $token) !== false) {
 				if ($rows[$key] === $token) {
 					$rows[$key] = $replaceWith;
 				} else {

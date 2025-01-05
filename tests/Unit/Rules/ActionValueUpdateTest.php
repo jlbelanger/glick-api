@@ -6,6 +6,7 @@ use App\Models\Action;
 use App\Models\ActionType;
 use App\Rules\ActionValueUpdate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ActionValueUpdateTest extends TestCase
@@ -58,9 +59,7 @@ class ActionValueUpdateTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider passesProvider
-	 */
+	#[DataProvider('passesProvider')]
 	public function testPasses(array $args) : void
 	{
 		$actionType = ActionType::factory()->create($args['actionType']);

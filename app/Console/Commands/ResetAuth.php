@@ -14,14 +14,14 @@ class ResetAuth extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'reset-auth';
+	protected $signature = 'auth:reset-admin';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Reset authentication';
+	protected $description = 'Reset admin credentials';
 
 	/**
 	 * Executes the console command.
